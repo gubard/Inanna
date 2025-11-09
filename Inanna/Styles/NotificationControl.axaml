@@ -1,0 +1,41 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:c="clr-namespace:Inanna.Controls">
+    <ControlTheme x:Key="NotificationControlStyle" TargetType="c:NotificationControl">
+        <Setter Property="Width" Value="300" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <ContentPresenter x:Name="PART_ContentPresenter" Width="{TemplateBinding Width}" Content="{TemplateBinding Content}" />
+            </ControlTemplate>
+        </Setter>
+
+        <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="CornerRadius" Value="5" />
+            <Setter Property="Background" Value="{DynamicResource NotificationCardBackgroundBrush}" />
+        </Style>
+
+        <Style Selector="^:info /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource NotificationCardInformationBackgroundBrush}" />
+        </Style>
+
+        <Style Selector="^:error /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource NotificationCardErrorBackgroundBrush}" />
+        </Style>
+        
+        <Style Selector="^:progress /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource NotificationCardProgressBackgroundBrush}" />
+        </Style>
+        
+        <Style Selector="^:success /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource NotificationCardSuccessBackgroundBrush}" />
+        </Style>
+        
+        <Style Selector="^:warning /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource NotificationCardWarningBackgroundBrush}" />
+        </Style>
+    </ControlTheme>
+
+    <ControlTheme x:Key="{x:Type c:NotificationControl}"
+                  BasedOn="{StaticResource NotificationControlStyle}"
+                  TargetType="c:NotificationControl" />
+</ResourceDictionary>

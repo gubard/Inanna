@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+        <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+        <CompilerGeneratedFilesOutputPath>$(BaseIntermediateOutputPath)\GeneratedFiles</CompilerGeneratedFilesOutputPath>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Avalonia" Version="11.3.8" />
+      <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="Styles\Button.axaml" />
+      <AdditionalFiles Include="Styles\CalendarDatePicker.axaml" />
+      <AdditionalFiles Include="Styles\CheckBox.axaml" />
+      <AdditionalFiles Include="Styles\ComboBox.axaml" />
+      <AdditionalFiles Include="Styles\EnumSelectorControl.axaml" />
+      <AdditionalFiles Include="Styles\EnumSelectorItemControl.axaml" />
+      <AdditionalFiles Include="Styles\ItemsControl.axaml" />
+      <AdditionalFiles Include="Styles\Layoutable.axaml" />
+      <AdditionalFiles Include="Styles\NumericUpDown.axaml" />
+      <AdditionalFiles Include="Styles\Rectangle.axaml" />
+      <AdditionalFiles Include="Styles\StackPanel.axaml" />
+      <AdditionalFiles Include="Styles\TemplatedControl.axaml" />
+      <AdditionalFiles Include="Styles\TextBlock.axaml" />
+      <AdditionalFiles Include="Styles\TextBox.axaml" />
+      <AdditionalFiles Include="Styles\Theme.axaml" />
+      <AdditionalFiles Include="Styles\ViewSelectorControl.axaml" />
+      <AdditionalFiles Include="Styles\ViewSelectorItemControl.axaml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Gaia\Gaia\Gaia.csproj" />
+    </ItemGroup>
+
+</Project>

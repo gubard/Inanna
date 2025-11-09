@@ -1,0 +1,33 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:m="clr-namespace:Inanna.Models"
+             xmlns:ui="clr-namespace:Inanna.Ui"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Inanna.Ui.DialogView"
+             x:DataType="ui:DialogViewModel"
+             Background="{DynamicResource SystemControlPageBackgroundBaseLowBrush}">
+    <Grid RowDefinitions="Auto,*,Auto">
+        <StackPanel>
+            <ContentControl Content="{Binding Header}" />
+            <Rectangle Fill="{DynamicResource ButtonBackground}" Height="2" />
+        </StackPanel>
+
+        <ScrollViewer Grid.Row="1" Classes="vertical-scroll">
+            <ContentControl Margin="5" Content="{Binding Content}" />
+        </ScrollViewer>
+        
+        <ItemsControl Grid.Row="2" Classes="accept-panel" ItemsSource="{Binding  Buttons}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Button Classes.primary="{Binding Type, Converter={StaticResource IsValueConverter}, ConverterParameter={x:Static m:DialogButtonType.Primary}}"
+                            Classes.danger="{Binding Type, Converter={StaticResource IsValueConverter}, ConverterParameter={x:Static m:DialogButtonType.Danger}}"
+                            Content="{Binding Content}"
+                            Command="{Binding Command}"
+                            CommandParameter="{Binding $parent[ui:DialogView].ViewModel.Content}" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Grid>
+</UserControl>
