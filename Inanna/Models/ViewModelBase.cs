@@ -12,8 +12,7 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
     private readonly Dictionary<string, Func<IEnumerable<ValidationError>>> _errors = new();
 
     public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
-
-    public bool HasErrors => _errors.Count != 0 && _errors.Any(x => x.Value.Invoke().Any());
+    public bool HasErrors => _isAnyExecute && _errors.Count != 0 && _errors.Any(x => x.Value.Invoke().Any());
 
     protected Task WrapCommand(Func<Task> func)
     {
@@ -48,6 +47,8 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
         {
             return Enumerable.Empty<ValidationError>();
         }
+
+        OnPropertyChanged(nameof(HasErrors));
 
         return _errors.TryGetValue(propertyName, out var validation) ? validation.Invoke() : [];
     }
