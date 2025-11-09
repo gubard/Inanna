@@ -38,12 +38,7 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
 
     public IEnumerable GetErrors(string? propertyName)
     {
-        if (_isAnyExecute is false)
-        {
-            return Enumerable.Empty<ValidationError>();
-        }
-
-        if (propertyName is null)
+        if (_isAnyExecute is false || propertyName is null)
         {
             return Enumerable.Empty<ValidationError>();
         }
