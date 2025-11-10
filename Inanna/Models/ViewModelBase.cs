@@ -18,12 +18,7 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
     {
         StartExecute();
 
-        if (HasErrors)
-        {
-            return Task.CompletedTask;
-        }
-
-        return UiHelper.ExecuteAsync(func);
+        return HasErrors ? Task.CompletedTask : UiHelper.ExecuteAsync(func);
     }
 
     public void StartExecute()
@@ -42,8 +37,6 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
         {
             return Enumerable.Empty<ValidationError>();
         }
-
-        OnPropertyChanged(nameof(HasErrors));
 
         return _errors.TryGetValue(propertyName, out var validation) ? validation.Invoke() : [];
     }
