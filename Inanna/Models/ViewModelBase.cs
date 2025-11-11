@@ -38,7 +38,16 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
             return Enumerable.Empty<ValidationError>();
         }
 
-        return _errors.TryGetValue(propertyName, out var validation) ? validation.Invoke() : [];
+        OnPropertyChanged(nameof(HasErrors));
+
+        if (!_errors.TryGetValue(propertyName, out var validation))
+        {
+            return Enumerable.Empty<ValidationError>();
+        }
+
+        var errors = validation.Invoke();
+            
+        return errors;
     }
 
     protected void SetValidation(string propertyName, Func<IEnumerable<ValidationError>> validation)
