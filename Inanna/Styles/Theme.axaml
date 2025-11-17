@@ -10,6 +10,7 @@
                 <MergeResourceInclude Source="DialogControl.axaml" />
                 <MergeResourceInclude Source="NotificationPanel.axaml" />
                 <MergeResourceInclude Source="NotificationControl.axaml" />
+                <MergeResourceInclude Source="PathControl.axaml" />
                 <MergeResourceInclude Source="../Resources/Converters.axaml" />
                 <MergeResourceInclude Source="../Resources/Colors.axaml" />
             </ResourceDictionary.MergedDictionaries>

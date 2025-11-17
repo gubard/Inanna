@@ -1,0 +1,25 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:c="clr-namespace:Inanna.Controls">
+    <ControlTheme x:Key="PathControlStyle" TargetType="c:PathControl">
+        <Setter Property="Template">
+            <ControlTemplate>
+                <ItemsControl x:Name="PART_ItemsControl"
+                              ItemsSource="{TemplateBinding Items}"
+                              ItemTemplate="{TemplateBinding ItemTemplate}" />
+            </ControlTemplate>
+        </Setter>
+
+        <Style Selector="^ /template/ ItemsControl#PART_ItemsControl">
+            <Setter Property="ItemsPanel">
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </Setter>
+        </Style>
+    </ControlTheme>
+
+    <ControlTheme x:Key="{x:Type c:PathControl}"
+                  BasedOn="{StaticResource PathControlStyle}"
+                  TargetType="c:PathControl" />
+</ResourceDictionary>
