@@ -31,5 +31,6 @@
     <StyleInclude Source="TextBox.axaml" />
     <StyleInclude Source="ScrollViewer.axaml" />
     <StyleInclude Source="Visual.axaml" />
+    <StyleInclude Source="PackIconMaterialDesign.axaml" />
     <StyleInclude Source="TopLevel.axaml" />
 </Styles>
