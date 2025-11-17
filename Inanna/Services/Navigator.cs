@@ -8,6 +8,7 @@ public interface INavigator
     Task<object?> NavigateBackOrNullAsync(CancellationToken ct);
     Task NavigateToAsync(object view, CancellationToken ct);
     bool IsEmpty { get; }
+    object? CurrentView { get; }
     public event ViewChangedEventHandler? ViewChanged;
 }
 
@@ -51,5 +52,6 @@ public class Navigator : ObservableObject, INavigator
     }
 
     public bool IsEmpty => _stackViewModel.IsEmpty;
+    public object? CurrentView => _stackViewModel.CurrentView;
     public event ViewChangedEventHandler? ViewChanged;
 }
