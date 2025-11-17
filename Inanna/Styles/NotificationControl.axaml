@@ -3,6 +3,7 @@
                     xmlns:c="clr-namespace:Inanna.Controls">
     <ControlTheme x:Key="NotificationControlStyle" TargetType="c:NotificationControl">
         <Setter Property="Width" Value="300" />
+        <Setter Property="Margin" Value="3" />
         <Setter Property="Template">
             <ControlTemplate>
                 <ContentPresenter x:Name="PART_ContentPresenter" Width="{TemplateBinding Width}" Content="{TemplateBinding Content}" />
