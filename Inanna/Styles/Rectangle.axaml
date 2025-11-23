@@ -12,6 +12,7 @@
         <Setter Property="RadiusY" Value="5" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="VerticalAlignment" Value="Stretch" />
+        <Setter Property="Fill" Value="Transparent" />
     </Style>
 
     <Style Selector="Rectangle.drop-aria:pointerover">
