@@ -4,6 +4,10 @@
         <Setter Property="Margin" Value="10,5,5,5" />
     </Style>
 
+    <Style Selector="TextBlock.text-wrap">
+        <Setter Property="TextWrapping" Value="Wrap" />
+    </Style>
+
     <Style Selector="TextBlock">
         <Setter Property="Margin" Value="3" />
     </Style>
