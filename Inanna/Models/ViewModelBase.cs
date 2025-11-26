@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.ComponentModel;
 using CommunityToolkit.Mvvm.ComponentModel;
-using Inanna.Errors;
+using Gaia.Errors;
 using Inanna.Helpers;
 
 namespace Inanna.Models;

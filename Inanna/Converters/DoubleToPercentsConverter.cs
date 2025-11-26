@@ -12,7 +12,7 @@ public class DoubleToPercentsConverter : IValueConverter
         {
             return value;
         }
-        
+
         if (!TryGetPercentage(parameter, out var percentage))
         {
             return value;
@@ -27,7 +27,7 @@ public class DoubleToPercentsConverter : IValueConverter
         {
             return value;
         }
-        
+
         if (!TryGetPercentage(parameter, out var percentage))
         {
             return value;
@@ -36,15 +36,15 @@ public class DoubleToPercentsConverter : IValueConverter
         return number / percentage;
     }
 
-    private static bool TryGetPercentage([NotNullWhen(true)]object? parameter, out double percentage)
+    private static bool TryGetPercentage([NotNullWhen(true)] object? parameter, out double percentage)
     {
         if (parameter is double value)
         {
             percentage = value;
-            
+
             return true;
         }
-        
-        return double.TryParse(parameter?.ToString(), out percentage);
+
+        return double.TryParse(parameter?.ToString(), CultureInfo.InvariantCulture.NumberFormat, out percentage);
     }
 }
