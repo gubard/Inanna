@@ -1,7 +1,7 @@
 using System.Globalization;
 using Avalonia;
 using Avalonia.Data.Converters;
-using Gaia.Extensions;
+using Gaia.Helpers;
 using Inanna.Extensions;
 
 namespace Inanna.Converters;
