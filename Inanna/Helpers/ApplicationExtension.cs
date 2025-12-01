@@ -3,7 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.VisualTree;
 
-namespace Inanna.Extensions;
+namespace Inanna.Helpers;
 
 public static class ApplicationExtension
 {

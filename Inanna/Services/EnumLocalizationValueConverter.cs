@@ -2,9 +2,9 @@ using System.Globalization;
 using Avalonia;
 using Avalonia.Data.Converters;
 using Gaia.Helpers;
-using Inanna.Extensions;
+using Inanna.Helpers;
 
-namespace Inanna.Converters;
+namespace Inanna.Services;
 
 public class EnumLocalizationValueConverter : IValueConverter
 {

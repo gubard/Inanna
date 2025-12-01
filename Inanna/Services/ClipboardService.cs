@@ -1,6 +1,6 @@
 using Avalonia;
 using Gaia.Helpers;
-using Inanna.Extensions;
+using Inanna.Helpers;
 
 namespace Inanna.Services;
 

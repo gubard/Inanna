@@ -2,7 +2,7 @@ using System.Collections;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
-using Inanna.Enums;
+using Inanna.Models;
 
 namespace Inanna.Controls;
 

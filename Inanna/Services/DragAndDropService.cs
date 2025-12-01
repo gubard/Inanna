@@ -1,5 +1,5 @@
 using CommunityToolkit.Mvvm.ComponentModel;
-using Inanna.Exceptions;
+using Inanna.Models;
 
 namespace Inanna.Services;
 

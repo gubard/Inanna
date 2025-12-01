@@ -1,6 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
-using Inanna.Enums;
+using Inanna.Models;
 
 namespace Inanna.Controls;
 

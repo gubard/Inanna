@@ -1,7 +1,7 @@
 using System.Globalization;
 using Avalonia.Data.Converters;
 
-namespace Inanna.Converters;
+namespace Inanna.Services;
 
 public class IsValueConverter : IValueConverter
 {

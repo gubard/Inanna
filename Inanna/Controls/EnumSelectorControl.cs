@@ -2,7 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
-using Inanna.Converters;
+using Inanna.Services;
 
 namespace Inanna.Controls;
 

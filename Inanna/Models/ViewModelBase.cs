@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Gaia.Errors;
+using Gaia.Services;
 using Inanna.Helpers;
 
 namespace Inanna.Models;
@@ -12,9 +13,20 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
     private readonly Dictionary<string, Func<IEnumerable<ValidationError>>> _errors = new();
 
     public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
-    public bool HasErrors => _isAnyExecute && _errors.Count != 0 && _errors.Any(x => x.Value.Invoke().Any());
+
+    public bool HasErrors
+    {
+        get => _isAnyExecute && _errors.Count != 0 && _errors.Any(x => x.Value.Invoke().Any());
+    }
 
     protected Task WrapCommand(Func<Task> func)
+    {
+        StartExecute();
+
+        return HasErrors ? Task.CompletedTask : UiHelper.ExecuteAsync(func);
+    }
+
+    protected Task WrapCommand(Func<Task<IValidationErrors>> func)
     {
         StartExecute();
 
@@ -46,7 +58,7 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
         }
 
         var errors = validation.Invoke();
-            
+
         return errors;
     }
 

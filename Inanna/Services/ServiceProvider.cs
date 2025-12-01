@@ -2,5 +2,5 @@ namespace Inanna.Services;
 
 public interface IServiceProvider
 {
-    T GetService<T>();
+    T GetService<T>() where T : notnull;
 }

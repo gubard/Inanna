@@ -1,4 +1,4 @@
-namespace Inanna.Enums;
+namespace Inanna.Models;
 
 public enum NotificationType
 {

@@ -1,6 +1,6 @@
 using Inanna.Controls;
-using Inanna.Enums;
 using Inanna.Helpers;
+using Inanna.Models;
 
 namespace Inanna.Services;
 
