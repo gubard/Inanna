@@ -1,6 +1,20 @@
 <Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ip="https://github.com/MahApps/IconPacks.Avalonia"
+        xmlns:h="clr-namespace:Inanna.Helpers">
     <Style Selector="TextBox">
         <Setter Property="Margin" Value="5" />
+    </Style>
+
+    <Style Selector="TextBox.password">
+        <Setter Property="PasswordChar" Value="*" />
+        <Setter Property="InnerRightContent">
+            <Template>
+                <Button x:Name="Button" Background="Transparent" 
+                        Padding="0" 
+                        Content="{ip:MaterialDesign Visibility}"
+                        Tag="{Binding ElementName=Button}"/>
+            </Template>
+        </Setter>
     </Style>
 </Styles>
