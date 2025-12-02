@@ -7,22 +7,22 @@ namespace Inanna.Helpers;
 
 public static class ButtonAssist
 {
-    public static readonly AttachedProperty<bool> IsPasswordShowProperty =
-        AvaloniaProperty.RegisterAttached<Button, bool>("IsPasswordShow", typeof(ButtonAssist));
+    public static readonly AttachedProperty<bool> IsPasswordHandlerProperty =
+        AvaloniaProperty.RegisterAttached<Button, bool>("IsPasswordHandler", typeof(ButtonAssist));
 
-    public static void SetIsDragHandle(Button element, bool value)
+    public static void SetIsPasswordHandler(Button element, bool value)
     {
-        element.SetValue(IsPasswordShowProperty, value);
+        element.SetValue(IsPasswordHandlerProperty, value);
     }
 
-    public static bool GetIsDragHandle(Button element)
+    public static bool GetIsPasswordHandler(Button element)
     {
-        return element.GetValue(IsPasswordShowProperty);
+        return element.GetValue(IsPasswordHandlerProperty);
     }
 
     static ButtonAssist()
     {
-        IsPasswordShowProperty.Changed.AddClassHandler<Button, bool>((button, e) =>
+        IsPasswordHandlerProperty.Changed.AddClassHandler<Button, bool>((button, e) =>
         {
             if (e.NewValue.GetValueOrDefault<bool>())
             {

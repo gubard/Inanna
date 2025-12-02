@@ -10,7 +10,7 @@
         <Setter Property="PasswordChar" Value="*" />
         <Setter Property="InnerRightContent">
             <Template>
-                <Button Classes="password-visibility" h:ButtonAssist.IsDragHandle="True" />
+                <Button Classes="password-visibility" h:ButtonAssist.IsPasswordHandler="True" />
             </Template>
         </Setter>
     </Style>
