@@ -1,7 +1,7 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:ip="https://github.com/MahApps/IconPacks.Avalonia"
-        xmlns:h="clr-namespace:Inanna.Helpers">
+        xmlns:h="clr-namespace:Inanna.Helpers"
+        xmlns:s="clr-namespace:System;assembly=System.Runtime">
     <Style Selector="TextBox">
         <Setter Property="Margin" Value="5" />
     </Style>
@@ -10,11 +10,16 @@
         <Setter Property="PasswordChar" Value="*" />
         <Setter Property="InnerRightContent">
             <Template>
-                <Button x:Name="Button" Background="Transparent"
-                        Padding="0"
-                        Content="{ip:MaterialDesign Visibility}"
-                        h:ButtonAssist.IsDragHandle="True" />
+                <Button Classes="password-visibility" h:ButtonAssist.IsDragHandle="True" />
             </Template>
         </Setter>
+    </Style>
+
+    <Style Selector="TextBox:show-password">
+        <Setter Property="PasswordChar" Value="*" />
+    </Style>
+
+    <Style Selector="TextBox:hide-password">
+        <Setter Property="PasswordChar" Value="{x:Static s:Char.MinValue}" />
     </Style>
 </Styles>

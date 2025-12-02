@@ -1,5 +1,6 @@
 <Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ip="https://github.com/MahApps/IconPacks.Avalonia">
     <Style Selector="Button.link">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0" />
@@ -19,5 +20,26 @@
 
     <Style Selector="Button">
         <Setter Property="Margin" Value="5" />
+    </Style>
+
+    <Style Selector="Button.password-visibility">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Padding" Value="0" />
+    </Style>
+
+    <Style Selector="Button:show-password">
+        <Setter Property="Content">
+            <Template>
+                <ip:PackIconMaterialDesign Kind="Visibility" />
+            </Template>
+        </Setter>
+    </Style>
+
+    <Style Selector="Button:hide-password">
+        <Setter Property="Content">
+            <Template>
+                <ip:PackIconMaterialDesign Kind="VisibilityOff" />
+            </Template>
+        </Setter>
     </Style>
 </Styles>
