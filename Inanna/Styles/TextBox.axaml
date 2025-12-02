@@ -10,10 +10,10 @@
         <Setter Property="PasswordChar" Value="*" />
         <Setter Property="InnerRightContent">
             <Template>
-                <Button x:Name="Button" Background="Transparent" 
-                        Padding="0" 
+                <Button x:Name="Button" Background="Transparent"
+                        Padding="0"
                         Content="{ip:MaterialDesign Visibility}"
-                        Tag="{Binding ElementName=Button}"/>
+                        h:ButtonAssist.IsDragHandle="True" />
             </Template>
         </Setter>
     </Style>
