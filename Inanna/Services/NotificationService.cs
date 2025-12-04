@@ -28,11 +28,11 @@ public class NotificationService : INotificationService
             Content = content,
         };
 
-        notification.Command = UiHelper.CreateCommand(() =>
+        notification.Command = UiHelper.CreateCommand(_ =>
         {
             NotificationPanel.CloseNotification(_identifier, notification);
 
-            return Task.CompletedTask;
+            return ValueTask.CompletedTask;
         });
 
         NotificationPanel.ShowNotification(_identifier, notification, NotificationPanelAlignment.Center, _duration);

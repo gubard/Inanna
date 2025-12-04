@@ -5,8 +5,8 @@ namespace Inanna.Services;
 
 public interface INavigator
 {
-    Task<object?> NavigateBackOrNullAsync(CancellationToken ct);
-    Task NavigateToAsync(object view, CancellationToken ct);
+    ValueTask<object?> NavigateBackOrNullAsync(CancellationToken ct);
+    ValueTask NavigateToAsync(object view, CancellationToken ct);
     bool IsEmpty { get; }
     object? CurrentView { get; }
     public event ViewChangedEventHandler? ViewChanged;
@@ -35,20 +35,20 @@ public class Navigator : ObservableObject, INavigator
         };
     }
 
-    public Task<object?> NavigateBackOrNullAsync(CancellationToken ct)
+    public ValueTask<object?> NavigateBackOrNullAsync(CancellationToken ct)
     {
         _stackViewModel.PopView();
         ViewChanged?.Invoke(this, _stackViewModel.CurrentView);
 
-        return Task.FromResult(_stackViewModel.CurrentView);
+        return ValueTask.FromResult(_stackViewModel.CurrentView);
     }
 
-    public Task NavigateToAsync(object view, CancellationToken ct)
+    public ValueTask NavigateToAsync(object view, CancellationToken ct)
     {
         _stackViewModel.PushView(view);
         ViewChanged?.Invoke(this, _stackViewModel.CurrentView);
 
-        return Task.CompletedTask;
+        return ValueTask.CompletedTask;
     }
 
     public bool IsEmpty => _stackViewModel.IsEmpty;

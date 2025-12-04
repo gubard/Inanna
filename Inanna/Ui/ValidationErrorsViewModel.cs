@@ -1,5 +1,5 @@
 ﻿using Avalonia.Collections;
-using Gaia.Errors;
+using Gaia.Models;
 using Inanna.Models;
 
 namespace Inanna.Ui;

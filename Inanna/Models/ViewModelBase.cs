@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.ComponentModel;
 using CommunityToolkit.Mvvm.ComponentModel;
-using Gaia.Errors;
+using Gaia.Models;
 using Gaia.Services;
 using Inanna.Helpers;
 
@@ -19,18 +19,18 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
         get => _isAnyExecute && _errors.Count != 0 && _errors.Any(x => x.Value.Invoke().Any());
     }
 
-    protected Task WrapCommand(Func<Task> func)
+    protected ValueTask WrapCommand(Func<ValueTask> func)
     {
         StartExecute();
 
-        return HasErrors ? Task.CompletedTask : UiHelper.ExecuteAsync(func);
+        return HasErrors ? ValueTask.CompletedTask : UiHelper.ExecuteAsync(func);
     }
 
-    protected Task WrapCommand(Func<Task<IValidationErrors>> func)
+    protected ValueTask WrapCommand(Func<ValueTask<IValidationErrors>> func)
     {
         StartExecute();
 
-        return HasErrors ? Task.CompletedTask : UiHelper.ExecuteAsync(func);
+        return HasErrors ? ValueTask.CompletedTask : UiHelper.ExecuteAsync(func);
     }
 
     public void StartExecute()
