@@ -35,4 +35,5 @@
     <StyleInclude Source="Visual.axaml" />
     <StyleInclude Source="PackIconMaterialDesign.axaml" />
     <StyleInclude Source="TopLevel.axaml" />
+    <StyleInclude Source="Border.axaml" />
 </Styles>

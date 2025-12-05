@@ -14,23 +14,6 @@
                 </Grid>
             </ControlTemplate>
         </Setter>
-
-        <Style Selector="^ /template/ ContentPresenter#HeaderContentPresenter">
-            <Setter Property="HorizontalAlignment" Value="Left" />
-        </Style>
-
-        <Style Selector="^.header-alignment-left /template/ ContentPresenter#HeaderContentPresenter">
-            <Setter Property="HorizontalAlignment" Value="Left" />
-        </Style>
-
-        <Style Selector="^.header-alignment-stretch /template/ ContentPresenter#HeaderContentPresenter">
-            <Setter Property="HorizontalAlignment" Value="Stretch" />
-        </Style>
-
-        <Style Selector="^.header-alignment-center /template/ ContentPresenter#HeaderContentPresenter">
-            <Setter Property="HorizontalAlignment" Value="Center" />
-            <Setter Property="VerticalAlignment" Value="Center" />
-        </Style>
     </ControlTheme>
 
     <ControlTheme x:Key="{x:Type c:GroupBoxControl}"
