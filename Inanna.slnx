@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="Inanna.SourceGenerator/Inanna.SourceGenerator.csproj" />
+  <Project Path="Inanna/Inanna.csproj" />
+</Solution>
