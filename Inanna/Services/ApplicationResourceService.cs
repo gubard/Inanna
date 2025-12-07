@@ -2,16 +2,16 @@ using Avalonia;
 
 namespace Inanna.Services;
 
-public interface IApplicationResourceService
+public interface IAppResourceService
 {
     T GetResource<T>(string key);
 }
 
-public class ApplicationResourceService : IApplicationResourceService
+public class AppResourceService : IAppResourceService
 {
     private readonly Application _application;
 
-    public ApplicationResourceService(Application application)
+    public AppResourceService(Application application)
     {
         _application = application;
     }

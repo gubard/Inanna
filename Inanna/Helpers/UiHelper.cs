@@ -12,19 +12,19 @@ public static class UiHelper
 {
     private static readonly IDialogService DialogService;
     private static readonly INavigator Navigator;
-    private static readonly IApplicationResourceService ApplicationResourceService;
+    private static readonly IAppResourceService AppResourceService;
 
     static UiHelper()
     {
         DialogService = DiHelper.ServiceProvider.GetService<IDialogService>();
         Navigator = DiHelper.ServiceProvider.GetService<INavigator>();
-        ApplicationResourceService = DiHelper.ServiceProvider.GetService<IApplicationResourceService>();
+        AppResourceService = DiHelper.ServiceProvider.GetService<IAppResourceService>();
         EmptyCommand = new RelayCommand(() => { });
 
-        CancelButton = new(ApplicationResourceService.GetResource<string>("Lang.Cancel"),
+        CancelButton = new(AppResourceService.GetResource<string>("Lang.Cancel"),
             new RelayCommand(() => DialogService.CloseMessageBox()), null, DialogButtonType.Normal);
 
-        OkButton = new(ApplicationResourceService.GetResource<string>("Lang.Ok"),
+        OkButton = new(AppResourceService.GetResource<string>("Lang.Ok"),
             new RelayCommand(() => DialogService.CloseMessageBox()), null, DialogButtonType.Primary);
     }
 
@@ -45,7 +45,7 @@ public static class UiHelper
         }
         catch (Exception e)
         {
-            await DialogService.ShowMessageBoxAsync(new(ApplicationResourceService.GetResource<string>("Lang.Error"),
+            await DialogService.ShowMessageBoxAsync(new(AppResourceService.GetResource<string>("Lang.Error"),
                 new ExceptionViewModel(e), OkButton));
         }
     }
@@ -58,13 +58,13 @@ public static class UiHelper
 
             if (result.ValidationErrors is not { Count: 0 })
             {
-                await DialogService.ShowMessageBoxAsync(new(ApplicationResourceService.GetResource<string>("Lang.Error"),
+                await DialogService.ShowMessageBoxAsync(new(AppResourceService.GetResource<string>("Lang.Error"),
                     new ValidationErrorsViewModel(result.ValidationErrors.ToArray()), OkButton));
             }
         }
         catch (Exception e)
         {
-            await DialogService.ShowMessageBoxAsync(new(ApplicationResourceService.GetResource<string>("Lang.Error"),
+            await DialogService.ShowMessageBoxAsync(new(AppResourceService.GetResource<string>("Lang.Error"),
                 new ExceptionViewModel(e), OkButton));
         }
     }
@@ -78,7 +78,7 @@ public static class UiHelper
             return true;
         }
 
-        await DialogService.ShowMessageBoxAsync(new(ApplicationResourceService.GetResource<string>("Lang.Error"),
+        await DialogService.ShowMessageBoxAsync(new(AppResourceService.GetResource<string>("Lang.Error"),
             new ValidationErrorsViewModel(result.ValidationErrors.ToArray()), OkButton));
 
         return false;
@@ -91,7 +91,7 @@ public static class UiHelper
             return true;
         }
 
-        await DialogService.ShowMessageBoxAsync(new(ApplicationResourceService.GetResource<string>("Lang.Error"),
+        await DialogService.ShowMessageBoxAsync(new(AppResourceService.GetResource<string>("Lang.Error"),
             new ValidationErrorsViewModel(errors.ValidationErrors.ToArray()), OkButton));
 
         return false;
