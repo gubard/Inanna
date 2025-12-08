@@ -24,15 +24,15 @@ public abstract class
         TPostResponse>
     where TPostRequest : IPostRequest
 {
-    private readonly THttpService _httpService;
+    private readonly THttpService _service;
     private readonly TEfService _efService;
     private readonly AppState _appState;
     private long _lastHttpId;
 
-    protected UiService(THttpService httpService, TEfService efService,
+    protected UiService(THttpService service, TEfService efService,
         AppState appState)
     {
-        _httpService = httpService;
+        _service = service;
         _efService = efService;
         _appState = appState;
         _lastHttpId = -1;
@@ -47,7 +47,7 @@ public abstract class
             {
                 await InitAsync(ct);
 
-                return await _httpService.GetAsync(request, ct);
+                return await _service.GetAsync(request, ct);
             }
             case AppMode.Offline:
                 return await _efService.GetAsync(request, ct);
@@ -66,7 +66,7 @@ public abstract class
                 await InitAsync(ct);
                 var lastLocalId = await _efService.GetLastIdAsync(ct);
                 request.LastLocalId = lastLocalId;
-                var response = await _httpService.PostAsync(request, ct);
+                var response = await _service.PostAsync(request, ct);
                 await _efService.SaveEventsAsync(response.Events, ct);
 
                 return response;
@@ -88,7 +88,7 @@ public abstract class
         var request = new TGetRequest();
         var lastLocalId = await _efService.GetLastIdAsync(ct);
         request.LastId = lastLocalId;
-        var response = await _httpService.GetAsync(request, ct);
+        var response = await _service.GetAsync(request, ct);
 
         if (response.Events.Length == 0)
         {
