@@ -2,9 +2,9 @@
 
 namespace Inanna.Models;
 
-public sealed class SpravaCommand
+public sealed class InannaCommand
 {
-    public SpravaCommand(ICommand command, object? parameter, object content)
+    public InannaCommand(ICommand command, object? parameter, object content)
     {
         Command = command;
         Parameter = parameter;

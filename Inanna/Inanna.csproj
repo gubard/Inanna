@@ -38,6 +38,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\Gaia\Gaia\Gaia.csproj" />
+      <ProjectReference Include="..\..\Nestor\Nestor.Db\Nestor.Db.csproj" />
       <ProjectReference Include="..\Inanna.SourceGenerator\Inanna.SourceGenerator.csproj" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />
     </ItemGroup>
 
