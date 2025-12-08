@@ -12,8 +12,8 @@
                 <MergeResourceInclude Source="NotificationControl.axaml" />
                 <MergeResourceInclude Source="PathControl.axaml" />
                 <MergeResourceInclude Source="GroupBoxControl.axaml" />
-                <MergeResourceInclude Source="../Resources/Converters.axaml" />
-                <MergeResourceInclude Source="../Resources/Colors.axaml" />
+                <MergeResourceInclude Source="Converters.axaml" />
+                <MergeResourceInclude Source="Colors.axaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Styles.Resources>

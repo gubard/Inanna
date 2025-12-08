@@ -4,4 +4,5 @@
     <services:IsValueConverter x:Key="IsValueConverter" />
     <services:IsNotValueConverter x:Key="IsNotValueConverter" />
     <services:DoubleToPercentsConverter x:Key="DoubleToPercentsConverter" />
+    <services:Int32MoreThanConverter x:Key="Int32MoreThanConverter" />
 </ResourceDictionary>
