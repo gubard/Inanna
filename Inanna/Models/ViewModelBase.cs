@@ -10,27 +10,36 @@ namespace Inanna.Models;
 public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
 {
     private bool _isAnyExecute;
-    private readonly Dictionary<string, Func<IEnumerable<ValidationError>>> _errors = new();
+
+    private readonly Dictionary<string, Func<IEnumerable<ValidationError>>>
+        _errors = new();
 
     public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
 
     public bool HasErrors
     {
-        get => _isAnyExecute && _errors.Count != 0 && _errors.Any(x => x.Value.Invoke().Any());
+        get => _isAnyExecute && _errors.Count != 0
+         && _errors.Any(x => x.Value.Invoke().Any());
     }
 
     protected ValueTask WrapCommand(Func<ValueTask> func)
     {
         StartExecute();
 
-        return HasErrors ? ValueTask.CompletedTask : UiHelper.ExecuteAsync(func);
+        return HasErrors
+            ? ValueTask.CompletedTask
+            : UiHelper.ExecuteAsync(func);
     }
 
-    protected ValueTask WrapCommand(Func<ValueTask<IValidationErrors>> func)
+    protected ValueTask WrapCommand<TValidationErrors>(
+        Func<ValueTask<TValidationErrors>> func)
+        where TValidationErrors : IValidationErrors
     {
         StartExecute();
 
-        return HasErrors ? ValueTask.CompletedTask : UiHelper.ExecuteAsync(func);
+        return HasErrors
+            ? ValueTask.CompletedTask
+            : UiHelper.ExecuteAsync(func);
     }
 
     public void StartExecute()
@@ -62,7 +71,8 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
         return errors;
     }
 
-    protected void SetValidation(string propertyName, Func<IEnumerable<ValidationError>> validation)
+    protected void SetValidation(string propertyName,
+        Func<IEnumerable<ValidationError>> validation)
     {
         _errors[propertyName] = validation;
     }

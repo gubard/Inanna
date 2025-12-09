@@ -18,23 +18,29 @@ public static class UiHelper
     {
         DialogService = DiHelper.ServiceProvider.GetService<IDialogService>();
         Navigator = DiHelper.ServiceProvider.GetService<INavigator>();
-        AppResourceService = DiHelper.ServiceProvider.GetService<IAppResourceService>();
+        AppResourceService =
+            DiHelper.ServiceProvider.GetService<IAppResourceService>();
         EmptyCommand = new RelayCommand(() => { });
 
-        CancelButton = new(AppResourceService.GetResource<string>("Lang.Cancel"),
-            new RelayCommand(() => DialogService.CloseMessageBox()), null, DialogButtonType.Normal);
+        CancelButton = new(
+            AppResourceService.GetResource<string>("Lang.Cancel"),
+            new RelayCommand(() => DialogService.CloseMessageBox()), null,
+            DialogButtonType.Normal);
 
         OkButton = new(AppResourceService.GetResource<string>("Lang.Ok"),
-            new RelayCommand(() => DialogService.CloseMessageBox()), null, DialogButtonType.Primary);
+            new RelayCommand(() => DialogService.CloseMessageBox()), null,
+            DialogButtonType.Primary);
     }
 
     public static readonly DialogButton CancelButton;
     public static readonly DialogButton OkButton;
     public static readonly ICommand EmptyCommand;
 
-    public static ValueTask NavigateToAsync<TView>(CancellationToken ct) where TView : notnull
+    public static ValueTask NavigateToAsync<TView>(CancellationToken ct)
+        where TView : notnull
     {
-        return Navigator.NavigateToAsync(DiHelper.ServiceProvider.GetService<TView>(), ct);
+        return Navigator.NavigateToAsync(
+            DiHelper.ServiceProvider.GetService<TView>(), ct);
     }
 
     public static async ValueTask ExecuteAsync(Func<ValueTask> func)
@@ -45,12 +51,15 @@ public static class UiHelper
         }
         catch (Exception e)
         {
-            await DialogService.ShowMessageBoxAsync(new(AppResourceService.GetResource<string>("Lang.Error"),
+            await DialogService.ShowMessageBoxAsync(new(
+                AppResourceService.GetResource<string>("Lang.Error"),
                 new ExceptionViewModel(e), OkButton));
         }
     }
 
-    public static async ValueTask ExecuteAsync(Func<ValueTask<IValidationErrors>> func)
+    public static async ValueTask ExecuteAsync<TValidationErrors>(
+        Func<ValueTask<TValidationErrors>> func)
+        where TValidationErrors : IValidationErrors
     {
         try
         {
@@ -58,18 +67,24 @@ public static class UiHelper
 
             if (result.ValidationErrors is not { Count: 0 })
             {
-                await DialogService.ShowMessageBoxAsync(new(AppResourceService.GetResource<string>("Lang.Error"),
-                    new ValidationErrorsViewModel(result.ValidationErrors.ToArray()), OkButton));
+                await DialogService.ShowMessageBoxAsync(new(
+                    AppResourceService.GetResource<string>("Lang.Error"),
+                    new ValidationErrorsViewModel(result.ValidationErrors
+                       .ToArray()), OkButton));
             }
         }
         catch (Exception e)
         {
-            await DialogService.ShowMessageBoxAsync(new(AppResourceService.GetResource<string>("Lang.Error"),
+            await DialogService.ShowMessageBoxAsync(new(
+                AppResourceService.GetResource<string>("Lang.Error"),
                 new ExceptionViewModel(e), OkButton));
         }
     }
 
-    public static async ValueTask<bool> CheckValidationErrorsAsync<TValidationErrors>(ValueTask<TValidationErrors> task) where TValidationErrors : IValidationErrors
+    public static async ValueTask<bool>
+        CheckValidationErrorsAsync<TValidationErrors>(
+            ValueTask<TValidationErrors> task)
+        where TValidationErrors : IValidationErrors
     {
         var result = await task;
 
@@ -78,36 +93,47 @@ public static class UiHelper
             return true;
         }
 
-        await DialogService.ShowMessageBoxAsync(new(AppResourceService.GetResource<string>("Lang.Error"),
-            new ValidationErrorsViewModel(result.ValidationErrors.ToArray()), OkButton));
+        await DialogService.ShowMessageBoxAsync(new(
+            AppResourceService.GetResource<string>("Lang.Error"),
+            new ValidationErrorsViewModel(result.ValidationErrors.ToArray()),
+            OkButton));
 
         return false;
     }
 
-    public static async ValueTask<bool> CheckValidationErrorsAsync<TValidationErrors>(TValidationErrors errors) where TValidationErrors : IValidationErrors
+    public static async ValueTask<bool>
+        CheckValidationErrorsAsync<TValidationErrors>(TValidationErrors errors)
+        where TValidationErrors : IValidationErrors
     {
         if (errors.ValidationErrors is { Count: 0 })
         {
             return true;
         }
 
-        await DialogService.ShowMessageBoxAsync(new(AppResourceService.GetResource<string>("Lang.Error"),
-            new ValidationErrorsViewModel(errors.ValidationErrors.ToArray()), OkButton));
+        await DialogService.ShowMessageBoxAsync(new(
+            AppResourceService.GetResource<string>("Lang.Error"),
+            new ValidationErrorsViewModel(errors.ValidationErrors.ToArray()),
+            OkButton));
 
         return false;
     }
 
-    public static ICommand CreateCommand<T>(Func<T, CancellationToken, ValueTask> func)
+    public static ICommand CreateCommand<T>(
+        Func<T, CancellationToken, ValueTask> func)
     {
-        return new AsyncRelayCommand<T>(async (parameter, ct) => await ExecuteAsync(() => func.Invoke(parameter.ThrowIfNull(), ct)));
+        return new AsyncRelayCommand<T>(async (parameter, ct) =>
+            await ExecuteAsync(() => func.Invoke(parameter.ThrowIfNull(), ct)));
     }
 
-    public static ICommand CreateCommand(Func<CancellationToken, ValueTask> func)
+    public static ICommand CreateCommand(
+        Func<CancellationToken, ValueTask> func)
     {
-        return new AsyncRelayCommand(async ct => await ExecuteAsync(() => func.Invoke(ct)));
+        return new AsyncRelayCommand(async ct =>
+            await ExecuteAsync(() => func.Invoke(ct)));
     }
 
-    public static ICommand CreateCommand(Func<ValueTask<IValidationErrors>> func)
+    public static ICommand CreateCommand(
+        Func<ValueTask<IValidationErrors>> func)
     {
         return new AsyncRelayCommand(async () => await ExecuteAsync(func));
     }

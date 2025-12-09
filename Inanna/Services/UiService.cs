@@ -13,7 +13,7 @@ public interface
 
 public abstract class
     UiService<TGetRequest, TPostRequest, TGetResponse, TPostResponse,
-        THttpService, TEfService> :
+        THttpService, TEfService, TCache> :
     IUiService<TGetRequest, TPostRequest, TGetResponse, TPostResponse>
     where TGetResponse : IValidationErrors, IResponse, new()
     where TPostResponse : IValidationErrors, IResponse, new()
@@ -23,22 +23,25 @@ public abstract class
     where TEfService : IEfService<TGetRequest, TPostRequest, TGetResponse,
         TPostResponse>
     where TPostRequest : IPostRequest
+    where TCache : ICache<TGetResponse>
 {
     private readonly THttpService _service;
     private readonly TEfService _efService;
     private readonly AppState _appState;
     private long _lastHttpId;
+    private readonly TCache _cache;
 
     protected UiService(THttpService service, TEfService efService,
-        AppState appState)
+        AppState appState, TCache cache)
     {
         _service = service;
         _efService = efService;
         _appState = appState;
+        _cache = cache;
         _lastHttpId = -1;
     }
 
-    public async ValueTask<TGetResponse> GetAsync(TGetRequest request,
+    public virtual async ValueTask<TGetResponse> GetAsync(TGetRequest request,
         CancellationToken ct)
     {
         switch (_appState.Mode)
@@ -47,16 +50,25 @@ public abstract class
             {
                 await InitAsync(ct);
 
-                return await _service.GetAsync(request, ct);
+                var response = await _service.GetAsync(request, ct);
+                _cache.Update(response);
+
+                return response;
             }
             case AppMode.Offline:
-                return await _efService.GetAsync(request, ct);
+            {
+                var response = await _efService.GetAsync(request, ct);
+                _cache.Update(response);
+
+                return response;
+            }
             default:
                 throw new ArgumentOutOfRangeException();
         }
     }
 
-    public async ValueTask<TPostResponse> PostAsync(TPostRequest request,
+    public virtual async ValueTask<TPostResponse> PostAsync(
+        TPostRequest request,
         CancellationToken ct)
     {
         switch (_appState.Mode)
