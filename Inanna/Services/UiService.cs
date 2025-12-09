@@ -90,6 +90,26 @@ public abstract class
         }
     }
 
+    public TPostResponse Post(TPostRequest request)
+    {
+        switch (_appState.Mode)
+        {
+            case AppMode.Online:
+            {
+                var lastLocalId = _efService.GetLastId();
+                request.LastLocalId = lastLocalId;
+                var response = _service.Post(request);
+                _efService.SaveEvents(response.Events);
+
+                return response;
+            }
+            case AppMode.Offline:
+                return  _efService.Post(request);
+
+            default: throw new ArgumentOutOfRangeException();
+        }
+    }
+
     private async ValueTask InitAsync(CancellationToken ct)
     {
         if (_lastHttpId != -1)
