@@ -1,8 +1,9 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:services="clr-namespace:Inanna.Services">
-    <services:IsValueConverter x:Key="IsValueConverter" />
-    <services:IsNotValueConverter x:Key="IsNotValueConverter" />
-    <services:DoubleToPercentsConverter x:Key="DoubleToPercentsConverter" />
-    <services:Int32MoreThanConverter x:Key="Int32MoreThanConverter" />
+                    xmlns:s="clr-namespace:Inanna.Services">
+    <s:IsValueConverter x:Key="IsValueConverter" />
+    <s:IsNotValueConverter x:Key="IsNotValueConverter" />
+    <s:DoubleToPercentsConverter x:Key="DoubleToPercentsConverter" />
+    <s:Int32MoreThanConverter x:Key="Int32MoreThanConverter" />
+    <s:InsertFirstElementConverter x:Key="InsertFirstElementConverter" />
 </ResourceDictionary>
