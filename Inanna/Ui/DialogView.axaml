@@ -25,7 +25,7 @@
                             Classes.danger="{Binding Type, Converter={StaticResource IsValueConverter}, ConverterParameter={x:Static m:DialogButtonType.Danger}}"
                             Content="{Binding Content}"
                             Command="{Binding Command}"
-                            CommandParameter="{Binding $parent[ui:DialogView].ViewModel.Content}" />
+                            CommandParameter="{Binding CommandParameter}" />
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
