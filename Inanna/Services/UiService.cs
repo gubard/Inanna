@@ -23,7 +23,7 @@ public abstract class
     where TEfService : IEfService<TGetRequest, TPostRequest, TGetResponse,
         TPostResponse>
     where TPostRequest : IPostRequest
-    where TCache : ICache<TGetResponse>
+    where TCache : ICache<TGetResponse>, ICache<TPostRequest>
 {
     private readonly THttpService _service;
     private readonly TEfService _efService;
@@ -71,6 +71,8 @@ public abstract class
         TPostRequest request,
         CancellationToken ct)
     {
+        _cache.Update(request);
+
         switch (_appState.Mode)
         {
             case AppMode.Online:
@@ -92,6 +94,8 @@ public abstract class
 
     public TPostResponse Post(TPostRequest request)
     {
+        _cache.Update(request);
+
         switch (_appState.Mode)
         {
             case AppMode.Online:
@@ -104,7 +108,7 @@ public abstract class
                 return response;
             }
             case AppMode.Offline:
-                return  _efService.Post(request);
+                return _efService.Post(request);
 
             default: throw new ArgumentOutOfRangeException();
         }

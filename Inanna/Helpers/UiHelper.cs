@@ -132,9 +132,10 @@ public static class UiHelper
             await ExecuteAsync(() => func.Invoke(ct)));
     }
 
-    public static ICommand CreateCommand(
-        Func<ValueTask<IValidationErrors>> func)
+    public static ICommand CreateCommand<T,TValidationErrors>(
+        Func<T, CancellationToken, ValueTask<TValidationErrors>> func)  where TValidationErrors  :IValidationErrors
     {
-        return new AsyncRelayCommand(async () => await ExecuteAsync(func));
+        return new AsyncRelayCommand<T>(async (parameter, ct) =>
+            await ExecuteAsync(() => func.Invoke(parameter.ThrowIfNull(), ct)));
     }
 }
