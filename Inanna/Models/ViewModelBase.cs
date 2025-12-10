@@ -16,11 +16,8 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
 
     public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
 
-    public bool HasErrors
-    {
-        get => _isAnyExecute && _errors.Count != 0
-         && _errors.Any(x => x.Value.Invoke().Any());
-    }
+    public bool HasErrors => _isAnyExecute && _errors.Count != 0
+     && _errors.Any(x => x.Value.Invoke().Any());
 
     protected ValueTask WrapCommand(Func<ValueTask> func)
     {

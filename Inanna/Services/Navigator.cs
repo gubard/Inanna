@@ -22,15 +22,9 @@ public class Navigator : ObservableObject, INavigator
 
     public event ViewChangedEventHandler? ViewChanged;
 
-    public bool IsEmpty
-    {
-        get => _stackViewModel.IsEmpty;
-    }
+    public bool IsEmpty => _stackViewModel.IsEmpty;
 
-    public object? CurrentView
-    {
-        get => _stackViewModel.CurrentView;
-    }
+    public object? CurrentView => _stackViewModel.CurrentView;
 
     public Navigator(StackViewModel stackViewModel)
     {
