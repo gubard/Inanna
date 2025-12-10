@@ -18,6 +18,8 @@
         </ResourceDictionary>
     </Styles.Resources>
 
+    <StyleInclude Source="ListBoxItem.axaml" />
+    <StyleInclude Source="ListBox.axaml" />
     <StyleInclude Source="ContentControl.axaml" />
     <StyleInclude Source="NumericUpDown.axaml" />
     <StyleInclude Source="Rectangle.axaml" />

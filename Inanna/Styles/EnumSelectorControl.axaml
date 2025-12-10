@@ -9,16 +9,7 @@
             <ControlTemplate>
                 <ListBox x:Name="PART_SelectingItemsControl"
                          SelectionMode="Single"
-                         MinWidth="{TemplateBinding MinWidth}">
-                    <ListBox.Styles>
-                        <Style Selector="ListBoxItem">
-                            <Setter Property="CornerRadius" Value="5" />
-                            <Setter Property="Margin" Value="3" />
-                            <Setter Property="Background"
-                                    Value="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}" />
-                        </Style>
-                    </ListBox.Styles>
-                </ListBox>
+                         MinWidth="{TemplateBinding MinWidth}" />
             </ControlTemplate>
         </Setter>
 
