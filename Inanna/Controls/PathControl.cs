@@ -35,17 +35,6 @@ public class PathControl : TemplatedControl
     private INotifyCollectionChanged? _notifyCollectionChanged;
     private IList? _items;
 
-    static PathControl()
-    {
-        ItemsSourceProperty.Changed.AddClassHandler<PathControl>(
-            (pc, _) =>
-            {
-                pc.UpdateDefaultItems();
-                pc.UpdateNotifyCollectionChanged();
-            }
-        );
-    }
-
     public PathControl()
     {
         Items = Array.Empty<object>();
@@ -75,6 +64,18 @@ public class PathControl : TemplatedControl
         set => SetValue(ItemsSourceProperty, value);
     }
 
+    protected override void OnPropertyChanged(
+        AvaloniaPropertyChangedEventArgs change)
+    {
+        base.OnPropertyChanged(change);
+
+        if (change.Property == ItemsSourceProperty)
+        {
+            UpdateNotifyCollectionChanged();
+            UpdateDefaultItems();
+        }
+    }
+
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
@@ -88,9 +89,9 @@ public class PathControl : TemplatedControl
             _notifyCollectionChanged.CollectionChanged -= OnCollectionChanged;
         }
 
-        if (ItemsSource is INotifyCollectionChanged n)
+        if (ItemsSource is INotifyCollectionChanged notifyCollectionChanged)
         {
-            _notifyCollectionChanged = n;
+            _notifyCollectionChanged = notifyCollectionChanged;
             _notifyCollectionChanged.CollectionChanged += OnCollectionChanged;
         }
         else
