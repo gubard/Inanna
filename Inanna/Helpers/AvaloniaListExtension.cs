@@ -4,50 +4,49 @@ namespace Inanna.Helpers;
 
 public static class AvaloniaListExtension
 {
-    public static void UpdateOrder<T>(this AvaloniaList<T> list, T[] items)
-        where T : notnull
-    {
-        if (items.Length == 0)
-        {
-            list.Clear();
-        }
-
-        var index = 0;
-
-        for (; index < items.Length; index++)
-        {
-            var item = items[index];
-
-            if (index >= list.Count)
-            {
-                list.Add(item);
-
-                continue;
-            }
-
-            if (item.Equals(list[index]))
-            {
-                continue;
-            }
-
-            var lastIndex = list.LastIndexOf(item);
-
-            if (lastIndex != -1)
-            {
-                list.RemoveAt(lastIndex);
-            }
-
-            list.Insert(index, item);
-        }
-
-        if (index < list.Count)
-        {
-            list.RemoveRange(index, list.Count - index);
-        }
-    }
-
     extension<T>(AvaloniaList<T> list)
     {
+        public void UpdateOrder(T[] items)
+        {
+            if (items.Length == 0)
+            {
+                list.Clear();
+            }
+
+            var index = 0;
+
+            for (; index < items.Length; index++)
+            {
+                var item = items[index];
+
+                if (index >= list.Count)
+                {
+                    list.Add(item);
+
+                    continue;
+                }
+
+                if (item?.Equals(list[index]) == true)
+                {
+                    continue;
+                }
+
+                var lastIndex = list.LastIndexOf(item);
+
+                if (lastIndex != -1)
+                {
+                    list.RemoveAt(lastIndex);
+                }
+
+                list.Insert(index, item);
+            }
+
+            if (index < list.Count)
+            {
+                list.RemoveRange(index, list.Count - index);
+            }
+        }
+
         private int LastIndexOf(T item)
         {
             if (list.Count == 0)
