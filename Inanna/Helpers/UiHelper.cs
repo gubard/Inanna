@@ -80,6 +80,30 @@ public static class UiHelper
                 new ExceptionViewModel(e), OkButton));
         }
     }
+    
+    public static void Execute<TValidationErrors>(
+        Func<TValidationErrors> func)
+        where TValidationErrors : IValidationErrors
+    {
+        try
+        {
+            var result = func.Invoke();
+
+            if (result.ValidationErrors is not { Count: 0 })
+            {
+                 DialogService.ShowMessageBox(new(
+                    AppResourceService.GetResource<string>("Lang.Error"),
+                    new ValidationErrorsViewModel(result.ValidationErrors
+                       .ToArray()), OkButton));
+            }
+        }
+        catch (Exception e)
+        {
+             DialogService.ShowMessageBox(new(
+                AppResourceService.GetResource<string>("Lang.Error"),
+                new ExceptionViewModel(e), OkButton));
+        }
+    }
 
     public static async ValueTask<bool>
         CheckValidationErrorsAsync<TValidationErrors>(

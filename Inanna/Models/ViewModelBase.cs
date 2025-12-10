@@ -42,6 +42,20 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
             : UiHelper.ExecuteAsync(func);
     }
 
+    protected void WrapCommand<TValidationErrors>(
+        Func<TValidationErrors> func)
+        where TValidationErrors : IValidationErrors
+    {
+        StartExecute();
+
+        if (HasErrors)
+        {
+            return;
+        }
+
+        UiHelper.Execute(func);
+    }
+
     public void StartExecute()
     {
         _isAnyExecute = true;

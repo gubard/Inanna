@@ -5,11 +5,13 @@ namespace Inanna.Services;
 
 public interface INavigator
 {
-    ValueTask<object?> NavigateBackOrNullAsync(CancellationToken ct);
-    ValueTask NavigateToAsync(object view, CancellationToken ct);
+    public event ViewChangedEventHandler? ViewChanged;
     bool IsEmpty { get; }
     object? CurrentView { get; }
-    public event ViewChangedEventHandler? ViewChanged;
+    ValueTask<object?> NavigateBackOrNullAsync(CancellationToken ct);
+    ValueTask NavigateToAsync(object view, CancellationToken ct);
+    ValueTask RefreshCurrentViewAsync(CancellationToken ct);
+    void RefreshCurrentView();
 }
 
 public delegate void ViewChangedEventHandler(object? sender, object? view);
@@ -18,10 +20,22 @@ public class Navigator : ObservableObject, INavigator
 {
     private readonly StackViewModel _stackViewModel;
 
+    public event ViewChangedEventHandler? ViewChanged;
+
+    public bool IsEmpty
+    {
+        get => _stackViewModel.IsEmpty;
+    }
+
+    public object? CurrentView
+    {
+        get => _stackViewModel.CurrentView;
+    }
+
     public Navigator(StackViewModel stackViewModel)
     {
         _stackViewModel = stackViewModel;
-        
+
         _stackViewModel.PropertyChanged += (_, e) =>
         {
             switch (e.PropertyName)
@@ -51,7 +65,21 @@ public class Navigator : ObservableObject, INavigator
         return ValueTask.CompletedTask;
     }
 
-    public bool IsEmpty => _stackViewModel.IsEmpty;
-    public object? CurrentView => _stackViewModel.CurrentView;
-    public event ViewChangedEventHandler? ViewChanged;
+    public ValueTask RefreshCurrentViewAsync(CancellationToken ct)
+    {
+        if (CurrentView is IRefresh refresh)
+        {
+            return refresh.RefreshAsync(ct);
+        }
+        
+        return ValueTask.CompletedTask;
+    }
+
+    public void RefreshCurrentView()
+    {
+        if (CurrentView is IRefresh refresh)
+        {
+            refresh.Refresh();
+        }
+    }
 }

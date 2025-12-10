@@ -28,17 +28,19 @@ public abstract class
     private readonly THttpService _service;
     private readonly TEfService _efService;
     private readonly AppState _appState;
-    private long _lastHttpId;
+    private bool _inited;
     private readonly TCache _cache;
+    private readonly INavigator _navigator;
 
     protected UiService(THttpService service, TEfService efService,
-        AppState appState, TCache cache)
+        AppState appState, TCache cache, INavigator navigator)
     {
         _service = service;
         _efService = efService;
         _appState = appState;
         _cache = cache;
-        _lastHttpId = -1;
+        _navigator = navigator;
+        _inited = false;
     }
 
     public virtual async ValueTask<TGetResponse> GetAsync(TGetRequest request,
@@ -72,30 +74,49 @@ public abstract class
         CancellationToken ct)
     {
         _cache.Update(request);
+        await InitAsync(ct);
+        var response = await PostCoreAsync(request, ct);
+        await _navigator.RefreshCurrentViewAsync(ct);
 
-        switch (_appState.Mode)
-        {
-            case AppMode.Online:
-            {
-                await InitAsync(ct);
-                var lastLocalId = await _efService.GetLastIdAsync(ct);
-                request.LastLocalId = lastLocalId;
-                var response = await _service.PostAsync(request, ct);
-                await _efService.SaveEventsAsync(response.Events, ct);
-
-                return response;
-            }
-            case AppMode.Offline:
-                return await _efService.PostAsync(request, ct);
-
-            default: throw new ArgumentOutOfRangeException();
-        }
+        return response;
     }
 
     public TPostResponse Post(TPostRequest request)
     {
         _cache.Update(request);
+        var response = PostCore(request);
+        _navigator.RefreshCurrentView();
 
+        return response;
+    }
+
+    public TGetResponse Get(TGetRequest request)
+    {
+        switch (_appState.Mode)
+        {
+            case AppMode.Online:
+            {
+                Init();
+
+                var response = _service.Get(request);
+                _cache.Update(response);
+
+                return response;
+            }
+            case AppMode.Offline:
+            {
+                var response = _efService.Get(request);
+                _cache.Update(response);
+
+                return response;
+            }
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+    }
+
+    private TPostResponse PostCore(TPostRequest request)
+    {
         switch (_appState.Mode)
         {
             case AppMode.Online:
@@ -114,9 +135,31 @@ public abstract class
         }
     }
 
+    private async ValueTask<TPostResponse> PostCoreAsync(
+        TPostRequest request,
+        CancellationToken ct)
+    {
+        switch (_appState.Mode)
+        {
+            case AppMode.Online:
+            {
+                var lastLocalId = await _efService.GetLastIdAsync(ct);
+                request.LastLocalId = lastLocalId;
+                var response = await _service.PostAsync(request, ct);
+                await _efService.SaveEventsAsync(response.Events, ct);
+
+                return response;
+            }
+            case AppMode.Offline:
+                return await _efService.PostAsync(request, ct);
+
+            default: throw new ArgumentOutOfRangeException();
+        }
+    }
+
     private async ValueTask InitAsync(CancellationToken ct)
     {
-        if (_lastHttpId != -1)
+        if (_inited || _appState.Mode != AppMode.Online)
         {
             return;
         }
@@ -125,13 +168,22 @@ public abstract class
         var lastLocalId = await _efService.GetLastIdAsync(ct);
         request.LastId = lastLocalId;
         var response = await _service.GetAsync(request, ct);
+        await _efService.SaveEventsAsync(response.Events, ct);
+        _inited = true;
+    }
 
-        if (response.Events.Length == 0)
+    private void Init()
+    {
+        if (_inited || _appState.Mode != AppMode.Online)
         {
             return;
         }
 
-        await _efService.SaveEventsAsync(response.Events, ct);
-        _lastHttpId = response.Events.Max(x => x.Id);
+        var request = new TGetRequest();
+        var lastLocalId = _efService.GetLastId();
+        request.LastId = lastLocalId;
+        var response = _service.Get(request);
+        _efService.SaveEvents(response.Events);
+        _inited = true;
     }
 }

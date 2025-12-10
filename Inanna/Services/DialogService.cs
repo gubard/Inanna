@@ -6,6 +6,7 @@ namespace Inanna.Services;
 public interface IDialogService
 {
     ValueTask ShowMessageBoxAsync(DialogViewModel dialog);
+    void ShowMessageBox(DialogViewModel dialog);
     void CloseMessageBox();
 }
 
@@ -29,6 +30,17 @@ public class DialogService : IDialogService
         var taskCompletionSource = new TaskCompletionSource();
         _taskStack.Push(taskCompletionSource);
         await taskCompletionSource.Task;
+    }
+
+    public void ShowMessageBox(DialogViewModel dialog)
+    {
+        _stackViewModel.PushView(dialog);
+        DialogControl.ShowDialog(_dialogId, _stackViewModel);
+        var taskCompletionSource = new TaskCompletionSource();
+        _taskStack.Push(taskCompletionSource);
+
+        taskCompletionSource.Task.ConfigureAwait(false).GetAwaiter()
+           .GetResult();
     }
 
     public void CloseMessageBox()

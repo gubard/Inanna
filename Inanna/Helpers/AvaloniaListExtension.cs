@@ -7,6 +7,11 @@ public static class AvaloniaListExtension
     public static void UpdateOrder<T>(this AvaloniaList<T> list, T[] items)
         where T : notnull
     {
+        if (items.Length == 0)
+        {
+            list.Clear();
+        }
+
         var index = 0;
 
         for (; index < items.Length; index++)
@@ -16,10 +21,10 @@ public static class AvaloniaListExtension
             if (index >= list.Count)
             {
                 list.Add(item);
-                
+
                 continue;
             }
-     
+
             if (item.Equals(list[index]))
             {
                 continue;
@@ -35,9 +40,9 @@ public static class AvaloniaListExtension
             list.Insert(index, item);
         }
 
-        if (index != list.Count - 1)
+        if (index < list.Count)
         {
-            list.RemoveRange(index + 1, list.Count - index - 1);
+            list.RemoveRange(index, list.Count - index);
         }
     }
 
