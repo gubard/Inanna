@@ -3,6 +3,8 @@ using Inanna.Ui;
 
 namespace Inanna.Services;
 
+public interface INonNavigate;
+
 public interface INavigator
 {
     public event ViewChangedEventHandler? ViewChanged;
@@ -53,6 +55,11 @@ public class Navigator : ObservableObject, INavigator
 
     public ValueTask NavigateToAsync(object view, CancellationToken ct)
     {
+        if (_stackViewModel.CurrentView is INonNavigate)
+        {
+            _stackViewModel.RemoveLastView();
+        }
+
         _stackViewModel.PushView(view);
         ViewChanged?.Invoke(this, _stackViewModel.CurrentView);
 
@@ -65,7 +72,7 @@ public class Navigator : ObservableObject, INavigator
         {
             return refresh.RefreshAsync(ct);
         }
-        
+
         return ValueTask.CompletedTask;
     }
 

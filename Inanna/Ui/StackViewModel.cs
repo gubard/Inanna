@@ -3,7 +3,6 @@ using Inanna.Models;
 
 namespace Inanna.Ui;
 
-
 public partial class StackViewModel : ViewModelBase
 {
     private readonly Stack<object> _views = new();
@@ -23,7 +22,7 @@ public partial class StackViewModel : ViewModelBase
         {
             CurrentView = null;
             OnPropertyChanged(nameof(IsEmpty));
-            
+
             return;
         }
 
@@ -38,6 +37,17 @@ public partial class StackViewModel : ViewModelBase
         }
 
         CurrentView = _views.Peek();
+        OnPropertyChanged(nameof(IsEmpty));
+    }
+
+    public void RemoveLastView()
+    {
+        if (_views.Count == 0)
+        {
+            return;
+        }
+
+        _views.Pop();
         OnPropertyChanged(nameof(IsEmpty));
     }
 }
