@@ -18,6 +18,7 @@
         </ResourceDictionary>
     </Styles.Resources>
 
+    <StyleInclude Source="ToggleButton.axaml" />
     <StyleInclude Source="ListBoxItem.axaml" />
     <StyleInclude Source="ListBox.axaml" />
     <StyleInclude Source="ContentControl.axaml" />
