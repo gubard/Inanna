@@ -5,4 +5,5 @@
     <s:IsNotValueConverter x:Key="IsNotValueConverter" />
     <s:DoubleToPercentsConverter x:Key="DoubleToPercentsConverter" />
     <s:Int32MoreThanConverter x:Key="Int32MoreThanConverter" />
+    <s:ColorToBrushConverter x:Key="ColorToBrushConverter" />
 </ResourceDictionary>

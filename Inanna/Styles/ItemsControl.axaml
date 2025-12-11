@@ -7,6 +7,14 @@
             </ItemsPanelTemplate>
         </Setter>
     </Style>
+    
+    <Style Selector=":is(ItemsControl).horizontal-wrap">
+        <Setter Property="ItemsPanel">
+            <ItemsPanelTemplate>
+                <WrapPanel Orientation="Horizontal" />
+            </ItemsPanelTemplate>
+        </Setter>
+    </Style>
 
     <Style Selector="ItemsControl.accept-panel">
         <Setter Property="ItemsPanel">
