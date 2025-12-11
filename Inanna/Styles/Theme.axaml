@@ -14,6 +14,10 @@
                 <MergeResourceInclude Source="GroupBoxControl.axaml" />
                 <MergeResourceInclude Source="Converters.axaml" />
                 <MergeResourceInclude Source="Colors.axaml" />
+                <MergeResourceInclude Source="DaysOfYearSelectorControl.axaml" />
+                <MergeResourceInclude Source="IntegerSelectorItemControl.axaml" />
+                <MergeResourceInclude Source="IntegersSelectorControl.axaml" />
+                <MergeResourceInclude Source="EnumsSelectorControl.axaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Styles.Resources>

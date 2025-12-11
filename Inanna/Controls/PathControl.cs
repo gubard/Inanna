@@ -8,7 +8,7 @@ using IconPacks.Avalonia.MaterialDesign;
 
 namespace Inanna.Controls;
 
-public class PathControl : TemplatedControl
+public sealed class PathControl : TemplatedControl
 {
     private static readonly FuncTemplate<Control?> DefaultSeparator = new(() =>
         new PackIconMaterialDesign
@@ -25,8 +25,7 @@ public class PathControl : TemplatedControl
         ItemsControl.ItemTemplateProperty.AddOwner<PathControl>();
 
     public static readonly StyledProperty<IEnumerable?> ItemsSourceProperty =
-        AvaloniaProperty.Register<PathControl, IEnumerable?>(
-            nameof(ItemsSource));
+        ItemsControl.ItemsSourceProperty.AddOwner<PathControl>();
 
     public static readonly DirectProperty<PathControl, IList?> ItemsProperty =
         AvaloniaProperty.RegisterDirect<PathControl, IList?>(nameof(Items),
@@ -100,8 +99,7 @@ public class PathControl : TemplatedControl
         }
     }
 
-    private void OnCollectionChanged(object? sender,
-        NotifyCollectionChangedEventArgs e)
+    private void OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         UpdateDefaultItems();
     }

@@ -6,4 +6,7 @@
     <s:DoubleToPercentsConverter x:Key="DoubleToPercentsConverter" />
     <s:Int32MoreThanConverter x:Key="Int32MoreThanConverter" />
     <s:ColorToBrushConverter x:Key="ColorToBrushConverter" />
+    <s:DateOnlyToDateTimeConverter x:Key="DateOnlyToDateTimeConverter" />
+    <s:Int32MoreThenConverter x:Key="Int32MoreThenConverter" />
+    <s:AnyOfConverter x:Key="AnyOfConverter" />
 </ResourceDictionary>

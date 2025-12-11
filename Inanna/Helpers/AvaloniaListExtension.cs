@@ -4,7 +4,7 @@ namespace Inanna.Helpers;
 
 public static class AvaloniaListExtension
 {
-    extension<T>(AvaloniaList<T> list)
+    extension<TAvaloniaList, T>(TAvaloniaList list) where TAvaloniaList : IAvaloniaList<T>
     {
         public void UpdateOrder(T[] items)
         {

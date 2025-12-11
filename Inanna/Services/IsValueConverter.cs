@@ -3,7 +3,7 @@ using Avalonia.Data.Converters;
 
 namespace Inanna.Services;
 
-public class IsValueConverter : IValueConverter
+public sealed class IsValueConverter : IValueConverter
 {
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
@@ -21,7 +21,7 @@ public class IsValueConverter : IValueConverter
     }
 }
 
-public class IsNotValueConverter : IValueConverter
+public sealed class IsNotValueConverter : IValueConverter
 {
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
