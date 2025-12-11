@@ -43,7 +43,7 @@ public static class TopLevelAssist
         var effects = await DragDrop.DoDragDropAsync(triggerEvent, dataTransfer, allowedEffects);
         topLevel.SetValue(IsDraggingProperty, false);
         pseudoClasses.Set(":dragging", false);
-        
+
         return effects;
     }
 }
