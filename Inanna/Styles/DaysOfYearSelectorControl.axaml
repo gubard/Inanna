@@ -1,0 +1,51 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:c="clr-namespace:Inanna.Controls"
+                    xmlns:g="clr-namespace:System.Collections.Generic;assembly=System.Runtime"
+                    xmlns:m="clr-namespace:Gaia.Models;assembly=Gaia">
+    <ControlTheme x:Key="DaysOfYearSelectorControlStyle" TargetType="c:DaysOfYearSelectorControl">
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Grid RowDefinitions="Auto,Auto">
+                    <ListBox x:Name="PART_ListBox" SelectionMode="AlwaysSelected" ItemsSource="{TemplateBinding Items}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <DataTemplate.DataType>
+                                    <x:Type TypeName="g:KeyValuePair"
+                                            x:TypeArguments="m:Month,c:IntegersSelectorControl" />
+                                </DataTemplate.DataType>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Key}" />
+                                    <TextBlock Text="{Binding Value.SelectedIntegers.Count}"
+                                               IsVisible="{Binding Value.SelectedIntegers.Count, Converter={StaticResource Int32MoreThenConverter}, ConverterParameter=0}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                    </ListBox>
+
+                    <ContentControl Grid.Row="1" Content="{Binding SelectedItem, ElementName=PART_ListBox}">
+                        <ContentControl.DataTemplates>
+                            <DataTemplate>
+                                <DataTemplate.DataType>
+                                    <x:Type TypeName="g:KeyValuePair"
+                                            x:TypeArguments="m:Month,c:IntegersSelectorControl" />
+                                </DataTemplate.DataType>
+                                <ContentControl Content="{Binding Value}" />
+                            </DataTemplate>
+                        </ContentControl.DataTemplates>
+                    </ContentControl>
+                </Grid>
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
+
+    <ControlTheme x:Key="{x:Type c:DaysOfYearSelectorControl}"
+                  BasedOn="{StaticResource DaysOfYearSelectorControlStyle}"
+                  TargetType="c:DaysOfYearSelectorControl" />
+</ResourceDictionary>
