@@ -18,10 +18,12 @@
                 <MergeResourceInclude Source="IntegerSelectorItemControl.axaml" />
                 <MergeResourceInclude Source="IntegersSelectorControl.axaml" />
                 <MergeResourceInclude Source="EnumsSelectorControl.axaml" />
+                <MergeResourceInclude Source="Resources.axaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Styles.Resources>
 
+    <StyleInclude Source="Expander.axaml" />
     <StyleInclude Source="ToggleButton.axaml" />
     <StyleInclude Source="ListBoxItem.axaml" />
     <StyleInclude Source="ListBox.axaml" />
