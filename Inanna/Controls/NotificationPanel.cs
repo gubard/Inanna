@@ -138,7 +138,7 @@ public class NotificationPanel : ContentControl
     public static void ShowNotification(
         string identifier,
         object notification,
-        NotificationPanelAlignment alignment,
+        NotificationPanelAlignment align,
         TimeSpan duration,
         bool isAddInEnd = true
     )
@@ -148,7 +148,7 @@ public class NotificationPanel : ContentControl
             throw new($"Notification panel {identifier} not found");
         }
 
-        var list = panel.GetOrCreateList(alignment);
+        var list = panel.GetOrCreateList(align);
 
         if (isAddInEnd)
         {
@@ -176,9 +176,9 @@ public class NotificationPanel : ContentControl
         });
     }
 
-    private IList GetOrCreateList(NotificationPanelAlignment alignment)
+    private IList GetOrCreateList(NotificationPanelAlignment align)
     {
-        return alignment switch
+        return align switch
         {
             NotificationPanelAlignment.TopLeft => GetOrCreateList(TopLeftNotificationsProperty),
             NotificationPanelAlignment.TopRight => GetOrCreateList(TopRightNotificationsProperty),
@@ -199,7 +199,7 @@ public class NotificationPanel : ContentControl
             NotificationPanelAlignment.BottomCenter => GetOrCreateList(
                 BottomCenterNotificationsProperty
             ),
-            _ => throw new ArgumentOutOfRangeException(nameof(alignment), alignment, null),
+            _ => throw new ArgumentOutOfRangeException(nameof(align), align, null),
         };
     }
 

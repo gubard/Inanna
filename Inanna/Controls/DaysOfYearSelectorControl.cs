@@ -24,6 +24,7 @@ public sealed class DaysOfYearSelectorControl : TemplatedControl
 
     private readonly FrozenDictionary<Month, IntegersSelectorControl> _items;
     private IAvaloniaList<DayOfYear>? _list;
+    private bool _blockUpdate;
 
     public DaysOfYearSelectorControl()
     {
@@ -58,11 +59,13 @@ public sealed class DaysOfYearSelectorControl : TemplatedControl
 
                     foreach (var integer in selector.SelectedIntegers)
                     {
-                        newList.Add(new((byte)integer, m));
+                        newList.Add(new() { Day = (byte)integer, Month = m });
                     }
                 }
 
+                _blockUpdate = true;
                 _list.UpdateOrder(newList.ToArray());
+                _blockUpdate = false;
             };
 
             items[month] = new()
@@ -120,17 +123,22 @@ public sealed class DaysOfYearSelectorControl : TemplatedControl
 
     private void UpdateItems()
     {
+        if (_blockUpdate)
+        {
+            return;
+        }
+
         if (ItemsSource is null)
         {
             return;
         }
 
-        var items = ItemsSource.GroupBy(x => x.Month).ToDictionary(x => x.Key);
+        var items = ItemsSource.GroupBy(x => x.Month);
 
-        foreach (var (month, days) in items)
+        foreach (var item in items)
         {
-            (_items[month].SelectedIntegers as AvaloniaList<int>)?.UpdateOrder(
-                days.Select(x => (int)x.Day).ToArray()
+            (_items[item.Key].SelectedIntegers as IAvaloniaList<int>)?.UpdateOrder(
+                item.Select(x => (int)x.Day).ToArray()
             );
         }
     }
