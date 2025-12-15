@@ -19,17 +19,20 @@ public static class Extensions
         };
     }
 
-    public static string GetNamespace<T>(this T syntax) where T : SyntaxNode
+    public static string GetNamespace<T>(this T syntax)
+        where T : SyntaxNode
     {
         return syntax.Ancestors().OfType<BaseNamespaceDeclarationSyntax>().First().Name.ToString();
     }
 
-    public static string GetName<T>(this T syntax) where T : BaseTypeDeclarationSyntax
+    public static string GetName<T>(this T syntax)
+        where T : BaseTypeDeclarationSyntax
     {
         return syntax.Identifier.Text;
     }
 
-    public static string GetFullName<T>(this T syntax) where T : BaseTypeDeclarationSyntax
+    public static string GetFullName<T>(this T syntax)
+        where T : BaseTypeDeclarationSyntax
     {
         return $"{syntax.GetNamespace()}.{syntax.GetName()}";
     }

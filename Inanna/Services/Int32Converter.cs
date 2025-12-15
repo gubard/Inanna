@@ -21,7 +21,12 @@ public class Int32MoreThenConverter : IValueConverter
         return x > y;
     }
 
-    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+    public object? ConvertBack(
+        object? value,
+        Type targetType,
+        object? parameter,
+        CultureInfo culture
+    )
     {
         throw new NotSupportedException();
     }
@@ -30,7 +35,11 @@ public class Int32MoreThenConverter : IValueConverter
     {
         if (parameter is not int value)
         {
-            return int.TryParse(parameter?.ToString(), CultureInfo.InvariantCulture.NumberFormat, out y);
+            return int.TryParse(
+                parameter?.ToString(),
+                CultureInfo.InvariantCulture.NumberFormat,
+                out y
+            );
         }
 
         y = value;

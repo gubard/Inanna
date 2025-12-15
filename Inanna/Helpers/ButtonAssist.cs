@@ -22,40 +22,42 @@ public static class ButtonAssist
 
     static ButtonAssist()
     {
-        IsPasswordHandlerProperty.Changed.AddClassHandler<Button, bool>((button, e) =>
-        {
-            if (e.NewValue.GetValueOrDefault<bool>())
+        IsPasswordHandlerProperty.Changed.AddClassHandler<Button, bool>(
+            (button, e) =>
             {
-                button.Click += OnClick;
-                button.SetPseudoClass(":show-password", true);
-                button.SetPseudoClass(":hide-password", false);
-                var passwordTextBox = GetPasswordTextBox(button);
-
-                if (passwordTextBox is null)
+                if (e.NewValue.GetValueOrDefault<bool>())
                 {
-                    return;
+                    button.Click += OnClick;
+                    button.SetPseudoClass(":show-password", true);
+                    button.SetPseudoClass(":hide-password", false);
+                    var passwordTextBox = GetPasswordTextBox(button);
+
+                    if (passwordTextBox is null)
+                    {
+                        return;
+                    }
+
+                    passwordTextBox.SetPseudoClass(":show-password", true);
+                    passwordTextBox.SetPseudoClass(":hide-password", false);
                 }
-
-                passwordTextBox.SetPseudoClass(":show-password", true);
-                passwordTextBox.SetPseudoClass(":hide-password", false);
-            }
-            else
-            {
-                button.Click -= OnClick;
-                button.SetPseudoClass(":show-password", false);
-                button.SetPseudoClass(":hide-password", false);
-
-                var passwordTextBox = GetPasswordTextBox(button);
-
-                if (passwordTextBox is null)
+                else
                 {
-                    return;
-                }
+                    button.Click -= OnClick;
+                    button.SetPseudoClass(":show-password", false);
+                    button.SetPseudoClass(":hide-password", false);
 
-                passwordTextBox.SetPseudoClass(":show-password", false);
-                passwordTextBox.SetPseudoClass(":hide-password", false);
+                    var passwordTextBox = GetPasswordTextBox(button);
+
+                    if (passwordTextBox is null)
+                    {
+                        return;
+                    }
+
+                    passwordTextBox.SetPseudoClass(":show-password", false);
+                    passwordTextBox.SetPseudoClass(":hide-password", false);
+                }
             }
-        });
+        );
     }
 
     private static TextBox? GetPasswordTextBox(Button button)

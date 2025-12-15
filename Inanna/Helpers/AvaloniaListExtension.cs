@@ -4,7 +4,8 @@ namespace Inanna.Helpers;
 
 public static class AvaloniaListExtension
 {
-    extension<TAvaloniaList, T>(TAvaloniaList list) where TAvaloniaList : IAvaloniaList<T>
+    extension<TAvaloniaList, T>(TAvaloniaList list)
+        where TAvaloniaList : IAvaloniaList<T>
     {
         public void UpdateOrder(T[] items)
         {
@@ -57,8 +58,7 @@ public static class AvaloniaListExtension
             return list.LastIndexOf(item, list.Count - 1, list.Count);
         }
 
-        private int LastIndexOf(T item,
-            int index, int count)
+        private int LastIndexOf(T item, int index, int count)
         {
             if (list.Count != 0 && index < 0)
             {
@@ -83,5 +83,4 @@ public static class AvaloniaListExtension
             return Array.LastIndexOf(list.ToArray(), item, index, count);
         }
     }
-
 }

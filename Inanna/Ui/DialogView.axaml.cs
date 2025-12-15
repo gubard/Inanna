@@ -9,5 +9,6 @@ public partial class DialogView : UserControl
         InitializeComponent();
     }
 
-    public DialogViewModel ViewModel => DataContext as DialogViewModel ?? throw new NullReferenceException(nameof(DialogViewModel));
+    public DialogViewModel ViewModel =>
+        DataContext as DialogViewModel ?? throw new NullReferenceException(nameof(DialogViewModel));
 }

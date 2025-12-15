@@ -18,7 +18,9 @@ public class EnumSelectorControl : TemplatedControl
 
     static EnumSelectorControl()
     {
-        SelectedEnumProperty.Changed.AddClassHandler<EnumSelectorControl>((control, _) => control.UpdateEnums());
+        SelectedEnumProperty.Changed.AddClassHandler<EnumSelectorControl>(
+            (control, _) => control.UpdateEnums()
+        );
     }
 
     public ValueType? SelectedEnum

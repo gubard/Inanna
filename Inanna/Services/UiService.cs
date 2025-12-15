@@ -5,23 +5,25 @@ using Nestor.Db.Services;
 
 namespace Inanna.Services;
 
-public interface
-    IUiService<in TGetRequest, in TPostRequest, TGetResponse, TPostResponse> :
-    IService<TGetRequest, TPostRequest, TGetResponse, TPostResponse>
+public interface IUiService<in TGetRequest, in TPostRequest, TGetResponse, TPostResponse>
+    : IService<TGetRequest, TPostRequest, TGetResponse, TPostResponse>
     where TGetResponse : IValidationErrors, new()
     where TPostResponse : IValidationErrors, new();
 
-public abstract class
-    UiService<TGetRequest, TPostRequest, TGetResponse, TPostResponse,
-        THttpService, TEfService, TCache> :
-    IUiService<TGetRequest, TPostRequest, TGetResponse, TPostResponse>
+public abstract class UiService<
+    TGetRequest,
+    TPostRequest,
+    TGetResponse,
+    TPostResponse,
+    THttpService,
+    TEfService,
+    TCache
+> : IUiService<TGetRequest, TPostRequest, TGetResponse, TPostResponse>
     where TGetResponse : IValidationErrors, IResponse, new()
     where TPostResponse : IValidationErrors, IResponse, new()
     where TGetRequest : IGetRequest, new()
-    where THttpService : IService<TGetRequest, TPostRequest, TGetResponse,
-        TPostResponse>
-    where TEfService : IEfService<TGetRequest, TPostRequest, TGetResponse,
-        TPostResponse>
+    where THttpService : IService<TGetRequest, TPostRequest, TGetResponse, TPostResponse>
+    where TEfService : IEfService<TGetRequest, TPostRequest, TGetResponse, TPostResponse>
     where TPostRequest : IPostRequest
     where TCache : ICache<TGetResponse>, ICache<TPostRequest>
 {
@@ -32,8 +34,13 @@ public abstract class
     private readonly TCache _cache;
     private readonly INavigator _navigator;
 
-    protected UiService(THttpService service, TEfService efService,
-        AppState appState, TCache cache, INavigator navigator)
+    protected UiService(
+        THttpService service,
+        TEfService efService,
+        AppState appState,
+        TCache cache,
+        INavigator navigator
+    )
     {
         _service = service;
         _efService = efService;
@@ -43,8 +50,7 @@ public abstract class
         _inited = false;
     }
 
-    public virtual async ValueTask<TGetResponse> GetAsync(TGetRequest request,
-        CancellationToken ct)
+    public virtual async ValueTask<TGetResponse> GetAsync(TGetRequest request, CancellationToken ct)
     {
         switch (_appState.Mode)
         {
@@ -71,7 +77,8 @@ public abstract class
 
     public virtual async ValueTask<TPostResponse> PostAsync(
         TPostRequest request,
-        CancellationToken ct)
+        CancellationToken ct
+    )
     {
         _cache.Update(request);
         await InitAsync(ct);
@@ -131,13 +138,12 @@ public abstract class
             case AppMode.Offline:
                 return _efService.Post(request);
 
-            default: throw new ArgumentOutOfRangeException();
+            default:
+                throw new ArgumentOutOfRangeException();
         }
     }
 
-    private async ValueTask<TPostResponse> PostCoreAsync(
-        TPostRequest request,
-        CancellationToken ct)
+    private async ValueTask<TPostResponse> PostCoreAsync(TPostRequest request, CancellationToken ct)
     {
         switch (_appState.Mode)
         {
@@ -153,7 +159,8 @@ public abstract class
             case AppMode.Offline:
                 return await _efService.PostAsync(request, ct);
 
-            default: throw new ArgumentOutOfRangeException();
+            default:
+                throw new ArgumentOutOfRangeException();
         }
     }
 

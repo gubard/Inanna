@@ -6,7 +6,9 @@ namespace Inanna.Ui;
 public partial class StackViewModel : ViewModelBase
 {
     private readonly Stack<object> _views = new();
-    [ObservableProperty] private object? _currentView;
+
+    [ObservableProperty]
+    private object? _currentView;
     public bool IsEmpty => _views.Count <= 1;
 
     public void PushView(object view)

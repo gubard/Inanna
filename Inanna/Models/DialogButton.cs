@@ -4,7 +4,12 @@ namespace Inanna.Models;
 
 public class DialogButton
 {
-    public DialogButton(object content, ICommand command, object? commandParameter, DialogButtonType type)
+    public DialogButton(
+        object content,
+        ICommand command,
+        object? commandParameter,
+        DialogButtonType type
+    )
     {
         Content = content;
         Command = command;

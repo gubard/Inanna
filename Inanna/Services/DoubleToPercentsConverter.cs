@@ -21,7 +21,12 @@ public class DoubleToPercentsConverter : IValueConverter
         return number * percentage;
     }
 
-    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+    public object? ConvertBack(
+        object? value,
+        Type targetType,
+        object? parameter,
+        CultureInfo culture
+    )
     {
         if (value is not double number)
         {
@@ -36,7 +41,10 @@ public class DoubleToPercentsConverter : IValueConverter
         return number / percentage;
     }
 
-    private static bool TryGetPercentage([NotNullWhen(true)] object? parameter, out double percentage)
+    private static bool TryGetPercentage(
+        [NotNullWhen(true)] object? parameter,
+        out double percentage
+    )
     {
         if (parameter is double value)
         {
@@ -45,7 +53,11 @@ public class DoubleToPercentsConverter : IValueConverter
             return true;
         }
 
-        return double.TryParse(parameter?.ToString(), CultureInfo.InvariantCulture.NumberFormat, out percentage);
+        return double.TryParse(
+            parameter?.ToString(),
+            CultureInfo.InvariantCulture.NumberFormat,
+            out percentage
+        );
     }
 }
 
@@ -66,7 +78,12 @@ public class Int32MoreThanConverter : IValueConverter
         return number > value2;
     }
 
-    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+    public object? ConvertBack(
+        object? value,
+        Type targetType,
+        object? parameter,
+        CultureInfo culture
+    )
     {
         throw new NotSupportedException();
     }
@@ -80,6 +97,10 @@ public class Int32MoreThanConverter : IValueConverter
             return true;
         }
 
-        return double.TryParse(parameter?.ToString(), CultureInfo.InvariantCulture.NumberFormat, out percentage);
+        return double.TryParse(
+            parameter?.ToString(),
+            CultureInfo.InvariantCulture.NumberFormat,
+            out percentage
+        );
     }
 }

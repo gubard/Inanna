@@ -22,11 +22,7 @@ public class NotificationService : INotificationService
 
     public void ShowNotification(object content, NotificationType type)
     {
-        var notification = new NotificationControl
-        {
-            Type = type,
-            Content = content,
-        };
+        var notification = new NotificationControl { Type = type, Content = content };
 
         notification.Command = UiHelper.CreateCommand(_ =>
         {
@@ -35,6 +31,11 @@ public class NotificationService : INotificationService
             return ValueTask.CompletedTask;
         });
 
-        NotificationPanel.ShowNotification(_identifier, notification, NotificationPanelAlignment.Center, _duration);
+        NotificationPanel.ShowNotification(
+            _identifier,
+            notification,
+            NotificationPanelAlignment.Center,
+            _duration
+        );
     }
 }

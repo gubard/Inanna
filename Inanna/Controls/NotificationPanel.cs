@@ -37,20 +37,24 @@ public class NotificationPanel : ContentControl
     public static readonly StyledProperty<IList?> BottomCenterNotificationsProperty =
         AvaloniaProperty.Register<NotificationPanel, IList?>(nameof(BottomCenterNotifications));
 
-    public static readonly StyledProperty<string?> IdentifierProperty =
-        AvaloniaProperty.Register<NotificationPanel, string?>(nameof(Identifier));
+    public static readonly StyledProperty<string?> IdentifierProperty = AvaloniaProperty.Register<
+        NotificationPanel,
+        string?
+    >(nameof(Identifier));
 
     static NotificationPanel()
     {
-        IdentifierProperty.Changed.AddClassHandler<NotificationPanel, string?>((control, id) =>
-        {
-            if (id.NewValue.Value is null)
+        IdentifierProperty.Changed.AddClassHandler<NotificationPanel, string?>(
+            (control, id) =>
             {
-                return;
-            }
+                if (id.NewValue.Value is null)
+                {
+                    return;
+                }
 
-            NotificationPanels[id.NewValue.Value] = control;
-        });
+                NotificationPanels[id.NewValue.Value] = control;
+            }
+        );
     }
 
     public IList? TopLeftNotifications
@@ -119,7 +123,7 @@ public class NotificationPanel : ContentControl
         {
             throw new($"Notification panel {identifier} not found");
         }
-        
+
         panel.TopLeftNotifications?.Remove(notification);
         panel.TopRightNotifications?.Remove(notification);
         panel.BottomLeftNotifications?.Remove(notification);
@@ -159,12 +163,12 @@ public class NotificationPanel : ContentControl
         {
             return;
         }
-        
+
         if (TimeSpan.Zero >= duration)
         {
             return;
         }
-        
+
         Task.Run(async () =>
         {
             await Task.Delay(duration);
@@ -178,13 +182,23 @@ public class NotificationPanel : ContentControl
         {
             NotificationPanelAlignment.TopLeft => GetOrCreateList(TopLeftNotificationsProperty),
             NotificationPanelAlignment.TopRight => GetOrCreateList(TopRightNotificationsProperty),
-            NotificationPanelAlignment.BottomLeft => GetOrCreateList(BottomLeftNotificationsProperty),
-            NotificationPanelAlignment.BottomRight => GetOrCreateList(BottomRightNotificationsProperty),
+            NotificationPanelAlignment.BottomLeft => GetOrCreateList(
+                BottomLeftNotificationsProperty
+            ),
+            NotificationPanelAlignment.BottomRight => GetOrCreateList(
+                BottomRightNotificationsProperty
+            ),
             NotificationPanelAlignment.Center => GetOrCreateList(CenterNotificationsProperty),
-            NotificationPanelAlignment.LeftCenter => GetOrCreateList(LeftCenterNotificationsProperty),
-            NotificationPanelAlignment.RightCenter => GetOrCreateList(RightCenterNotificationsProperty),
+            NotificationPanelAlignment.LeftCenter => GetOrCreateList(
+                LeftCenterNotificationsProperty
+            ),
+            NotificationPanelAlignment.RightCenter => GetOrCreateList(
+                RightCenterNotificationsProperty
+            ),
             NotificationPanelAlignment.TopCenter => GetOrCreateList(TopCenterNotificationsProperty),
-            NotificationPanelAlignment.BottomCenter => GetOrCreateList(BottomCenterNotificationsProperty),
+            NotificationPanelAlignment.BottomCenter => GetOrCreateList(
+                BottomCenterNotificationsProperty
+            ),
             _ => throw new ArgumentOutOfRangeException(nameof(alignment), alignment, null),
         };
     }

@@ -11,10 +11,14 @@ namespace Inanna.Controls;
 public class ViewSelectorControl : TemplatedControl
 {
     public static readonly StyledProperty<IEnumerable<ViewSelectorItemControl>> ItemsProperty =
-        AvaloniaProperty.Register<ViewSelectorControl, IEnumerable<ViewSelectorItemControl>>(nameof(Items));
+        AvaloniaProperty.Register<ViewSelectorControl, IEnumerable<ViewSelectorItemControl>>(
+            nameof(Items)
+        );
 
-    public static readonly StyledProperty<object?> StateProperty =
-        AvaloniaProperty.Register<ViewSelectorControl, object?>(nameof(State), defaultBindingMode: BindingMode.TwoWay);
+    public static readonly StyledProperty<object?> StateProperty = AvaloniaProperty.Register<
+        ViewSelectorControl,
+        object?
+    >(nameof(State), defaultBindingMode: BindingMode.TwoWay);
 
     private IAvaloniaReadOnlyList<ViewSelectorItemControl>? _itemsNotify;
 

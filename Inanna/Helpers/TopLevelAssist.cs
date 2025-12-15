@@ -10,11 +10,16 @@ namespace Inanna.Helpers;
 public static class TopLevelAssist
 {
     public static readonly AvaloniaProperty<MaterialDesignSizeType> MaterialDesignSizeTypeProperty =
-        AvaloniaProperty.RegisterAttached<TopLevel, MaterialDesignSizeType>(nameof(MaterialDesignSizeType),
-            typeof(TopLevel));
+        AvaloniaProperty.RegisterAttached<TopLevel, MaterialDesignSizeType>(
+            nameof(MaterialDesignSizeType),
+            typeof(TopLevel)
+        );
 
     public static readonly AvaloniaProperty<bool> IsDraggingProperty =
-        AvaloniaProperty.RegisterAttached<TopLevel, bool>(nameof(IDragAndDropService.IsDragging), typeof(TopLevel));
+        AvaloniaProperty.RegisterAttached<TopLevel, bool>(
+            nameof(IDragAndDropService.IsDragging),
+            typeof(TopLevel)
+        );
 
     public static MaterialDesignSizeType GetMaterialDesignSizeType(TopLevel element)
     {
@@ -32,7 +37,10 @@ public static class TopLevelAssist
         DragDropEffects allowedEffects
     )
     {
-        if (triggerEvent.Source is not Visual source || source.GetVisualRoot() is not TopLevel topLevel)
+        if (
+            triggerEvent.Source is not Visual source
+            || source.GetVisualRoot() is not TopLevel topLevel
+        )
         {
             return await DragDrop.DoDragDropAsync(triggerEvent, dataTransfer, allowedEffects);
         }

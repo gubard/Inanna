@@ -39,8 +39,7 @@ public class DialogService : IDialogService
         var taskCompletionSource = new TaskCompletionSource();
         _taskStack.Push(taskCompletionSource);
 
-        taskCompletionSource.Task.ConfigureAwait(false).GetAwaiter()
-           .GetResult();
+        taskCompletionSource.Task.ConfigureAwait(false).GetAwaiter().GetResult();
     }
 
     public void CloseMessageBox()

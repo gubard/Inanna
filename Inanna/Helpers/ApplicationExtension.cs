@@ -13,7 +13,7 @@ public static class ApplicationExtension
 
         return value;
     }
-    
+
     public static TopLevel? GetTopLevel(this Application app)
     {
         if (app.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)

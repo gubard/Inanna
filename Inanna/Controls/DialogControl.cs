@@ -8,43 +8,62 @@ public class DialogControl : ContentControl
 {
     private static readonly Dictionary<string, DialogControl> Dialogs = new();
 
-    public static readonly StyledProperty<bool> IsOpenProperty =
-        AvaloniaProperty.Register<DialogControl, bool>(nameof(IsOpen), defaultBindingMode: BindingMode.TwoWay);
+    public static readonly StyledProperty<bool> IsOpenProperty = AvaloniaProperty.Register<
+        DialogControl,
+        bool
+    >(nameof(IsOpen), defaultBindingMode: BindingMode.TwoWay);
 
-    public static readonly StyledProperty<object?> DialogProperty =
-        AvaloniaProperty.Register<DialogControl, object?>(nameof(Dialog), defaultBindingMode: BindingMode.TwoWay);
+    public static readonly StyledProperty<object?> DialogProperty = AvaloniaProperty.Register<
+        DialogControl,
+        object?
+    >(nameof(Dialog), defaultBindingMode: BindingMode.TwoWay);
 
-    public static readonly StyledProperty<double> WidthDialogProperty =
-        AvaloniaProperty.Register<DialogControl, double>(nameof(WidthDialog), double.NaN);
+    public static readonly StyledProperty<double> WidthDialogProperty = AvaloniaProperty.Register<
+        DialogControl,
+        double
+    >(nameof(WidthDialog), double.NaN);
 
-    public static readonly StyledProperty<double> HeightDialogProperty =
-        AvaloniaProperty.Register<DialogControl, double>(nameof(HeightDialog), double.NaN);
+    public static readonly StyledProperty<double> HeightDialogProperty = AvaloniaProperty.Register<
+        DialogControl,
+        double
+    >(nameof(HeightDialog), double.NaN);
 
     public static readonly StyledProperty<double> MaxWidthDialogProperty =
-        AvaloniaProperty.Register<DialogControl, double>(nameof(MaxWidthDialog), double.PositiveInfinity);
+        AvaloniaProperty.Register<DialogControl, double>(
+            nameof(MaxWidthDialog),
+            double.PositiveInfinity
+        );
 
     public static readonly StyledProperty<double> MaxHeightDialogProperty =
-        AvaloniaProperty.Register<DialogControl, double>(nameof(MaxHeightDialog), double.PositiveInfinity);
+        AvaloniaProperty.Register<DialogControl, double>(
+            nameof(MaxHeightDialog),
+            double.PositiveInfinity
+        );
 
-    public static readonly StyledProperty<string?> IdentifierProperty =
-        AvaloniaProperty.Register<DialogControl, string?>(nameof(Identifier));
+    public static readonly StyledProperty<string?> IdentifierProperty = AvaloniaProperty.Register<
+        DialogControl,
+        string?
+    >(nameof(Identifier));
 
     static DialogControl()
     {
-        IsOpenProperty.Changed.AddClassHandler<DialogControl>((control, _) =>
-            control.PseudoClasses.Set(":is-open", control.IsOpen));
+        IsOpenProperty.Changed.AddClassHandler<DialogControl>(
+            (control, _) => control.PseudoClasses.Set(":is-open", control.IsOpen)
+        );
 
-        IdentifierProperty.Changed.AddClassHandler<DialogControl, string?>((control, id) =>
-        {
-            if (id.NewValue.Value is null)
+        IdentifierProperty.Changed.AddClassHandler<DialogControl, string?>(
+            (control, id) =>
             {
-                return;
-            }
+                if (id.NewValue.Value is null)
+                {
+                    return;
+                }
 
-            Dialogs[id.NewValue.Value] = control;
-        });
+                Dialogs[id.NewValue.Value] = control;
+            }
+        );
     }
-    
+
     public static bool IsShowDialog(string identifier)
     {
         return Dialogs[identifier].IsOpen;
@@ -55,7 +74,7 @@ public class DialogControl : ContentControl
         Dialogs[identifier].Dialog = dialog;
         Dialogs[identifier].IsOpen = true;
     }
-    
+
     public static void CloseDialog(string identifier)
     {
         Dialogs[identifier].IsOpen = false;

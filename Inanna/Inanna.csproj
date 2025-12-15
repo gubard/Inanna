@@ -1,45 +1,47 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+    <CompilerGeneratedFilesOutputPath>$(BaseIntermediateOutputPath)\GeneratedFiles</CompilerGeneratedFilesOutputPath>
+  </PropertyGroup>
 
-    <PropertyGroup>
-        <TargetFramework>net10.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-        <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-        <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
-        <CompilerGeneratedFilesOutputPath>$(BaseIntermediateOutputPath)\GeneratedFiles</CompilerGeneratedFilesOutputPath>
-    </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="11.3.9" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+    <PackageReference Include="IconPacks.Avalonia.MaterialDesign" Version="1.3.1" />
+    <PackageReference Include="Xaml.Behaviors.Interactions" Version="11.3.9" />
+  </ItemGroup>
 
-    <ItemGroup>
-      <PackageReference Include="Avalonia" Version="11.3.9" />
-      <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
-      <PackageReference Include="IconPacks.Avalonia.MaterialDesign" Version="1.3.1" />
-      <PackageReference Include="Xaml.Behaviors.Interactions" Version="11.3.9" />
-    </ItemGroup>
+  <ItemGroup>
+    <AdditionalFiles Include="Styles\Button.axaml" />
+    <AdditionalFiles Include="Styles\CalendarDatePicker.axaml" />
+    <AdditionalFiles Include="Styles\CheckBox.axaml" />
+    <AdditionalFiles Include="Styles\ComboBox.axaml" />
+    <AdditionalFiles Include="Styles\EnumSelectorControl.axaml" />
+    <AdditionalFiles Include="Styles\EnumSelectorItemControl.axaml" />
+    <AdditionalFiles Include="Styles\ItemsControl.axaml" />
+    <AdditionalFiles Include="Styles\Layoutable.axaml" />
+    <AdditionalFiles Include="Styles\NumericUpDown.axaml" />
+    <AdditionalFiles Include="Styles\Rectangle.axaml" />
+    <AdditionalFiles Include="Styles\StackPanel.axaml" />
+    <AdditionalFiles Include="Styles\TemplatedControl.axaml" />
+    <AdditionalFiles Include="Styles\TextBlock.axaml" />
+    <AdditionalFiles Include="Styles\TextBox.axaml" />
+    <AdditionalFiles Include="Styles\Theme.axaml" />
+    <AdditionalFiles Include="Styles\ViewSelectorControl.axaml" />
+    <AdditionalFiles Include="Styles\ViewSelectorItemControl.axaml" />
+  </ItemGroup>
 
-    <ItemGroup>
-      <AdditionalFiles Include="Styles\Button.axaml" />
-      <AdditionalFiles Include="Styles\CalendarDatePicker.axaml" />
-      <AdditionalFiles Include="Styles\CheckBox.axaml" />
-      <AdditionalFiles Include="Styles\ComboBox.axaml" />
-      <AdditionalFiles Include="Styles\EnumSelectorControl.axaml" />
-      <AdditionalFiles Include="Styles\EnumSelectorItemControl.axaml" />
-      <AdditionalFiles Include="Styles\ItemsControl.axaml" />
-      <AdditionalFiles Include="Styles\Layoutable.axaml" />
-      <AdditionalFiles Include="Styles\NumericUpDown.axaml" />
-      <AdditionalFiles Include="Styles\Rectangle.axaml" />
-      <AdditionalFiles Include="Styles\StackPanel.axaml" />
-      <AdditionalFiles Include="Styles\TemplatedControl.axaml" />
-      <AdditionalFiles Include="Styles\TextBlock.axaml" />
-      <AdditionalFiles Include="Styles\TextBox.axaml" />
-      <AdditionalFiles Include="Styles\Theme.axaml" />
-      <AdditionalFiles Include="Styles\ViewSelectorControl.axaml" />
-      <AdditionalFiles Include="Styles\ViewSelectorItemControl.axaml" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\..\Gaia\Gaia\Gaia.csproj" />
-      <ProjectReference Include="..\..\Nestor\Nestor.Db\Nestor.Db.csproj" />
-      <ProjectReference Include="..\Inanna.SourceGenerator\Inanna.SourceGenerator.csproj" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />
-    </ItemGroup>
-
+  <ItemGroup>
+    <ProjectReference Include="..\..\Gaia\Gaia\Gaia.csproj" />
+    <ProjectReference Include="..\..\Nestor\Nestor.Db\Nestor.Db.csproj" />
+    <ProjectReference
+      Include="..\Inanna.SourceGenerator\Inanna.SourceGenerator.csproj"
+      ReferenceOutputAssembly="false"
+      OutputItemType="Analyzer"
+    />
+  </ItemGroup>
 </Project>

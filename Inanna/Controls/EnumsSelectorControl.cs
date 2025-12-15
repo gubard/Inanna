@@ -67,7 +67,8 @@ public class EnumsSelectorControl : TemplatedControl
             {
                 if (selectedEnums is INotifyCollectionChanged notifyCollectionChanged)
                 {
-                    notifyCollectionChanged.CollectionChanged -= SelectedIntegersChangedEventHandler;
+                    notifyCollectionChanged.CollectionChanged -=
+                        SelectedIntegersChangedEventHandler;
                 }
 
                 selectedEnums = SelectedEnums;
@@ -90,7 +91,10 @@ public class EnumsSelectorControl : TemplatedControl
         }
     }
 
-    private void SelectedIntegersChangedEventHandler(object? sender, NotifyCollectionChangedEventArgs e)
+    private void SelectedIntegersChangedEventHandler(
+        object? sender,
+        NotifyCollectionChangedEventArgs e
+    )
     {
         if (sender is not IEnumerable enumerable)
         {
@@ -152,22 +156,20 @@ public class EnumsSelectorControl : TemplatedControl
         Clear();
 
         enumControls.AddRange(
-            Enum.GetValues(SelectedEnums.GetType().GetGenericArguments()[0]).OfType<object>()
-               .Select(
-                    x => new EnumSelectorItemControl
-                    {
-                        Value = x,
-                        DisplayValue =
-                            EnumLocalizationValueConverter.Instance.Convert(
-                                x,
-                                x.GetType(),
-                                null,
-                                CultureInfo.CurrentCulture
-                            )
-                         ?? x,
-                    }
-                )
-               .ToArray()
+            Enum.GetValues(SelectedEnums.GetType().GetGenericArguments()[0])
+                .OfType<object>()
+                .Select(x => new EnumSelectorItemControl
+                {
+                    Value = x,
+                    DisplayValue =
+                        EnumLocalizationValueConverter.Instance.Convert(
+                            x,
+                            x.GetType(),
+                            null,
+                            CultureInfo.CurrentCulture
+                        ) ?? x,
+                })
+                .ToArray()
         );
 
         foreach (var enumControl in enumControls)

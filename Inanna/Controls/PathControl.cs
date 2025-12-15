@@ -11,15 +11,14 @@ namespace Inanna.Controls;
 public sealed class PathControl : TemplatedControl
 {
     private static readonly FuncTemplate<Control?> DefaultSeparator = new(() =>
-        new PackIconMaterialDesign
-        {
-            Kind = PackIconMaterialDesignKind.ChevronRight,
-        });
+        new PackIconMaterialDesign { Kind = PackIconMaterialDesignKind.ChevronRight }
+    );
 
-    public static readonly StyledProperty<ITemplate<Control?>>
-        SeparatorProperty =
-            AvaloniaProperty.Register<PathControl, ITemplate<Control?>>(
-                nameof(SeparatorPanel), DefaultSeparator);
+    public static readonly StyledProperty<ITemplate<Control?>> SeparatorProperty =
+        AvaloniaProperty.Register<PathControl, ITemplate<Control?>>(
+            nameof(SeparatorPanel),
+            DefaultSeparator
+        );
 
     public static readonly StyledProperty<IDataTemplate?> ItemTemplateProperty =
         ItemsControl.ItemTemplateProperty.AddOwner<PathControl>();
@@ -28,8 +27,10 @@ public sealed class PathControl : TemplatedControl
         ItemsControl.ItemsSourceProperty.AddOwner<PathControl>();
 
     public static readonly DirectProperty<PathControl, IList?> ItemsProperty =
-        AvaloniaProperty.RegisterDirect<PathControl, IList?>(nameof(Items),
-            control => control._items);
+        AvaloniaProperty.RegisterDirect<PathControl, IList?>(
+            nameof(Items),
+            control => control._items
+        );
 
     private INotifyCollectionChanged? _notifyCollectionChanged;
     private IList? _items;
@@ -63,8 +64,7 @@ public sealed class PathControl : TemplatedControl
         set => SetValue(ItemsSourceProperty, value);
     }
 
-    protected override void OnPropertyChanged(
-        AvaloniaPropertyChangedEventArgs change)
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
 

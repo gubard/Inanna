@@ -13,11 +13,14 @@ public sealed class DaysOfYearSelectorControl : TemplatedControl
 {
     public static readonly StyledProperty<IEnumerable<DayOfYear>?> ItemsSourceProperty =
         AvaloniaProperty.Register<DaysOfYearSelectorControl, IEnumerable<DayOfYear>?>(
-            nameof(ItemsSource));
+            nameof(ItemsSource)
+        );
 
     public static readonly DirectProperty<DaysOfYearSelectorControl, IEnumerable> ItemsProperty =
         AvaloniaProperty.RegisterDirect<DaysOfYearSelectorControl, IEnumerable>(
-            nameof(Items), x => x._items);
+            nameof(Items),
+            x => x._items
+        );
 
     private readonly FrozenDictionary<Month, IntegersSelectorControl> _items;
     private IAvaloniaList<DayOfYear>? _list;
@@ -126,7 +129,9 @@ public sealed class DaysOfYearSelectorControl : TemplatedControl
 
         foreach (var (month, days) in items)
         {
-            (_items[month].SelectedIntegers as AvaloniaList<int>)?.UpdateOrder(days.Select(x => (int)x.Day).ToArray());
+            (_items[month].SelectedIntegers as AvaloniaList<int>)?.UpdateOrder(
+                days.Select(x => (int)x.Day).ToArray()
+            );
         }
     }
 }

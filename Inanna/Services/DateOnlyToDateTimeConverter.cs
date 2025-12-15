@@ -16,7 +16,12 @@ public sealed class DateOnlyToDateTimeConverter : IValueConverter
         return date.ToDateTime(TimeOnly.MinValue);
     }
 
-    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+    public object? ConvertBack(
+        object? value,
+        Type targetType,
+        object? parameter,
+        CultureInfo culture
+    )
     {
         if (value is not DateTime date)
         {

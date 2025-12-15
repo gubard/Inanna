@@ -10,11 +10,15 @@ public class IntegersSelectorControl : TemplatedControl
     public static readonly StyledProperty<IList<int>?> SelectedIntegersProperty =
         AvaloniaProperty.Register<IntegersSelectorControl, IList<int>?>(nameof(SelectedIntegers));
 
-    public static readonly StyledProperty<int> MinProperty =
-        AvaloniaProperty.Register<IntegersSelectorControl, int>(nameof(Min));
+    public static readonly StyledProperty<int> MinProperty = AvaloniaProperty.Register<
+        IntegersSelectorControl,
+        int
+    >(nameof(Min));
 
-    public static readonly StyledProperty<int> MaxProperty =
-        AvaloniaProperty.Register<IntegersSelectorControl, int>(nameof(Max));
+    public static readonly StyledProperty<int> MaxProperty = AvaloniaProperty.Register<
+        IntegersSelectorControl,
+        int
+    >(nameof(Max));
 
     private readonly List<IntegerSelectorItemControl> _integerControls = new();
     private ItemsControl? _itemsControl;
@@ -84,7 +88,8 @@ public class IntegersSelectorControl : TemplatedControl
             {
                 if (_selectedIntegers is INotifyCollectionChanged notifyCollectionChanged)
                 {
-                    notifyCollectionChanged.CollectionChanged -= SelectedIntegersChangedEventHandler;
+                    notifyCollectionChanged.CollectionChanged -=
+                        SelectedIntegersChangedEventHandler;
                 }
 
                 _selectedIntegers = SelectedIntegers;
@@ -107,7 +112,10 @@ public class IntegersSelectorControl : TemplatedControl
         }
     }
 
-    private void SelectedIntegersChangedEventHandler(object? sender, NotifyCollectionChangedEventArgs e)
+    private void SelectedIntegersChangedEventHandler(
+        object? sender,
+        NotifyCollectionChangedEventArgs e
+    )
     {
         if (sender is not IEnumerable<int> enumerable)
         {
@@ -167,13 +175,7 @@ public class IntegersSelectorControl : TemplatedControl
         }
 
         _integerControls.AddRange(
-            Enumerable.Range(Min, Max)
-               .Select(
-                    x => new IntegerSelectorItemControl
-                    {
-                        Value = x,
-                    }
-                )
+            Enumerable.Range(Min, Max).Select(x => new IntegerSelectorItemControl { Value = x })
         );
 
         foreach (var integerControl in _integerControls)

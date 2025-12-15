@@ -13,7 +13,9 @@ public interface IDragAndDropService
 public partial class DragAndDropService : ObservableObject, IDragAndDropService
 {
     private object? _data;
-    [ObservableProperty] private bool _isDragging;
+
+    [ObservableProperty]
+    private bool _isDragging;
 
     public object? GetDataAndRelease()
     {
