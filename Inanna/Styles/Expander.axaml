@@ -3,5 +3,6 @@
     <Style Selector="Expander">
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="VerticalAlignment" Value="Stretch" />
+        <Setter Property="IsExpanded" Value="True" />
     </Style>
 </Styles>
