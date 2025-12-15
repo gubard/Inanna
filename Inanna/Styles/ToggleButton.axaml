@@ -3,4 +3,39 @@
     <Style Selector="ToggleButton">
         <Setter Property="Margin" Value="2" />
     </Style>
+
+    <Style Selector="ToggleButton.h1">
+        <Setter Property="Width" Value="36.4" />
+        <Setter Property="Height" Value="36.4" />
+    </Style>
+
+    <Style Selector="ToggleButton.h2">
+        <Setter Property="Width" Value="28" />
+        <Setter Property="Height" Value="28" />
+    </Style>
+
+    <Style Selector="ToggleButton.h3">
+        <Setter Property="Width" Value="22.4" />
+        <Setter Property="Height" Value="22.4" />
+    </Style>
+
+    <Style Selector="ToggleButton.h4">
+        <Setter Property="Width" Value="19.6" />
+        <Setter Property="Height" Value="19.6" />
+    </Style>
+
+    <Style Selector="ToggleButton.h5">
+        <Setter Property="Width" Value="16.8" />
+        <Setter Property="Height" Value="16.8" />
+    </Style>
+
+    <Style Selector="ToggleButton.h6">
+        <Setter Property="Width" Value="14" />
+        <Setter Property="Height" Value="14" />
+    </Style>
+
+    <Style Selector="ToggleButton.small">
+        <Setter Property="Width" Value="11.2" />
+        <Setter Property="Height" Value="11.2" />
+    </Style>
 </Styles>
