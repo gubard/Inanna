@@ -32,6 +32,10 @@
         <Setter Property="HorizontalAlignment" Value="Right" />
     </Style>
 
+    <Style Selector=":is(Layoutable).m-3">
+        <Setter Property="Margin" Value="3" />
+    </Style>
+
     <Style Selector=":is(Layoutable).m-5">
         <Setter Property="Margin" Value="5" />
     </Style>

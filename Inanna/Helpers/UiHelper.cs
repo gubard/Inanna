@@ -126,6 +126,24 @@ public static class UiHelper
         }
     }
 
+    public static void Execute(Action action)
+    {
+        try
+        {
+            action.Invoke();
+        }
+        catch (Exception e)
+        {
+            DialogService.ShowMessageBox(
+                new(
+                    AppResourceService.GetResource<string>("Lang.Error"),
+                    new ExceptionViewModel(e),
+                    OkButton
+                )
+            );
+        }
+    }
+
     public static async ValueTask<bool> CheckValidationErrorsAsync<TValidationErrors>(
         ValueTask<TValidationErrors> task
     )
