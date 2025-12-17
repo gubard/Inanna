@@ -6,7 +6,7 @@ namespace Inanna.Services;
 
 public interface IClipboardService
 {
-    Task SetTextAsync(string? text, CancellationToken ct);
+    ValueTask SetTextAsync(string? text, CancellationToken ct);
 }
 
 public class AvaloniaClipboardService : IClipboardService
@@ -18,10 +18,10 @@ public class AvaloniaClipboardService : IClipboardService
         _application = application;
     }
 
-    public Task SetTextAsync(string? text, CancellationToken ct)
+    public async ValueTask SetTextAsync(string? text, CancellationToken ct)
     {
         var topLevel = _application.GetTopLevel().ThrowIfNull();
-
-        return topLevel.Clipboard.ThrowIfNull().SetTextAsync(text);
+        ct.ThrowIfCancellationRequested();
+        await topLevel.Clipboard.ThrowIfNull().SetTextAsync(text);
     }
 }
