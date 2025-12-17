@@ -23,6 +23,7 @@
                 <DataTemplate>
                     <Button Classes.primary="{Binding Type, Converter={StaticResource IsValueConverter}, ConverterParameter={x:Static m:DialogButtonType.Primary}}"
                             Classes.danger="{Binding Type, Converter={StaticResource IsValueConverter}, ConverterParameter={x:Static m:DialogButtonType.Danger}}"
+                            IsDefault="{Binding Type, Converter={StaticResource IsValueConverter}, ConverterParameter={x:Static m:DialogButtonType.Primary}}"
                             Content="{Binding Content}"
                             Command="{Binding Command}"
                             CommandParameter="{Binding CommandParameter}" />
