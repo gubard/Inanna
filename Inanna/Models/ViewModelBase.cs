@@ -30,19 +30,22 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
         UiHelper.Execute(action);
     }
 
-    protected ValueTask WrapCommand(Func<ValueTask> func)
+    protected ValueTask WrapCommandAsync(Func<ValueTask> func, CancellationToken ct)
     {
         StartExecute();
 
-        return HasErrors ? ValueTask.CompletedTask : UiHelper.ExecuteAsync(func);
+        return HasErrors ? ValueTask.CompletedTask : UiHelper.ExecuteAsync(func, ct);
     }
 
-    protected ValueTask WrapCommand<TValidationErrors>(Func<ValueTask<TValidationErrors>> func)
+    protected ValueTask WrapCommandAsync<TValidationErrors>(
+        Func<ValueTask<TValidationErrors>> func,
+        CancellationToken ct
+    )
         where TValidationErrors : IValidationErrors
     {
         StartExecute();
 
-        return HasErrors ? ValueTask.CompletedTask : UiHelper.ExecuteAsync(func);
+        return HasErrors ? ValueTask.CompletedTask : UiHelper.ExecuteAsync(func, ct);
     }
 
     protected void WrapCommand<TValidationErrors>(Func<TValidationErrors> func)

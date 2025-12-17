@@ -46,7 +46,7 @@ public static class UiHelper
         return Navigator.NavigateToAsync(DiHelper.ServiceProvider.GetService<TView>(), ct);
     }
 
-    public static async ValueTask ExecuteAsync(Func<ValueTask> func)
+    public static async ValueTask ExecuteAsync(Func<ValueTask> func, CancellationToken ct)
     {
         try
         {
@@ -59,13 +59,15 @@ public static class UiHelper
                     AppResourceService.GetResource<string>("Lang.Error"),
                     new ExceptionViewModel(e),
                     OkButton
-                )
+                ),
+                ct
             );
         }
     }
 
     public static async ValueTask ExecuteAsync<TValidationErrors>(
-        Func<ValueTask<TValidationErrors>> func
+        Func<ValueTask<TValidationErrors>> func,
+        CancellationToken ct
     )
         where TValidationErrors : IValidationErrors
     {
@@ -80,7 +82,8 @@ public static class UiHelper
                         AppResourceService.GetResource<string>("Lang.Error"),
                         new ValidationErrorsViewModel(result.ValidationErrors.ToArray()),
                         OkButton
-                    )
+                    ),
+                    ct
                 );
             }
         }
@@ -91,7 +94,8 @@ public static class UiHelper
                     AppResourceService.GetResource<string>("Lang.Error"),
                     new ExceptionViewModel(e),
                     OkButton
-                )
+                ),
+                ct
             );
         }
     }
@@ -145,7 +149,8 @@ public static class UiHelper
     }
 
     public static async ValueTask<bool> CheckValidationErrorsAsync<TValidationErrors>(
-        ValueTask<TValidationErrors> task
+        ValueTask<TValidationErrors> task,
+        CancellationToken ct
     )
         where TValidationErrors : IValidationErrors
     {
@@ -161,14 +166,16 @@ public static class UiHelper
                 AppResourceService.GetResource<string>("Lang.Error"),
                 new ValidationErrorsViewModel(result.ValidationErrors.ToArray()),
                 OkButton
-            )
+            ),
+            ct
         );
 
         return false;
     }
 
     public static async ValueTask<bool> CheckValidationErrorsAsync<TValidationErrors>(
-        TValidationErrors errors
+        TValidationErrors errors,
+        CancellationToken ct
     )
         where TValidationErrors : IValidationErrors
     {
@@ -182,7 +189,8 @@ public static class UiHelper
                 AppResourceService.GetResource<string>("Lang.Error"),
                 new ValidationErrorsViewModel(errors.ValidationErrors.ToArray()),
                 OkButton
-            )
+            ),
+            ct
         );
 
         return false;
@@ -192,13 +200,13 @@ public static class UiHelper
     {
         return new AsyncRelayCommand<T>(
             async (parameter, ct) =>
-                await ExecuteAsync(() => func.Invoke(parameter.ThrowIfNull(), ct))
+                await ExecuteAsync(() => func.Invoke(parameter.ThrowIfNull(), ct), ct)
         );
     }
 
     public static ICommand CreateCommand(Func<CancellationToken, ValueTask> func)
     {
-        return new AsyncRelayCommand(async ct => await ExecuteAsync(() => func.Invoke(ct)));
+        return new AsyncRelayCommand(async ct => await ExecuteAsync(() => func.Invoke(ct), ct));
     }
 
     public static ICommand CreateCommand<TValidationErrors>(
@@ -206,7 +214,7 @@ public static class UiHelper
     )
         where TValidationErrors : IValidationErrors
     {
-        return new AsyncRelayCommand(async ct => await ExecuteAsync(() => func.Invoke(ct)));
+        return new AsyncRelayCommand(async ct => await ExecuteAsync(() => func.Invoke(ct), ct));
     }
 
     public static ICommand CreateCommand<T, TValidationErrors>(
@@ -216,7 +224,7 @@ public static class UiHelper
     {
         return new AsyncRelayCommand<T>(
             async (parameter, ct) =>
-                await ExecuteAsync(() => func.Invoke(parameter.ThrowIfNull(), ct))
+                await ExecuteAsync(() => func.Invoke(parameter.ThrowIfNull(), ct), ct)
         );
     }
 }
