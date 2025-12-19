@@ -52,6 +52,9 @@ public class DialogService : IDialogService
             DialogControl.CloseDialog(_dialogId);
         }
 
-        _taskStack.Pop().SetResult();
+        if (_taskStack.Count > 0)
+        {
+            _taskStack.Pop().SetResult();
+        }
     }
 }
