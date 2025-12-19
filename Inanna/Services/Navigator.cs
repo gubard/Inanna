@@ -39,6 +39,7 @@ public class Navigator : ObservableObject, INavigator
                 case nameof(StackViewModel.CurrentView):
                 {
                     OnPropertyChanged(nameof(IsEmpty));
+
                     break;
                 }
             }
