@@ -13,9 +13,9 @@ public sealed class ColorToBrushConverter : IValueConverter
             return value;
         }
 
-        if (parameter is int a)
+        if (parameter is byte alfa)
         {
-            return new SolidColorBrush(new Color((byte)a, color.R, color.G, color.B));
+            return new SolidColorBrush(new Color(alfa, color.R, color.G, color.B));
         }
 
         return new SolidColorBrush(color);
