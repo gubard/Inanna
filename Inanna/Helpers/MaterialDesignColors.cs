@@ -2,7 +2,7 @@
 
 namespace Inanna.Helpers;
 
-public static class ColorData
+public static class MaterialDesignColors
 {
     public static readonly IEnumerable<Color> ColorsA400;
     public static readonly Color Red50 = Color.Parse("#FFEBEE");
@@ -272,7 +272,7 @@ public static class ColorData
     public static readonly Color BlueGreyA400 = Color.Parse("#78909C");
     public static readonly Color BlueGreyA700 = Color.Parse("#455A64");
 
-    static ColorData()
+    static MaterialDesignColors()
     {
         ColorsA400 =
         [
