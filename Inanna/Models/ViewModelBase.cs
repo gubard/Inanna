@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Gaia.Helpers;
 using Gaia.Models;
 using Gaia.Services;
 using Inanna.Helpers;
@@ -30,22 +32,25 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
         UiHelper.Execute(action);
     }
 
-    protected ValueTask WrapCommandAsync(Func<ValueTask> func, CancellationToken ct)
+    protected ConfiguredValueTaskAwaitable WrapCommandAsync(
+        Func<ConfiguredValueTaskAwaitable> func,
+        CancellationToken ct
+    )
     {
         StartExecute();
 
-        return HasErrors ? ValueTask.CompletedTask : UiHelper.ExecuteAsync(func, ct);
+        return HasErrors ? TaskHelper.ConfiguredCompletedTask : UiHelper.ExecuteAsync(func, ct);
     }
 
-    protected ValueTask WrapCommandAsync<TValidationErrors>(
-        Func<ValueTask<TValidationErrors>> func,
+    protected ConfiguredValueTaskAwaitable WrapCommandAsync<TValidationErrors>(
+        Func<ConfiguredValueTaskAwaitable<TValidationErrors>> func,
         CancellationToken ct
     )
         where TValidationErrors : IValidationErrors
     {
         StartExecute();
 
-        return HasErrors ? ValueTask.CompletedTask : UiHelper.ExecuteAsync(func, ct);
+        return HasErrors ? TaskHelper.ConfiguredCompletedTask : UiHelper.ExecuteAsync(func, ct);
     }
 
     protected void WrapCommand<TValidationErrors>(Func<TValidationErrors> func)

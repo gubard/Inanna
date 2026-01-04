@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using Inanna.Controls;
 using Inanna.Ui;
 
@@ -5,7 +6,7 @@ namespace Inanna.Services;
 
 public interface IDialogService
 {
-    ValueTask ShowMessageBoxAsync(DialogViewModel dialog, CancellationToken ct);
+    ConfiguredValueTaskAwaitable ShowMessageBoxAsync(DialogViewModel dialog, CancellationToken ct);
     void ShowMessageBox(DialogViewModel dialog);
     void CloseMessageBox();
 }
@@ -23,7 +24,15 @@ public class DialogService : IDialogService
         _taskStack = new();
     }
 
-    public async ValueTask ShowMessageBoxAsync(DialogViewModel dialog, CancellationToken ct)
+    public ConfiguredValueTaskAwaitable ShowMessageBoxAsync(
+        DialogViewModel dialog,
+        CancellationToken ct
+    )
+    {
+        return ShowMessageBoxCore(dialog, ct).ConfigureAwait(false);
+    }
+
+    public async ValueTask ShowMessageBoxCore(DialogViewModel dialog, CancellationToken ct)
     {
         _stackViewModel.PushView(dialog);
         DialogControl.ShowDialog(_dialogId, _stackViewModel);

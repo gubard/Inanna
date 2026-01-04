@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using Avalonia;
 using Gaia.Helpers;
 using Inanna.Helpers;
@@ -6,7 +7,7 @@ namespace Inanna.Services;
 
 public interface IClipboardService
 {
-    ValueTask SetTextAsync(string? text, CancellationToken ct);
+    ConfiguredValueTaskAwaitable SetTextAsync(string? text, CancellationToken ct);
 }
 
 public class AvaloniaClipboardService : IClipboardService
@@ -18,7 +19,12 @@ public class AvaloniaClipboardService : IClipboardService
         _application = application;
     }
 
-    public async ValueTask SetTextAsync(string? text, CancellationToken ct)
+    public ConfiguredValueTaskAwaitable SetTextAsync(string? text, CancellationToken ct)
+    {
+        return SetTextCore(text, ct).ConfigureAwait(false);
+    }
+
+    private async ValueTask SetTextCore(string? text, CancellationToken ct)
     {
         var topLevel = _application.GetTopLevel().ThrowIfNull();
         ct.ThrowIfCancellationRequested();

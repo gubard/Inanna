@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using Gaia.Helpers;
@@ -40,13 +41,24 @@ public static class UiHelper
     public static readonly DialogButton OkButton;
     public static readonly ICommand EmptyCommand;
 
-    public static ValueTask NavigateToAsync<TView>(CancellationToken ct)
+    public static ConfiguredValueTaskAwaitable NavigateToAsync<TView>(CancellationToken ct)
         where TView : notnull
     {
         return Navigator.NavigateToAsync(DiHelper.ServiceProvider.GetService<TView>(), ct);
     }
 
-    public static async ValueTask ExecuteAsync(Func<ValueTask> func, CancellationToken ct)
+    public static ConfiguredValueTaskAwaitable ExecuteAsync(
+        Func<ConfiguredValueTaskAwaitable> func,
+        CancellationToken ct
+    )
+    {
+        return ExecuteCore(func, ct).ConfigureAwait(false);
+    }
+
+    private static async ValueTask ExecuteCore(
+        Func<ConfiguredValueTaskAwaitable> func,
+        CancellationToken ct
+    )
     {
         try
         {
@@ -65,8 +77,17 @@ public static class UiHelper
         }
     }
 
-    public static async ValueTask ExecuteAsync<TValidationErrors>(
-        Func<ValueTask<TValidationErrors>> func,
+    public static ConfiguredValueTaskAwaitable ExecuteAsync<TValidationErrors>(
+        Func<ConfiguredValueTaskAwaitable<TValidationErrors>> func,
+        CancellationToken ct
+    )
+        where TValidationErrors : IValidationErrors
+    {
+        return ExecuteCore(func, ct).ConfigureAwait(false);
+    }
+
+    private static async ValueTask ExecuteCore<TValidationErrors>(
+        Func<ConfiguredValueTaskAwaitable<TValidationErrors>> func,
         CancellationToken ct
     )
         where TValidationErrors : IValidationErrors
@@ -148,8 +169,17 @@ public static class UiHelper
         }
     }
 
-    public static async ValueTask<bool> CheckValidationErrorsAsync<TValidationErrors>(
-        ValueTask<TValidationErrors> task,
+    public static ConfiguredValueTaskAwaitable<bool> CheckValidationErrorsAsync<TValidationErrors>(
+        ConfiguredValueTaskAwaitable<TValidationErrors> task,
+        CancellationToken ct
+    )
+        where TValidationErrors : IValidationErrors
+    {
+        return CheckValidationErrorsCore(task, ct).ConfigureAwait(false);
+    }
+
+    private static async ValueTask<bool> CheckValidationErrorsCore<TValidationErrors>(
+        ConfiguredValueTaskAwaitable<TValidationErrors> task,
         CancellationToken ct
     )
         where TValidationErrors : IValidationErrors
@@ -173,7 +203,16 @@ public static class UiHelper
         return false;
     }
 
-    public static async ValueTask<bool> CheckValidationErrorsAsync<TValidationErrors>(
+    public static ConfiguredValueTaskAwaitable<bool> CheckValidationErrorsAsync<TValidationErrors>(
+        TValidationErrors errors,
+        CancellationToken ct
+    )
+        where TValidationErrors : IValidationErrors
+    {
+        return CheckValidationErrorsCore(errors, ct).ConfigureAwait(false);
+    }
+
+    private static async ValueTask<bool> CheckValidationErrorsCore<TValidationErrors>(
         TValidationErrors errors,
         CancellationToken ct
     )
@@ -196,7 +235,9 @@ public static class UiHelper
         return false;
     }
 
-    public static ICommand CreateCommand<T>(Func<T, CancellationToken, ValueTask> func)
+    public static ICommand CreateCommand<T>(
+        Func<T, CancellationToken, ConfiguredValueTaskAwaitable> func
+    )
     {
         return new AsyncRelayCommand<T>(
             async (parameter, ct) =>
@@ -204,13 +245,13 @@ public static class UiHelper
         );
     }
 
-    public static ICommand CreateCommand(Func<CancellationToken, ValueTask> func)
+    public static ICommand CreateCommand(Func<CancellationToken, ConfiguredValueTaskAwaitable> func)
     {
         return new AsyncRelayCommand(async ct => await ExecuteAsync(() => func.Invoke(ct), ct));
     }
 
     public static ICommand CreateCommand<TValidationErrors>(
-        Func<CancellationToken, ValueTask<TValidationErrors>> func
+        Func<CancellationToken, ConfiguredValueTaskAwaitable<TValidationErrors>> func
     )
         where TValidationErrors : IValidationErrors
     {
@@ -218,7 +259,7 @@ public static class UiHelper
     }
 
     public static ICommand CreateCommand<T, TValidationErrors>(
-        Func<T, CancellationToken, ValueTask<TValidationErrors>> func
+        Func<T, CancellationToken, ConfiguredValueTaskAwaitable<TValidationErrors>> func
     )
         where TValidationErrors : IValidationErrors
     {

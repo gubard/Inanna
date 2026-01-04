@@ -1,4 +1,6 @@
+using System.Runtime.CompilerServices;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Gaia.Helpers;
 using Inanna.Ui;
 
 namespace Inanna.Services;
@@ -10,9 +12,9 @@ public interface INavigator
     public event ViewChangedEventHandler? ViewChanged;
     bool IsEmpty { get; }
     object? CurrentView { get; }
-    ValueTask<object?> NavigateBackOrNullAsync(CancellationToken ct);
-    ValueTask NavigateToAsync(object view, CancellationToken ct);
-    ValueTask RefreshCurrentViewAsync(CancellationToken ct);
+    ConfiguredValueTaskAwaitable<object?> NavigateBackOrNullAsync(CancellationToken ct);
+    ConfiguredValueTaskAwaitable NavigateToAsync(object view, CancellationToken ct);
+    ConfiguredValueTaskAwaitable RefreshCurrentViewAsync(CancellationToken ct);
     void RefreshCurrentView();
     void RefreshUiCurrentView();
 }
@@ -47,15 +49,15 @@ public class Navigator : ObservableObject, INavigator
         };
     }
 
-    public ValueTask<object?> NavigateBackOrNullAsync(CancellationToken ct)
+    public ConfiguredValueTaskAwaitable<object?> NavigateBackOrNullAsync(CancellationToken ct)
     {
         _stackViewModel.PopView();
         ViewChanged?.Invoke(this, _stackViewModel.CurrentView);
 
-        return ValueTask.FromResult(_stackViewModel.CurrentView);
+        return TaskHelper.FromResult(_stackViewModel.CurrentView);
     }
 
-    public ValueTask NavigateToAsync(object view, CancellationToken ct)
+    public ConfiguredValueTaskAwaitable NavigateToAsync(object view, CancellationToken ct)
     {
         if (_stackViewModel.CurrentView is INonNavigate)
         {
@@ -65,17 +67,17 @@ public class Navigator : ObservableObject, INavigator
         _stackViewModel.PushView(view);
         ViewChanged?.Invoke(this, _stackViewModel.CurrentView);
 
-        return ValueTask.CompletedTask;
+        return TaskHelper.ConfiguredCompletedTask;
     }
 
-    public ValueTask RefreshCurrentViewAsync(CancellationToken ct)
+    public ConfiguredValueTaskAwaitable RefreshCurrentViewAsync(CancellationToken ct)
     {
         if (CurrentView is IRefresh refresh)
         {
             return refresh.RefreshAsync(ct);
         }
 
-        return ValueTask.CompletedTask;
+        return TaskHelper.ConfiguredCompletedTask;
     }
 
     public void RefreshCurrentView()

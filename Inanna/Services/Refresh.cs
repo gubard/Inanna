@@ -1,8 +1,10 @@
-﻿namespace Inanna.Services;
+﻿using System.Runtime.CompilerServices;
+
+namespace Inanna.Services;
 
 public interface IRefresh
 {
-    ValueTask RefreshAsync(CancellationToken ct);
+    ConfiguredValueTaskAwaitable RefreshAsync(CancellationToken ct);
     void Refresh();
 }
 

@@ -1,4 +1,5 @@
-﻿using Gaia.Services;
+﻿using System.Runtime.CompilerServices;
+using Gaia.Services;
 using Inanna.Models;
 using Nestor.Db.Models;
 using Nestor.Db.Services;
@@ -50,7 +51,15 @@ public abstract class UiService<
         _inited = false;
     }
 
-    public virtual async ValueTask<TGetResponse> GetAsync(TGetRequest request, CancellationToken ct)
+    public virtual ConfiguredValueTaskAwaitable<TGetResponse> GetAsync(
+        TGetRequest request,
+        CancellationToken ct
+    )
+    {
+        return GetCore(request, ct).ConfigureAwait(false);
+    }
+
+    private async ValueTask<TGetResponse> GetCore(TGetRequest request, CancellationToken ct)
     {
         switch (_appState.Mode)
         {
@@ -75,10 +84,15 @@ public abstract class UiService<
         }
     }
 
-    public virtual async ValueTask<TPostResponse> PostAsync(
+    public virtual ConfiguredValueTaskAwaitable<TPostResponse> PostAsync(
         TPostRequest request,
         CancellationToken ct
     )
+    {
+        return PostCore(request, ct).ConfigureAwait(false);
+    }
+
+    private async ValueTask<TPostResponse> PostCore(TPostRequest request, CancellationToken ct)
     {
         _cache.Update(request);
         await InitAsync(ct);

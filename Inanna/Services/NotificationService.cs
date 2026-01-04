@@ -1,3 +1,4 @@
+using Gaia.Helpers;
 using Inanna.Controls;
 using Inanna.Helpers;
 using Inanna.Models;
@@ -28,7 +29,7 @@ public class NotificationService : INotificationService
         {
             NotificationPanel.CloseNotification(_identifier, notification);
 
-            return ValueTask.CompletedTask;
+            return TaskHelper.ConfiguredCompletedTask;
         });
 
         NotificationPanel.ShowNotification(
