@@ -14,6 +14,7 @@ public interface INavigator
     ValueTask NavigateToAsync(object view, CancellationToken ct);
     ValueTask RefreshCurrentViewAsync(CancellationToken ct);
     void RefreshCurrentView();
+    void RefreshUiCurrentView();
 }
 
 public delegate void ViewChangedEventHandler(object? sender, object? view);
@@ -82,6 +83,14 @@ public class Navigator : ObservableObject, INavigator
         if (CurrentView is IRefresh refresh)
         {
             refresh.Refresh();
+        }
+    }
+
+    public void RefreshUiCurrentView()
+    {
+        if (CurrentView is IRefreshUi refresh)
+        {
+            refresh.RefreshUi();
         }
     }
 }
