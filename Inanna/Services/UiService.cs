@@ -1,4 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
+using Avalonia.Threading;
 using Gaia.Services;
 using Inanna.Models;
 using Nestor.Db.Models;
@@ -68,14 +69,14 @@ public abstract class UiService<
                 await InitAsync(ct);
 
                 var response = await _service.GetAsync(request, ct);
-                _cache.Update(response);
+                Dispatcher.UIThread.Post(() => _cache.Update(response));
 
                 return response;
             }
             case AppMode.Offline:
             {
                 var response = await _efService.GetAsync(request, ct);
-                _cache.Update(response);
+                Dispatcher.UIThread.Post(() => _cache.Update(response));
 
                 return response;
             }
@@ -94,7 +95,7 @@ public abstract class UiService<
 
     private async ValueTask<TPostResponse> PostCore(TPostRequest request, CancellationToken ct)
     {
-        _cache.Update(request);
+        Dispatcher.UIThread.Post(() => _cache.Update(request));
         await InitAsync(ct);
         var response = await PostCoreAsync(request, ct);
         await _navigator.RefreshCurrentViewAsync(ct);
@@ -104,7 +105,7 @@ public abstract class UiService<
 
     public TPostResponse Post(TPostRequest request)
     {
-        _cache.Update(request);
+        Dispatcher.UIThread.Post(() => _cache.Update(request));
         var response = PostCore(request);
         _navigator.RefreshCurrentView();
 
@@ -120,19 +121,19 @@ public abstract class UiService<
                 Init();
 
                 var response = _service.Get(request);
-                _cache.Update(response);
+                Dispatcher.UIThread.Post(() => _cache.Update(response));
 
                 return response;
             }
             case AppMode.Offline:
             {
                 var response = _efService.Get(request);
-                _cache.Update(response);
+                Dispatcher.UIThread.Post(() => _cache.Update(response));
 
                 return response;
             }
             default:
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException(nameof(_appState.Mode), _appState.Mode, null);
         }
     }
 

@@ -1,4 +1,5 @@
 using System.Runtime.CompilerServices;
+using Avalonia.Threading;
 using Inanna.Controls;
 using Inanna.Ui;
 
@@ -32,10 +33,14 @@ public class DialogService : IDialogService
         return ShowMessageBoxCore(dialog, ct).ConfigureAwait(false);
     }
 
-    public async ValueTask ShowMessageBoxCore(DialogViewModel dialog, CancellationToken ct)
+    private async ValueTask ShowMessageBoxCore(DialogViewModel dialog, CancellationToken ct)
     {
-        _stackViewModel.PushView(dialog);
-        DialogControl.ShowDialog(_dialogId, _stackViewModel);
+        Dispatcher.UIThread.Post(() =>
+        {
+            _stackViewModel.PushView(dialog);
+            DialogControl.ShowDialog(_dialogId, _stackViewModel);
+        });
+
         var taskCompletionSource = new TaskCompletionSource();
         _taskStack.Push(taskCompletionSource);
         ct.ThrowIfCancellationRequested();
@@ -44,11 +49,14 @@ public class DialogService : IDialogService
 
     public void ShowMessageBox(DialogViewModel dialog)
     {
-        _stackViewModel.PushView(dialog);
-        DialogControl.ShowDialog(_dialogId, _stackViewModel);
+        Dispatcher.UIThread.Post(() =>
+        {
+            _stackViewModel.PushView(dialog);
+            DialogControl.ShowDialog(_dialogId, _stackViewModel);
+        });
+
         var taskCompletionSource = new TaskCompletionSource();
         _taskStack.Push(taskCompletionSource);
-
         taskCompletionSource.Task.ConfigureAwait(false).GetAwaiter().GetResult();
     }
 
