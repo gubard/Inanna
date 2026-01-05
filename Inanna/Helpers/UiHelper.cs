@@ -1,5 +1,6 @@
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
 using Gaia.Helpers;
 using Gaia.Services;
@@ -24,14 +25,14 @@ public static class UiHelper
 
         CancelButton = new(
             AppResourceService.GetResource<string>("Lang.Cancel"),
-            new RelayCommand(() => DialogService.CloseMessageBox()),
+            new RelayCommand(() => Dispatcher.UIThread.Post(() => DialogService.CloseMessageBox())),
             null,
             DialogButtonType.Normal
         );
 
         OkButton = new(
             AppResourceService.GetResource<string>("Lang.Ok"),
-            new RelayCommand(() => DialogService.CloseMessageBox()),
+            new RelayCommand(() => Dispatcher.UIThread.Post(() => DialogService.CloseMessageBox())),
             null,
             DialogButtonType.Primary
         );
