@@ -86,27 +86,32 @@ public abstract class UiService<
     }
 
     public virtual ConfiguredValueTaskAwaitable<TPostResponse> PostAsync(
+        Guid idempotentId,
         TPostRequest request,
         CancellationToken ct
     )
     {
-        return PostCore(request, ct).ConfigureAwait(false);
+        return PostCore(idempotentId, request, ct).ConfigureAwait(false);
     }
 
-    private async ValueTask<TPostResponse> PostCore(TPostRequest request, CancellationToken ct)
+    private async ValueTask<TPostResponse> PostCore(
+        Guid idempotentId,
+        TPostRequest request,
+        CancellationToken ct
+    )
     {
         Dispatcher.UIThread.Post(() => _cache.Update(request));
         await InitAsync(ct);
-        var response = await PostCoreAsync(request, ct);
+        var response = await PostCoreAsync(idempotentId, request, ct);
         await _navigator.RefreshCurrentViewAsync(ct);
 
         return response;
     }
 
-    public TPostResponse Post(TPostRequest request)
+    public TPostResponse Post(Guid idempotentId, TPostRequest request)
     {
         Dispatcher.UIThread.Post(() => _cache.Update(request));
-        var response = PostCore(request);
+        var response = PostCore(idempotentId, request);
         _navigator.RefreshCurrentView();
 
         return response;
@@ -137,7 +142,7 @@ public abstract class UiService<
         }
     }
 
-    private TPostResponse PostCore(TPostRequest request)
+    private TPostResponse PostCore(Guid idempotentId, TPostRequest request)
     {
         switch (_appState.Mode)
         {
@@ -145,20 +150,24 @@ public abstract class UiService<
             {
                 var lastLocalId = _efService.GetLastId();
                 request.LastLocalId = lastLocalId;
-                var response = _service.Post(request);
+                var response = _service.Post(idempotentId, request);
                 _efService.SaveEvents(response.Events);
 
                 return response;
             }
             case AppMode.Offline:
-                return _efService.Post(request);
+                return _efService.Post(idempotentId, request);
 
             default:
                 throw new ArgumentOutOfRangeException();
         }
     }
 
-    private async ValueTask<TPostResponse> PostCoreAsync(TPostRequest request, CancellationToken ct)
+    private async ValueTask<TPostResponse> PostCoreAsync(
+        Guid idempotentId,
+        TPostRequest request,
+        CancellationToken ct
+    )
     {
         switch (_appState.Mode)
         {
@@ -166,13 +175,13 @@ public abstract class UiService<
             {
                 var lastLocalId = await _efService.GetLastIdAsync(ct);
                 request.LastLocalId = lastLocalId;
-                var response = await _service.PostAsync(request, ct);
+                var response = await _service.PostAsync(idempotentId, request, ct);
                 await _efService.SaveEventsAsync(response.Events, ct);
 
                 return response;
             }
             case AppMode.Offline:
-                return await _efService.PostAsync(request, ct);
+                return await _efService.PostAsync(idempotentId, request, ct);
 
             default:
                 throw new ArgumentOutOfRangeException();
