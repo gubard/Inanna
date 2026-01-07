@@ -36,7 +36,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Gaia\Gaia\Gaia.csproj" />
-    <ProjectReference Include="..\..\IconPacks.Avalonia\src\IconPacks.Avalonia.MaterialDesign\IconPacks.Avalonia.MaterialDesign.csproj" />
+    <ProjectReference Include="..\..\IconPacks.Avalonia.Aot\src\IconPacks.Avalonia.MaterialDesign\IconPacks.Avalonia.MaterialDesign.csproj" />
     <ProjectReference Include="..\..\Nestor\Nestor.Db\Nestor.Db.csproj" />
     <ProjectReference
       Include="..\Inanna.SourceGenerator\Inanna.SourceGenerator.csproj"
