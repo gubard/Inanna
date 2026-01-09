@@ -25,12 +25,12 @@ public abstract class UiService<
     where TPostResponse : IValidationErrors, IResponse, new()
     where TGetRequest : IGetRequest, new()
     where THttpService : IService<TGetRequest, TPostRequest, TGetResponse, TPostResponse>
-    where TEfService : IEfService<TGetRequest, TPostRequest, TGetResponse, TPostResponse>
+    where TEfService : IDbService<TGetRequest, TPostRequest, TGetResponse, TPostResponse>
     where TPostRequest : IPostRequest
     where TCache : ICache<TGetResponse>, ICache<TPostRequest>
 {
     private readonly THttpService _service;
-    private readonly TEfService _efService;
+    private readonly TEfService _dbService;
     private readonly AppState _appState;
     private bool _inited;
     private readonly TCache _cache;
@@ -38,14 +38,14 @@ public abstract class UiService<
 
     protected UiService(
         THttpService service,
-        TEfService efService,
+        TEfService dbService,
         AppState appState,
         TCache cache,
         INavigator navigator
     )
     {
         _service = service;
-        _efService = efService;
+        _dbService = dbService;
         _appState = appState;
         _cache = cache;
         _navigator = navigator;
@@ -75,7 +75,7 @@ public abstract class UiService<
             }
             case AppMode.Offline:
             {
-                var response = await _efService.GetAsync(request, ct);
+                var response = await _dbService.GetAsync(request, ct);
                 Dispatcher.UIThread.Post(() => _cache.Update(response));
 
                 return response;
@@ -132,7 +132,7 @@ public abstract class UiService<
             }
             case AppMode.Offline:
             {
-                var response = _efService.Get(request);
+                var response = _dbService.Get(request);
                 Dispatcher.UIThread.Post(() => _cache.Update(response));
 
                 return response;
@@ -148,15 +148,15 @@ public abstract class UiService<
         {
             case AppMode.Online:
             {
-                var lastLocalId = _efService.GetLastId();
+                var lastLocalId = _dbService.GetLastId();
                 request.LastLocalId = lastLocalId;
                 var response = _service.Post(idempotentId, request);
-                _efService.SaveEvents(response.Events);
+                _dbService.SaveEvents(response.Events);
 
                 return response;
             }
             case AppMode.Offline:
-                return _efService.Post(idempotentId, request);
+                return _dbService.Post(idempotentId, request);
 
             default:
                 throw new ArgumentOutOfRangeException();
@@ -173,15 +173,15 @@ public abstract class UiService<
         {
             case AppMode.Online:
             {
-                var lastLocalId = await _efService.GetLastIdAsync(ct);
+                var lastLocalId = await _dbService.GetLastIdAsync(ct);
                 request.LastLocalId = lastLocalId;
                 var response = await _service.PostAsync(idempotentId, request, ct);
-                await _efService.SaveEventsAsync(response.Events, ct);
+                await _dbService.SaveEventsAsync(response.Events, ct);
 
                 return response;
             }
             case AppMode.Offline:
-                return await _efService.PostAsync(idempotentId, request, ct);
+                return await _dbService.PostAsync(idempotentId, request, ct);
 
             default:
                 throw new ArgumentOutOfRangeException();
@@ -196,10 +196,10 @@ public abstract class UiService<
         }
 
         var request = new TGetRequest();
-        var lastLocalId = await _efService.GetLastIdAsync(ct);
+        var lastLocalId = await _dbService.GetLastIdAsync(ct);
         request.LastId = lastLocalId;
         var response = await _service.GetAsync(request, ct);
-        await _efService.SaveEventsAsync(response.Events, ct);
+        await _dbService.SaveEventsAsync(response.Events, ct);
         _inited = true;
     }
 
@@ -211,10 +211,10 @@ public abstract class UiService<
         }
 
         var request = new TGetRequest();
-        var lastLocalId = _efService.GetLastId();
+        var lastLocalId = _dbService.GetLastId();
         request.LastId = lastLocalId;
         var response = _service.Get(request);
-        _efService.SaveEvents(response.Events);
+        _dbService.SaveEvents(response.Events);
         _inited = true;
     }
 }
