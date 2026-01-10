@@ -191,7 +191,11 @@ public abstract class UiService<
                 var events = _dbService.GetEvents();
                 request.Events = events;
                 var response = _httpService.Post(idempotentId, request);
-                _dbService.ClearEvents();
+
+                if (request.Events.Length != 0)
+                {
+                    _dbService.ClearEvents();
+                }
 
                 return response;
             }
@@ -218,7 +222,11 @@ public abstract class UiService<
                 var events = await _dbService.GetEventsAsync(ct);
                 request.Events = events;
                 var response = await _httpService.PostAsync(idempotentId, request, ct);
-                await _dbService.ClearEventsAsync(ct);
+
+                if (request.Events.Length != 0)
+                {
+                    await _dbService.ClearEventsAsync(ct);
+                }
 
                 return response;
             }
