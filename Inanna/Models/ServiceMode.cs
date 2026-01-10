@@ -1,6 +1,6 @@
 ﻿namespace Inanna.Models;
 
-public enum AppMode
+public enum ServiceMode
 {
     Online,
     Offline,

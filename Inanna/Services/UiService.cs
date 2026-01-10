@@ -8,9 +8,13 @@ using Nestor.Db.Services;
 namespace Inanna.Services;
 
 public interface IUiService<in TGetRequest, in TPostRequest, TGetResponse, TPostResponse>
-    : IService<TGetRequest, TPostRequest, TGetResponse, TPostResponse>
+    : IService<TGetRequest, TPostRequest, TGetResponse, TPostResponse>,
+        IHealthCheck
     where TGetResponse : IValidationErrors, new()
-    where TPostResponse : IValidationErrors, new();
+    where TPostResponse : IValidationErrors, new()
+{
+    string ServiceName { get; }
+}
 
 public abstract class UiService<
     TGetRequest,
@@ -24,33 +28,12 @@ public abstract class UiService<
     where TGetResponse : IValidationErrors, IResponse, new()
     where TPostResponse : IValidationErrors, IResponse, new()
     where TGetRequest : IGetRequest, new()
-    where THttpService : IService<TGetRequest, TPostRequest, TGetResponse, TPostResponse>
+    where THttpService : IHttpService<TGetRequest, TPostRequest, TGetResponse, TPostResponse>
     where TEfService : IDbService<TGetRequest, TPostRequest, TGetResponse, TPostResponse>
     where TPostRequest : IPostRequest
     where TCache : ICache<TGetResponse>, ICache<TPostRequest>
 {
-    private readonly THttpService _service;
-    private readonly TEfService _dbService;
-    private readonly AppState _appState;
-    private bool _inited;
-    private readonly TCache _cache;
-    private readonly INavigator _navigator;
-
-    protected UiService(
-        THttpService service,
-        TEfService dbService,
-        AppState appState,
-        TCache cache,
-        INavigator navigator
-    )
-    {
-        _service = service;
-        _dbService = dbService;
-        _appState = appState;
-        _cache = cache;
-        _navigator = navigator;
-        _inited = false;
-    }
+    public string ServiceName { get; }
 
     public virtual ConfiguredValueTaskAwaitable<TGetResponse> GetAsync(
         TGetRequest request,
@@ -60,31 +43,6 @@ public abstract class UiService<
         return GetCore(request, ct).ConfigureAwait(false);
     }
 
-    private async ValueTask<TGetResponse> GetCore(TGetRequest request, CancellationToken ct)
-    {
-        switch (_appState.Mode)
-        {
-            case AppMode.Online:
-            {
-                await InitAsync(ct);
-
-                var response = await _service.GetAsync(request, ct);
-                Dispatcher.UIThread.Post(() => _cache.Update(response));
-
-                return response;
-            }
-            case AppMode.Offline:
-            {
-                var response = await _dbService.GetAsync(request, ct);
-                Dispatcher.UIThread.Post(() => _cache.Update(response));
-
-                return response;
-            }
-            default:
-                throw new ArgumentOutOfRangeException();
-        }
-    }
-
     public virtual ConfiguredValueTaskAwaitable<TPostResponse> PostAsync(
         Guid idempotentId,
         TPostRequest request,
@@ -92,20 +50,6 @@ public abstract class UiService<
     )
     {
         return PostCore(idempotentId, request, ct).ConfigureAwait(false);
-    }
-
-    private async ValueTask<TPostResponse> PostCore(
-        Guid idempotentId,
-        TPostRequest request,
-        CancellationToken ct
-    )
-    {
-        Dispatcher.UIThread.Post(() => _cache.Update(request));
-        await InitAsync(ct);
-        var response = await PostCoreAsync(idempotentId, request, ct);
-        await _navigator.RefreshCurrentViewAsync(ct);
-
-        return response;
     }
 
     public TPostResponse Post(Guid idempotentId, TPostRequest request)
@@ -119,18 +63,18 @@ public abstract class UiService<
 
     public TGetResponse Get(TGetRequest request)
     {
-        switch (_appState.Mode)
-        {
-            case AppMode.Online:
-            {
-                Init();
+        var mode = _appState.GetServiceMode(ServiceName);
 
-                var response = _service.Get(request);
+        switch (mode)
+        {
+            case ServiceMode.Online:
+            {
+                var response = _httpService.Get(request);
                 Dispatcher.UIThread.Post(() => _cache.Update(response));
 
                 return response;
             }
-            case AppMode.Offline:
+            case ServiceMode.Offline:
             {
                 var response = _dbService.Get(request);
                 Dispatcher.UIThread.Post(() => _cache.Update(response));
@@ -138,28 +82,122 @@ public abstract class UiService<
                 return response;
             }
             default:
-                throw new ArgumentOutOfRangeException(nameof(_appState.Mode), _appState.Mode, null);
+                throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
+        }
+    }
+
+    public ConfiguredValueTaskAwaitable<bool> HealthCheckAsync(CancellationToken ct)
+    {
+        return HealthCheckCore(ct).ConfigureAwait(false);
+    }
+
+    public bool HealthCheck()
+    {
+        if (_httpService.HealthCheck())
+        {
+            _appState.SetServiceMode(ServiceName, ServiceMode.Online);
+
+            return true;
+        }
+
+        _appState.SetServiceMode(ServiceName, ServiceMode.Offline);
+
+        return false;
+    }
+
+    protected UiService(
+        THttpService httpService,
+        TEfService dbService,
+        AppState appState,
+        TCache cache,
+        INavigator navigator,
+        string serviceName
+    )
+    {
+        _httpService = httpService;
+        _dbService = dbService;
+        _appState = appState;
+        _cache = cache;
+        _navigator = navigator;
+        ServiceName = serviceName;
+    }
+
+    private readonly THttpService _httpService;
+    private readonly TEfService _dbService;
+    private readonly AppState _appState;
+    private readonly TCache _cache;
+    private readonly INavigator _navigator;
+
+    private async ValueTask<bool> HealthCheckCore(CancellationToken ct)
+    {
+        if (await _httpService.HealthCheckAsync(ct))
+        {
+            _appState.SetServiceMode(ServiceName, ServiceMode.Online);
+
+            return true;
+        }
+
+        _appState.SetServiceMode(ServiceName, ServiceMode.Offline);
+
+        return false;
+    }
+
+    private async ValueTask<TPostResponse> PostCore(
+        Guid idempotentId,
+        TPostRequest request,
+        CancellationToken ct
+    )
+    {
+        Dispatcher.UIThread.Post(() => _cache.Update(request));
+        var response = await PostCoreAsync(idempotentId, request, ct);
+        await _navigator.RefreshCurrentViewAsync(ct);
+
+        return response;
+    }
+
+    private async ValueTask<TGetResponse> GetCore(TGetRequest request, CancellationToken ct)
+    {
+        var mode = _appState.GetServiceMode(ServiceName);
+
+        switch (mode)
+        {
+            case ServiceMode.Online:
+            {
+                var response = await _httpService.GetAsync(request, ct);
+                Dispatcher.UIThread.Post(() => _cache.Update(response));
+
+                return response;
+            }
+            case ServiceMode.Offline:
+            {
+                var response = await _dbService.GetAsync(request, ct);
+                Dispatcher.UIThread.Post(() => _cache.Update(response));
+
+                return response;
+            }
+            default:
+                throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
         }
     }
 
     private TPostResponse PostCore(Guid idempotentId, TPostRequest request)
     {
-        switch (_appState.Mode)
+        var mode = _appState.GetServiceMode(ServiceName);
+
+        switch (mode)
         {
-            case AppMode.Online:
+            case ServiceMode.Online:
             {
-                var lastLocalId = _dbService.GetLastId();
-                request.LastLocalId = lastLocalId;
-                var response = _service.Post(idempotentId, request);
-                _dbService.SaveEvents(response.Events);
+                var response = _httpService.Post(idempotentId, request);
+                _dbService.AddEvents(response.Events);
 
                 return response;
             }
-            case AppMode.Offline:
+            case ServiceMode.Offline:
                 return _dbService.Post(idempotentId, request);
 
             default:
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
         }
     }
 
@@ -169,52 +207,22 @@ public abstract class UiService<
         CancellationToken ct
     )
     {
-        switch (_appState.Mode)
+        var mode = _appState.GetServiceMode(ServiceName);
+
+        switch (mode)
         {
-            case AppMode.Online:
+            case ServiceMode.Online:
             {
-                var lastLocalId = await _dbService.GetLastIdAsync(ct);
-                request.LastLocalId = lastLocalId;
-                var response = await _service.PostAsync(idempotentId, request, ct);
-                await _dbService.SaveEventsAsync(response.Events, ct);
+                var response = await _httpService.PostAsync(idempotentId, request, ct);
+                await _dbService.AddEventsAsync(response.Events, ct);
 
                 return response;
             }
-            case AppMode.Offline:
+            case ServiceMode.Offline:
                 return await _dbService.PostAsync(idempotentId, request, ct);
 
             default:
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
         }
-    }
-
-    private async ValueTask InitAsync(CancellationToken ct)
-    {
-        if (_inited || _appState.Mode != AppMode.Online)
-        {
-            return;
-        }
-
-        var request = new TGetRequest();
-        var lastLocalId = await _dbService.GetLastIdAsync(ct);
-        request.LastId = lastLocalId;
-        var response = await _service.GetAsync(request, ct);
-        await _dbService.SaveEventsAsync(response.Events, ct);
-        _inited = true;
-    }
-
-    private void Init()
-    {
-        if (_inited || _appState.Mode != AppMode.Online)
-        {
-            return;
-        }
-
-        var request = new TGetRequest();
-        var lastLocalId = _dbService.GetLastId();
-        request.LastId = lastLocalId;
-        var response = _service.Get(request);
-        _dbService.SaveEvents(response.Events);
-        _inited = true;
     }
 }
