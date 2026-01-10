@@ -4,5 +4,5 @@ namespace Inanna.Services;
 
 public interface IInitUi
 {
-    ConfiguredValueTaskAwaitable InitAsync(CancellationToken ct);
+    ConfiguredValueTaskAwaitable InitUiAsync(CancellationToken ct);
 }

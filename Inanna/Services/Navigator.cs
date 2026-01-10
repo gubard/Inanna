@@ -96,7 +96,7 @@ public class Navigator : ObservableObject, INavigator
 
         if (_stackViewModel.CurrentView is IInitUi initUi)
         {
-            await initUi.InitAsync(ct);
+            await initUi.InitUiAsync(ct);
         }
 
         ViewChanged?.Invoke(this, _stackViewModel.CurrentView);
@@ -120,7 +120,7 @@ public class Navigator : ObservableObject, INavigator
 
         if (_stackViewModel.CurrentView is IInitUi initUi)
         {
-            await initUi.InitAsync(ct);
+            await initUi.InitUiAsync(ct);
         }
 
         ViewChanged?.Invoke(this, _stackViewModel.CurrentView);
