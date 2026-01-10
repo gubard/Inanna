@@ -51,23 +51,12 @@ public class Navigator : ObservableObject, INavigator
 
     public ConfiguredValueTaskAwaitable<object?> NavigateBackOrNullAsync(CancellationToken ct)
     {
-        _stackViewModel.PopView();
-        ViewChanged?.Invoke(this, _stackViewModel.CurrentView);
-
-        return TaskHelper.FromResult(_stackViewModel.CurrentView);
+        return NavigateBackOrNullCore(ct).ConfigureAwait(false);
     }
 
     public ConfiguredValueTaskAwaitable NavigateToAsync(object view, CancellationToken ct)
     {
-        if (_stackViewModel.CurrentView is INonNavigate)
-        {
-            _stackViewModel.RemoveLastView();
-        }
-
-        _stackViewModel.PushView(view);
-        ViewChanged?.Invoke(this, _stackViewModel.CurrentView);
-
-        return TaskHelper.ConfiguredCompletedTask;
+        return NavigateToCore(view, ct).ConfigureAwait(false);
     }
 
     public ConfiguredValueTaskAwaitable RefreshCurrentViewAsync(CancellationToken ct)
@@ -94,5 +83,34 @@ public class Navigator : ObservableObject, INavigator
         {
             refresh.RefreshUi();
         }
+    }
+
+    private async ValueTask<object?> NavigateBackOrNullCore(CancellationToken ct)
+    {
+        if (_stackViewModel.CurrentView is ISaveUi saveUi)
+        {
+            await saveUi.SaveAsync(ct);
+        }
+
+        _stackViewModel.PopView();
+        ViewChanged?.Invoke(this, _stackViewModel.CurrentView);
+
+        return TaskHelper.FromResult(_stackViewModel.CurrentView);
+    }
+
+    private async ValueTask NavigateToCore(object view, CancellationToken ct)
+    {
+        if (_stackViewModel.CurrentView is INonNavigate)
+        {
+            _stackViewModel.RemoveLastView();
+        }
+
+        if (_stackViewModel.CurrentView is ISaveUi saveUi)
+        {
+            await saveUi.SaveAsync(ct);
+        }
+
+        _stackViewModel.PushView(view);
+        ViewChanged?.Invoke(this, _stackViewModel.CurrentView);
     }
 }
