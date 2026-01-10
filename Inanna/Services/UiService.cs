@@ -27,7 +27,7 @@ public abstract class UiService<
 > : IUiService<TGetRequest, TPostRequest, TGetResponse, TPostResponse>
     where TGetResponse : IValidationErrors, IResponse, new()
     where TPostResponse : IValidationErrors, IResponse, new()
-    where TGetRequest : IGetRequest, new()
+    where TGetRequest : new()
     where THttpService : IHttpService<TGetRequest, TPostRequest, TGetResponse, TPostResponse>
     where TEfService : IDbService<TGetRequest, TPostRequest, TGetResponse, TPostResponse>
     where TPostRequest : IPostRequest
@@ -188,8 +188,10 @@ public abstract class UiService<
         {
             case ServiceMode.Online:
             {
+                var events = _dbService.GetEvents();
+                request.Events = events;
                 var response = _httpService.Post(idempotentId, request);
-                _dbService.AddEvents(response.Events);
+                _dbService.ClearEvents();
 
                 return response;
             }
@@ -213,8 +215,10 @@ public abstract class UiService<
         {
             case ServiceMode.Online:
             {
+                var events = await _dbService.GetEventsAsync(ct);
+                request.Events = events;
                 var response = await _httpService.PostAsync(idempotentId, request, ct);
-                await _dbService.AddEventsAsync(response.Events, ct);
+                await _dbService.ClearEventsAsync(ct);
 
                 return response;
             }
