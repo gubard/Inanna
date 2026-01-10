@@ -93,9 +93,15 @@ public class Navigator : ObservableObject, INavigator
         }
 
         _stackViewModel.PopView();
+
+        if (_stackViewModel.CurrentView is IInitUi initUi)
+        {
+            await initUi.InitAsync(ct);
+        }
+
         ViewChanged?.Invoke(this, _stackViewModel.CurrentView);
 
-        return TaskHelper.FromResult(_stackViewModel.CurrentView);
+        return _stackViewModel.CurrentView;
     }
 
     private async ValueTask NavigateToCore(object view, CancellationToken ct)
@@ -111,6 +117,12 @@ public class Navigator : ObservableObject, INavigator
         }
 
         _stackViewModel.PushView(view);
+
+        if (_stackViewModel.CurrentView is IInitUi initUi)
+        {
+            await initUi.InitAsync(ct);
+        }
+
         ViewChanged?.Invoke(this, _stackViewModel.CurrentView);
     }
 }
