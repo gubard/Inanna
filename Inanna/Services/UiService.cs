@@ -31,7 +31,7 @@ public abstract class UiService<
     where THttpService : IHttpService<TGetRequest, TPostRequest, TGetResponse, TPostResponse>
     where TEfService : IDbService<TGetRequest, TPostRequest, TGetResponse, TPostResponse>
     where TPostRequest : IPostRequest
-    where TCache : IMemoryCache<TGetResponse>, IMemoryCache<TPostRequest>
+    where TCache : IUiCache<TPostRequest, TGetResponse, IMemoryCache<TPostRequest, TGetResponse>>
 {
     public string ServiceName { get; }
 
@@ -54,7 +54,7 @@ public abstract class UiService<
 
     public TPostResponse Post(Guid idempotentId, TPostRequest request)
     {
-        Dispatcher.UIThread.Post(() => _memoryCache.Update(request));
+        _uiCache.Update(request);
         var response = PostCore(idempotentId, request);
         _navigator.RefreshCurrentView();
 
@@ -70,14 +70,14 @@ public abstract class UiService<
             case ServiceMode.Online:
             {
                 var response = _httpService.Get(request);
-                Dispatcher.UIThread.Post(() => _memoryCache.Update(response));
+                _uiCache.Update(response);
 
                 return response;
             }
             case ServiceMode.Offline:
             {
                 var response = _dbService.Get(request);
-                Dispatcher.UIThread.Post(() => _memoryCache.Update(response));
+                _uiCache.MemoryCache.Update(response);
 
                 return response;
             }
@@ -109,7 +109,7 @@ public abstract class UiService<
         THttpService httpService,
         TEfService dbService,
         AppState appState,
-        TCache memoryCache,
+        TCache uiCache,
         INavigator navigator,
         string serviceName
     )
@@ -117,7 +117,7 @@ public abstract class UiService<
         _httpService = httpService;
         _dbService = dbService;
         _appState = appState;
-        _memoryCache = memoryCache;
+        _uiCache = uiCache;
         _navigator = navigator;
         ServiceName = serviceName;
     }
@@ -125,7 +125,7 @@ public abstract class UiService<
     private readonly THttpService _httpService;
     private readonly TEfService _dbService;
     private readonly AppState _appState;
-    private readonly TCache _memoryCache;
+    private readonly TCache _uiCache;
     private readonly INavigator _navigator;
 
     private async ValueTask<bool> HealthCheckCore(CancellationToken ct)
@@ -148,7 +148,7 @@ public abstract class UiService<
         CancellationToken ct
     )
     {
-        Dispatcher.UIThread.Post(() => _memoryCache.Update(request));
+        _uiCache.Update(request);
         var response = await PostCoreAsync(idempotentId, request, ct);
         await _navigator.RefreshCurrentViewAsync(ct);
 
@@ -164,14 +164,14 @@ public abstract class UiService<
             case ServiceMode.Online:
             {
                 var response = await _httpService.GetAsync(request, ct);
-                Dispatcher.UIThread.Post(() => _memoryCache.Update(response));
+                await _uiCache.UpdateAsync(response, ct);
 
                 return response;
             }
             case ServiceMode.Offline:
             {
                 var response = await _dbService.GetAsync(request, ct);
-                Dispatcher.UIThread.Post(() => _memoryCache.Update(response));
+                await _uiCache.MemoryCache.UpdateAsync(response, ct);
 
                 return response;
             }
@@ -188,6 +188,7 @@ public abstract class UiService<
         {
             case ServiceMode.Online:
             {
+                _uiCache.Update(request);
                 var events = _dbService.GetEvents();
                 request.Events = events;
                 var response = _httpService.Post(idempotentId, request);
@@ -219,6 +220,7 @@ public abstract class UiService<
         {
             case ServiceMode.Online:
             {
+                await _uiCache.UpdateAsync(request, ct);
                 var events = await _dbService.GetEventsAsync(ct);
                 request.Events = events;
                 var response = await _httpService.PostAsync(idempotentId, request, ct);
