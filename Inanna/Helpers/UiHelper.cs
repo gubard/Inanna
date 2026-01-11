@@ -131,23 +131,25 @@ public static class UiHelper
 
             if (result.ValidationErrors is not { Count: 0 })
             {
-                DialogService.ShowMessageBox(
+                DialogService.ShowMessageBoxAsync(
                     new(
                         AppResourceService.GetResource<string>("Lang.Error"),
                         new ValidationErrorsViewModel(result.ValidationErrors.ToArray()),
                         OkButton
-                    )
+                    ),
+                    CancellationToken.None
                 );
             }
         }
         catch (Exception e)
         {
-            DialogService.ShowMessageBox(
+            DialogService.ShowMessageBoxAsync(
                 new(
                     AppResourceService.GetResource<string>("Lang.Error"),
                     new ExceptionViewModel(e),
                     OkButton
-                )
+                ),
+                CancellationToken.None
             );
         }
     }
@@ -160,12 +162,13 @@ public static class UiHelper
         }
         catch (Exception e)
         {
-            DialogService.ShowMessageBox(
+            DialogService.ShowMessageBoxAsync(
                 new(
                     AppResourceService.GetResource<string>("Lang.Error"),
                     new ExceptionViewModel(e),
                     OkButton
-                )
+                ),
+                CancellationToken.None
             );
         }
     }

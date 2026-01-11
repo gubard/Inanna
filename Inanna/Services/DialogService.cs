@@ -8,7 +8,6 @@ namespace Inanna.Services;
 public interface IDialogService
 {
     ConfiguredValueTaskAwaitable ShowMessageBoxAsync(DialogViewModel dialog, CancellationToken ct);
-    void ShowMessageBox(DialogViewModel dialog);
     void CloseMessageBox();
 }
 
@@ -45,19 +44,6 @@ public class DialogService : IDialogService
         _taskStack.Push(taskCompletionSource);
         ct.ThrowIfCancellationRequested();
         await taskCompletionSource.Task;
-    }
-
-    public void ShowMessageBox(DialogViewModel dialog)
-    {
-        Dispatcher.UIThread.Post(() =>
-        {
-            _stackViewModel.PushView(dialog);
-            DialogControl.ShowDialog(_dialogId, _stackViewModel);
-        });
-
-        var taskCompletionSource = new TaskCompletionSource();
-        _taskStack.Push(taskCompletionSource);
-        taskCompletionSource.Task.ConfigureAwait(false).GetAwaiter().GetResult();
     }
 
     public void CloseMessageBox()
