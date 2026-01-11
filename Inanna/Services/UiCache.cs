@@ -33,24 +33,12 @@ public class UiCache<TPostRequest, TGetResponse, TDbCache, TMemoryCache>
         );
     }
 
-    public void Update(TPostRequest source)
-    {
-        DbCache.Update(source);
-        MemoryCache.Update(source);
-    }
-
     public ConfiguredValueTaskAwaitable UpdateAsync(TGetResponse source, CancellationToken ct)
     {
         return TaskHelper.WhenAllAsync(
             DbCache.UpdateAsync(source, ct),
             MemoryCache.UpdateAsync(source, ct)
         );
-    }
-
-    public void Update(TGetResponse source)
-    {
-        DbCache.Update(source);
-        MemoryCache.Update(source);
     }
 
     protected readonly TDbCache DbCache;

@@ -73,7 +73,7 @@ public class Navigator : ObservableObject, INavigator
     {
         if (CurrentView is IRefresh refresh)
         {
-            refresh.Refresh();
+            refresh.RefreshAsync(CancellationToken.None);
         }
     }
 
