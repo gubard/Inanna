@@ -9,4 +9,6 @@
     <s:DateOnlyToDateTimeConverter x:Key="DateOnlyToDateTimeConverter" />
     <s:Int32MoreThenConverter x:Key="Int32MoreThenConverter" />
     <s:AnyOfConverter x:Key="AnyOfConverter" />
+    <s:IsNullOrWhiteSpaceConverter x:Key="IsNullOrWhiteSpaceConverter" />
+    <s:IsNotNullOrWhiteSpaceConverter x:Key="IsNotNullOrWhiteSpaceConverter" />
 </ResourceDictionary>
