@@ -1,5 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 using Avalonia.Threading;
+using Gaia.Models;
 using Gaia.Services;
 using Inanna.Models;
 using Nestor.Db.Models;
@@ -28,7 +29,7 @@ public abstract class UiService<
     TCache
 > : IUiService<TGetRequest, TPostRequest, TGetResponse, TPostResponse>
     where TGetResponse : IValidationErrors, IResponse, new()
-    where TPostResponse : IValidationErrors, IResponse, new()
+    where TPostResponse : IValidationErrors, IPostResponse, new()
     where TGetRequest : new()
     where THttpService : IHttpService<TGetRequest, TPostRequest, TGetResponse, TPostResponse>
     where TEfService : IDbService<TGetRequest, TPostRequest, TGetResponse, TPostResponse>
@@ -120,9 +121,15 @@ public abstract class UiService<
                 request.Events = events;
                 var response = await _httpService.PostAsync(idempotentId, request, ct);
 
-                if (request.Events.Length != 0 && response.ValidationErrors.Count == 0)
+                if (response.IsEventSaved)
                 {
                     await _dbService.ClearEventsAsync(ct);
+                }
+
+                if (response.ValidationErrors.OfType<ExceptionsValidationError>().Any())
+                {
+                    var r = await _dbService.PostAsync(idempotentId, request, ct);
+                    response.ValidationErrors.AddRange(r.ValidationErrors);
                 }
 
                 await _navigator.RefreshCurrentViewAsync(ct);
