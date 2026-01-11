@@ -1,5 +1,4 @@
 ﻿using System.Runtime.CompilerServices;
-using Avalonia.Threading;
 using Gaia.Models;
 using Gaia.Services;
 using Inanna.Models;
