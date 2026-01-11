@@ -69,7 +69,9 @@ public static class UiHelper
         {
             await DialogService.ShowMessageBoxAsync(
                 new(
-                    AppResourceService.GetResource<string>("Lang.Error").ToDialogHeader(),
+                    Dispatcher.UIThread.Invoke(() =>
+                        AppResourceService.GetResource<string>("Lang.Error").ToDialogHeader()
+                    ),
                     new ExceptionViewModel(e),
                     OkButton
                 ),
@@ -101,7 +103,9 @@ public static class UiHelper
             {
                 await DialogService.ShowMessageBoxAsync(
                     new(
-                        AppResourceService.GetResource<string>("Lang.Error").ToDialogHeader(),
+                        Dispatcher.UIThread.Invoke(() =>
+                            AppResourceService.GetResource<string>("Lang.Error").ToDialogHeader()
+                        ),
                         new ValidationErrorsViewModel(result.ValidationErrors.ToArray()),
                         OkButton
                     ),
@@ -113,7 +117,9 @@ public static class UiHelper
         {
             await DialogService.ShowMessageBoxAsync(
                 new(
-                    AppResourceService.GetResource<string>("Lang.Error").ToDialogHeader(),
+                    Dispatcher.UIThread.Invoke(() =>
+                        AppResourceService.GetResource<string>("Lang.Error").ToDialogHeader()
+                    ),
                     new ExceptionViewModel(e),
                     OkButton
                 ),
@@ -133,7 +139,9 @@ public static class UiHelper
             {
                 DialogService.ShowMessageBoxAsync(
                     new(
-                        AppResourceService.GetResource<string>("Lang.Error").ToDialogHeader(),
+                        Dispatcher.UIThread.Invoke(() =>
+                            AppResourceService.GetResource<string>("Lang.Error").ToDialogHeader()
+                        ),
                         new ValidationErrorsViewModel(result.ValidationErrors.ToArray()),
                         OkButton
                     ),
@@ -145,7 +153,9 @@ public static class UiHelper
         {
             DialogService.ShowMessageBoxAsync(
                 new(
-                    AppResourceService.GetResource<string>("Lang.Error").ToDialogHeader(),
+                    Dispatcher.UIThread.Invoke(() =>
+                        AppResourceService.GetResource<string>("Lang.Error").ToDialogHeader()
+                    ),
                     new ExceptionViewModel(e),
                     OkButton
                 ),
@@ -164,7 +174,9 @@ public static class UiHelper
         {
             DialogService.ShowMessageBoxAsync(
                 new(
-                    AppResourceService.GetResource<string>("Lang.Error").ToDialogHeader(),
+                    Dispatcher.UIThread.Invoke(() =>
+                        AppResourceService.GetResource<string>("Lang.Error").ToDialogHeader()
+                    ),
                     new ExceptionViewModel(e),
                     OkButton
                 ),
@@ -197,7 +209,9 @@ public static class UiHelper
 
         await DialogService.ShowMessageBoxAsync(
             new(
-                AppResourceService.GetResource<string>("Lang.Error").ToDialogHeader(),
+                Dispatcher.UIThread.Invoke(() =>
+                    AppResourceService.GetResource<string>("Lang.Error").ToDialogHeader()
+                ),
                 new ValidationErrorsViewModel(result.ValidationErrors.ToArray()),
                 OkButton
             ),
@@ -229,7 +243,9 @@ public static class UiHelper
 
         await DialogService.ShowMessageBoxAsync(
             new(
-                AppResourceService.GetResource<string>("Lang.Error").ToDialogHeader(),
+                Dispatcher.UIThread.Invoke(() =>
+                    AppResourceService.GetResource<string>("Lang.Error").ToDialogHeader()
+                ),
                 new ValidationErrorsViewModel(errors.ValidationErrors.ToArray()),
                 OkButton
             ),
