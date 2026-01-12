@@ -5,3 +5,4 @@ using Inanna.Ui;
 [assembly: ViewPair(typeof(DialogView), typeof(DialogViewModel))]
 [assembly: ViewPair(typeof(ExceptionView), typeof(ExceptionViewModel))]
 [assembly: ViewPair(typeof(ValidationErrorsView), typeof(ValidationErrorsViewModel))]
+[assembly: ViewPair(typeof(ChangeOrderView), typeof(ChangeOrderViewModel))]

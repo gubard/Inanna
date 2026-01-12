@@ -1,0 +1,22 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="clr-namespace:Inanna.Ui"
+             xmlns:m="clr-namespace:Inanna.Models"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Inanna.Ui.ChangeOrderView"
+             x:DataType="ui:ChangeOrderViewModel">
+    <StackPanel>
+        <ToggleSwitch IsChecked="{Binding IsAfter}"
+                      OnContent="{DynamicResource Lang.After}"
+                      OffContent="{DynamicResource Lang.Before}" />
+        <ListBox Classes="change-order" ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem}">
+            <ListBox.Styles>
+                <Style x:DataType="m:IOrderedItem" Selector="ListBoxItem">
+                    <Setter Property="IsEnabled" Value="{Binding !IsChangingOrder}" />
+                </Style>
+            </ListBox.Styles>
+        </ListBox>
+    </StackPanel>
+</UserControl>
