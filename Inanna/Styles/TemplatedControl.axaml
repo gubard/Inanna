@@ -4,8 +4,7 @@
         <Setter Property="Padding" Value="5" />
         <Setter Property="MinWidth" Value="200" />
     </Style>
-    
-    
+
     <Style Selector=":is(TemplatedControl).h1">
         <Setter Property="FontSize" Value="36.4" />
     </Style>
@@ -32,5 +31,9 @@
 
     <Style Selector=":is(TemplatedControl).small">
         <Setter Property="FontSize" Value="11.2" />
+    </Style>
+    
+    <Style Selector=":is(TemplatedControl).p-5">
+        <Setter Property="Padding" Value="5" />
     </Style>
 </Styles>
