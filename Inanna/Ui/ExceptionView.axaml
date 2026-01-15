@@ -12,9 +12,9 @@
             <DataTemplate x:DataType="s:Exception">
                 <StackPanel>
                     <TextBlock Classes="field" Text="{StaticResource Lang.Message}" />
-                    <TextBox Classes="is-readonly" Text="{Binding Message}" />
+                    <TextBox Classes="plain-text" Text="{Binding Message}" />
                     <TextBlock Classes="field" Text="{StaticResource Lang.StackTrace}" />
-                    <TextBox Classes="is-readonly" Text="{Binding StackTrace}" TextWrapping="Wrap" />
+                    <TextBox Classes="plain-text" Text="{Binding StackTrace}" TextWrapping="Wrap" />
                 </StackPanel>
             </DataTemplate>
         </ItemsControl.ItemTemplate>
