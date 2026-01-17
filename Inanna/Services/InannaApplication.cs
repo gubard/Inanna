@@ -80,7 +80,7 @@ public class InannaApplication : Application
 
                         break;
                     case MaterialDesignSizeType.ExtraLarge:
-                        pseudoClasses.Set(":extra-small", true);
+                        pseudoClasses.Set(":extra-small", false);
                         pseudoClasses.Set(":small", false);
                         pseudoClasses.Set(":medium", false);
                         pseudoClasses.Set(":large", false);
