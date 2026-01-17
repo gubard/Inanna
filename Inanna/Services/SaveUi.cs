@@ -4,5 +4,5 @@ namespace Inanna.Services;
 
 public interface ISaveUi
 {
-    ConfiguredValueTaskAwaitable SaveAsync(CancellationToken ct);
+    ConfiguredValueTaskAwaitable SaveUiAsync(CancellationToken ct);
 }

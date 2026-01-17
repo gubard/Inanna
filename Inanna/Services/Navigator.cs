@@ -89,7 +89,7 @@ public class Navigator : ObservableObject, INavigator
     {
         if (_stackViewModel.CurrentView is ISaveUi saveUi)
         {
-            await saveUi.SaveAsync(ct);
+            await saveUi.SaveUiAsync(ct);
         }
 
         _stackViewModel.PopView();
@@ -113,7 +113,7 @@ public class Navigator : ObservableObject, INavigator
 
         if (_stackViewModel.CurrentView is ISaveUi saveUi)
         {
-            await saveUi.SaveAsync(ct);
+            await saveUi.SaveUiAsync(ct);
         }
 
         _stackViewModel.PushView(view);
