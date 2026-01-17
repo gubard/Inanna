@@ -40,6 +40,14 @@
         <Setter Property="Margin" Value="5" />
     </Style>
 
+    <Style Selector=":is(Layoutable).m-l-5">
+        <Setter Property="Margin" Value="5,0,0,0" />
+    </Style>
+
+    <Style Selector=":is(Layoutable).m-h-3">
+        <Setter Property="Margin" Value="3,0" />
+    </Style>
+
     <Style Selector=":is(Layoutable).m-10">
         <Setter Property="Margin" Value="10" />
     </Style>
