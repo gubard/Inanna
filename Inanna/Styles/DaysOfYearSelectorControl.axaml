@@ -2,7 +2,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:c="clr-namespace:Inanna.Controls"
                     xmlns:g="clr-namespace:System.Collections.Generic;assembly=System.Runtime"
-                    xmlns:m="clr-namespace:Gaia.Models;assembly=Gaia">
+                    xmlns:m="clr-namespace:Gaia.Models;assembly=Gaia"
+                    xmlns:h="clr-namespace:Inanna.Helpers">
     <ControlTheme x:Key="DaysOfYearSelectorControlStyle" TargetType="c:DaysOfYearSelectorControl">
         <Setter Property="Template">
             <ControlTemplate>
@@ -16,8 +17,10 @@
                                 </DataTemplate.DataType>
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="{Binding Key}" />
+                                    <TextBlock Text=" "
+                                               IsVisible="{Binding Value.SelectedIntegers.Count, Converter={StaticResource IsNotValueConverter}, ConverterParameter={x:Static h:Numbers.Int32_0}}" />
                                     <TextBlock Text="{Binding Value.SelectedIntegers.Count}"
-                                               IsVisible="{Binding Value.SelectedIntegers.Count, Converter={StaticResource Int32MoreThenConverter}, ConverterParameter=0}" />
+                                               IsVisible="{Binding Value.SelectedIntegers.Count, Converter={StaticResource IsNotValueConverter}, ConverterParameter={x:Static h:Numbers.Int32_0}}" />
                                 </StackPanel>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
