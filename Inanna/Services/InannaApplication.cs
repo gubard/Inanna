@@ -11,6 +11,8 @@ namespace Inanna.Services;
 
 public class InannaApplication : Application
 {
+    private static readonly HashSet<TopLevel> InitedTopLevels = new();
+
     static InannaApplication()
     {
         ToggleButton.IsCheckedProperty.OverrideMetadata<CheckBox>(
@@ -18,83 +20,7 @@ public class InannaApplication : Application
         );
 
         Layoutable.WidthProperty.Changed.AddClassHandler<TopLevel>(
-            (topLevel, _) =>
-            {
-                var currentType = topLevel.Width switch
-                {
-                    <= MaterialDesign.MaxExtraSmall => MaterialDesignSizeType.ExtraSmall,
-                    > MaterialDesign.MaxExtraSmall and <= MaterialDesign.MaxSmall =>
-                        MaterialDesignSizeType.Small,
-                    > MaterialDesign.MaxSmall and <= MaterialDesign.MaxMedium =>
-                        MaterialDesignSizeType.Medium,
-                    > MaterialDesign.MaxMedium and <= MaterialDesign.MaxLarge =>
-                        MaterialDesignSizeType.Large,
-                    > MaterialDesign.MaxLarge => MaterialDesignSizeType.ExtraLarge,
-                    _ => MaterialDesignSizeType.ExtraSmall,
-                };
-
-                var type = topLevel.GetValue<MaterialDesignSizeType>(
-                    TopLevelAssist.MaterialDesignSizeTypeProperty
-                );
-
-                if (type == currentType)
-                {
-                    return;
-                }
-
-                topLevel.SetValue(TopLevelAssist.MaterialDesignSizeTypeProperty, currentType);
-                var pseudoClasses = (IPseudoClasses)topLevel.Classes;
-
-                switch (currentType)
-                {
-                    case MaterialDesignSizeType.ExtraSmall:
-                        pseudoClasses.Set(":extra-small", true);
-                        pseudoClasses.Set(":small", false);
-                        pseudoClasses.Set(":medium", false);
-                        pseudoClasses.Set(":large", false);
-                        pseudoClasses.Set(":extra-large", false);
-
-                        break;
-                    case MaterialDesignSizeType.Small:
-                        pseudoClasses.Set(":extra-small", false);
-                        pseudoClasses.Set(":small", true);
-                        pseudoClasses.Set(":medium", false);
-                        pseudoClasses.Set(":large", false);
-                        pseudoClasses.Set(":extra-large", false);
-
-                        break;
-                    case MaterialDesignSizeType.Medium:
-                        pseudoClasses.Set(":extra-small", false);
-                        pseudoClasses.Set(":small", false);
-                        pseudoClasses.Set(":medium", true);
-                        pseudoClasses.Set(":large", false);
-                        pseudoClasses.Set(":extra-large", false);
-
-                        break;
-                    case MaterialDesignSizeType.Large:
-                        pseudoClasses.Set(":extra-small", false);
-                        pseudoClasses.Set(":small", false);
-                        pseudoClasses.Set(":medium", false);
-                        pseudoClasses.Set(":large", true);
-                        pseudoClasses.Set(":extra-large", false);
-
-                        break;
-                    case MaterialDesignSizeType.ExtraLarge:
-                        pseudoClasses.Set(":extra-small", false);
-                        pseudoClasses.Set(":small", false);
-                        pseudoClasses.Set(":medium", false);
-                        pseudoClasses.Set(":large", false);
-                        pseudoClasses.Set(":extra-large", true);
-
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException(
-                            nameof(currentType),
-                            currentType,
-                            null
-                        );
-                }
-            }
+            (topLevel, _) => UpdateMaterialDesignSizeType(topLevel)
         );
     }
 
@@ -109,6 +35,81 @@ public class InannaApplication : Application
         foreach (var plugin in dataValidationPluginsToRemove)
         {
             BindingPlugins.DataValidators.Remove(plugin);
+        }
+    }
+
+    public static void UpdateMaterialDesignSizeType(TopLevel topLevel)
+    {
+        var currentType = topLevel.Width switch
+        {
+            <= MaterialDesign.MaxExtraSmall => MaterialDesignSizeType.ExtraSmall,
+            > MaterialDesign.MaxExtraSmall and <= MaterialDesign.MaxSmall =>
+                MaterialDesignSizeType.Small,
+            > MaterialDesign.MaxSmall and <= MaterialDesign.MaxMedium =>
+                MaterialDesignSizeType.Medium,
+            > MaterialDesign.MaxMedium and <= MaterialDesign.MaxLarge =>
+                MaterialDesignSizeType.Large,
+            > MaterialDesign.MaxLarge => MaterialDesignSizeType.ExtraLarge,
+            _ => MaterialDesignSizeType.ExtraSmall,
+        };
+
+        var type = topLevel.GetValue<MaterialDesignSizeType>(
+            TopLevelAssist.MaterialDesignSizeTypeProperty
+        );
+
+        if (type == currentType && InitedTopLevels.Contains(topLevel))
+        {
+            return;
+        }
+
+        InitedTopLevels.Add(topLevel);
+        topLevel.SetValue(TopLevelAssist.MaterialDesignSizeTypeProperty, currentType);
+        var pseudoClasses = (IPseudoClasses)topLevel.Classes;
+
+        switch (currentType)
+        {
+            case MaterialDesignSizeType.ExtraSmall:
+                pseudoClasses.Set(":extra-small", true);
+                pseudoClasses.Set(":small", false);
+                pseudoClasses.Set(":medium", false);
+                pseudoClasses.Set(":large", false);
+                pseudoClasses.Set(":extra-large", false);
+
+                break;
+            case MaterialDesignSizeType.Small:
+                pseudoClasses.Set(":extra-small", false);
+                pseudoClasses.Set(":small", true);
+                pseudoClasses.Set(":medium", false);
+                pseudoClasses.Set(":large", false);
+                pseudoClasses.Set(":extra-large", false);
+
+                break;
+            case MaterialDesignSizeType.Medium:
+                pseudoClasses.Set(":extra-small", false);
+                pseudoClasses.Set(":small", false);
+                pseudoClasses.Set(":medium", true);
+                pseudoClasses.Set(":large", false);
+                pseudoClasses.Set(":extra-large", false);
+
+                break;
+            case MaterialDesignSizeType.Large:
+                pseudoClasses.Set(":extra-small", false);
+                pseudoClasses.Set(":small", false);
+                pseudoClasses.Set(":medium", false);
+                pseudoClasses.Set(":large", true);
+                pseudoClasses.Set(":extra-large", false);
+
+                break;
+            case MaterialDesignSizeType.ExtraLarge:
+                pseudoClasses.Set(":extra-small", false);
+                pseudoClasses.Set(":small", false);
+                pseudoClasses.Set(":medium", false);
+                pseudoClasses.Set(":large", false);
+                pseudoClasses.Set(":extra-large", true);
+
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(currentType), currentType, null);
         }
     }
 }
