@@ -73,9 +73,9 @@ public static class UiHelper
             {
                 DialogService.ShowMessageBoxAsync(
                     new(
-                        Dispatcher.UIThread.Invoke(() =>
-                            AppResourceService.GetResource<string>("Lang.Error").ToDialogHeader()
-                        ),
+                        AppResourceService
+                            .GetResource<string>("Lang.Error")
+                            .DispatchToDialogHeader(),
                         InannaViewModelFactory.CreateValidationErrors(
                             result.ValidationErrors.ToArray()
                         ),
@@ -89,9 +89,7 @@ public static class UiHelper
         {
             DialogService.ShowMessageBoxAsync(
                 new(
-                    Dispatcher.UIThread.Invoke(() =>
-                        AppResourceService.GetResource<string>("Lang.Error").ToDialogHeader()
-                    ),
+                    AppResourceService.GetResource<string>("Lang.Error").DispatchToDialogHeader(),
                     InannaViewModelFactory.CreateException(e),
                     OkButton
                 ),
@@ -110,9 +108,7 @@ public static class UiHelper
         {
             DialogService.ShowMessageBoxAsync(
                 new(
-                    Dispatcher.UIThread.Invoke(() =>
-                        AppResourceService.GetResource<string>("Lang.Error").ToDialogHeader()
-                    ),
+                    AppResourceService.GetResource<string>("Lang.Error").DispatchToDialogHeader(),
                     InannaViewModelFactory.CreateException(e),
                     OkButton
                 ),
@@ -143,9 +139,7 @@ public static class UiHelper
         {
             await DialogService.ShowMessageBoxAsync(
                 new(
-                    Dispatcher.UIThread.Invoke(() =>
-                        AppResourceService.GetResource<string>("Lang.Error").ToDialogHeader()
-                    ),
+                    AppResourceService.GetResource<string>("Lang.Error").DispatchToDialogHeader(),
                     InannaViewModelFactory.CreateException(e),
                     OkButton
                 ),
@@ -226,9 +220,9 @@ public static class UiHelper
             {
                 await DialogService.ShowMessageBoxAsync(
                     new(
-                        Dispatcher.UIThread.Invoke(() =>
-                            AppResourceService.GetResource<string>("Lang.Error").ToDialogHeader()
-                        ),
+                        AppResourceService
+                            .GetResource<string>("Lang.Error")
+                            .DispatchToDialogHeader(),
                         InannaViewModelFactory.CreateValidationErrors(
                             result.ValidationErrors.ToArray()
                         ),
@@ -242,9 +236,7 @@ public static class UiHelper
         {
             await DialogService.ShowMessageBoxAsync(
                 new(
-                    Dispatcher.UIThread.Invoke(() =>
-                        AppResourceService.GetResource<string>("Lang.Error").ToDialogHeader()
-                    ),
+                    AppResourceService.GetResource<string>("Lang.Error").DispatchToDialogHeader(),
                     InannaViewModelFactory.CreateException(e),
                     OkButton
                 ),
@@ -268,9 +260,7 @@ public static class UiHelper
 
         await DialogService.ShowMessageBoxAsync(
             new(
-                Dispatcher.UIThread.Invoke(() =>
-                    AppResourceService.GetResource<string>("Lang.Error").ToDialogHeader()
-                ),
+                AppResourceService.GetResource<string>("Lang.Error").DispatchToDialogHeader(),
                 InannaViewModelFactory.CreateValidationErrors(result.ValidationErrors.ToArray()),
                 OkButton
             ),
@@ -293,9 +283,7 @@ public static class UiHelper
 
         await DialogService.ShowMessageBoxAsync(
             new(
-                Dispatcher.UIThread.Invoke(() =>
-                    AppResourceService.GetResource<string>("Lang.Error").ToDialogHeader()
-                ),
+                AppResourceService.GetResource<string>("Lang.Error").DispatchToDialogHeader(),
                 InannaViewModelFactory.CreateValidationErrors(errors.ValidationErrors.ToArray()),
                 OkButton
             ),
@@ -325,9 +313,7 @@ public static class UiHelper
 
         await DialogService.ShowMessageBoxAsync(
             new(
-                Dispatcher.UIThread.Invoke(() =>
-                    AppResourceService.GetResource<string>("Lang.ChangeOrder").ToDialogHeader()
-                ),
+                AppResourceService.GetResource<string>("Lang.ChangeOrder").DispatchToDialogHeader(),
                 viewModel,
                 new(
                     AppResourceService.GetResource<string>("Lang.Ok"),
