@@ -3,10 +3,17 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ui="clr-namespace:Inanna.Ui"
+             xmlns:ip="https://github.com/MahApps/IconPacks.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Inanna.Ui.ValidationErrorsView"
              x:DataType="ui:ValidationErrorsViewModel">
-    <ScrollViewer Classes="vertical">
-        <ItemsControl ItemsSource="{Binding Errors}" />
-    </ScrollViewer>
+    <Panel>
+        <ScrollViewer Classes="vertical">
+            <ItemsControl ItemsSource="{Binding Errors}" />
+        </ScrollViewer>
+
+        <Button Classes="mini align-right-top p-5"
+                Content="{ip:MaterialDesign ContentCopy}"
+                Command="{Binding CopyCommand}" />
+    </Panel>
 </UserControl>

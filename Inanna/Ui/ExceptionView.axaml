@@ -4,19 +4,26 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:s="clr-namespace:System;assembly=System.Runtime"
              xmlns:ui="clr-namespace:Inanna.Ui"
+             xmlns:ip="https://github.com/MahApps/IconPacks.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Inanna.Ui.ExceptionView"
              x:DataType="ui:ExceptionViewModel">
-    <ItemsControl ItemsSource="{Binding Exceptions}">
-        <ItemsControl.ItemTemplate>
-            <DataTemplate x:DataType="s:Exception">
-                <StackPanel>
-                    <TextBlock Classes="field" Text="{StaticResource Lang.Message}" />
-                    <TextBox Classes="plain-text" Text="{Binding Message}" />
-                    <TextBlock Classes="field" Text="{StaticResource Lang.StackTrace}" />
-                    <TextBox Classes="plain-text" Text="{Binding StackTrace}" TextWrapping="Wrap" />
-                </StackPanel>
-            </DataTemplate>
-        </ItemsControl.ItemTemplate>
-    </ItemsControl>
+    <Panel>
+        <ItemsControl ItemsSource="{Binding Exceptions}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="s:Exception">
+                    <StackPanel>
+                        <TextBlock Classes="field" Text="{StaticResource Lang.Message}" />
+                        <TextBox Classes="plain-text" Text="{Binding Message}" />
+                        <TextBlock Classes="field" Text="{StaticResource Lang.StackTrace}" />
+                        <TextBox Classes="plain-text" Text="{Binding StackTrace}" TextWrapping="Wrap" />
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <Button Classes="mini align-right-top p-5"
+                Content="{ip:MaterialDesign ContentCopy}"
+                Command="{Binding CopyCommand}" />
+    </Panel>
 </UserControl>

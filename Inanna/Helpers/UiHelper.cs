@@ -14,6 +14,7 @@ public static class UiHelper
 {
     static UiHelper()
     {
+        InannaViewModelFactory = DiHelper.ServiceProvider.GetService<IInannaViewModelFactory>();
         DialogService = DiHelper.ServiceProvider.GetService<IDialogService>();
         Navigator = DiHelper.ServiceProvider.GetService<INavigator>();
         AppResourceService = DiHelper.ServiceProvider.GetService<IAppResourceService>();
@@ -75,7 +76,9 @@ public static class UiHelper
                         Dispatcher.UIThread.Invoke(() =>
                             AppResourceService.GetResource<string>("Lang.Error").ToDialogHeader()
                         ),
-                        new ValidationErrorsViewModel(result.ValidationErrors.ToArray()),
+                        InannaViewModelFactory.CreateValidationErrors(
+                            result.ValidationErrors.ToArray()
+                        ),
                         OkButton
                     ),
                     CancellationToken.None
@@ -89,7 +92,7 @@ public static class UiHelper
                     Dispatcher.UIThread.Invoke(() =>
                         AppResourceService.GetResource<string>("Lang.Error").ToDialogHeader()
                     ),
-                    new ExceptionViewModel(e),
+                    InannaViewModelFactory.CreateException(e),
                     OkButton
                 ),
                 CancellationToken.None
@@ -110,7 +113,7 @@ public static class UiHelper
                     Dispatcher.UIThread.Invoke(() =>
                         AppResourceService.GetResource<string>("Lang.Error").ToDialogHeader()
                     ),
-                    new ExceptionViewModel(e),
+                    InannaViewModelFactory.CreateException(e),
                     OkButton
                 ),
                 CancellationToken.None
@@ -143,7 +146,7 @@ public static class UiHelper
                     Dispatcher.UIThread.Invoke(() =>
                         AppResourceService.GetResource<string>("Lang.Error").ToDialogHeader()
                     ),
-                    new ExceptionViewModel(e),
+                    InannaViewModelFactory.CreateException(e),
                     OkButton
                 ),
                 ct
@@ -207,6 +210,7 @@ public static class UiHelper
     private static readonly IDialogService DialogService;
     private static readonly INavigator Navigator;
     private static readonly IAppResourceService AppResourceService;
+    private static readonly IInannaViewModelFactory InannaViewModelFactory;
 
     private static async ValueTask ExecuteCore<TValidationErrors>(
         Func<ConfiguredValueTaskAwaitable<TValidationErrors>> func,
@@ -225,7 +229,9 @@ public static class UiHelper
                         Dispatcher.UIThread.Invoke(() =>
                             AppResourceService.GetResource<string>("Lang.Error").ToDialogHeader()
                         ),
-                        new ValidationErrorsViewModel(result.ValidationErrors.ToArray()),
+                        InannaViewModelFactory.CreateValidationErrors(
+                            result.ValidationErrors.ToArray()
+                        ),
                         OkButton
                     ),
                     ct
@@ -239,7 +245,7 @@ public static class UiHelper
                     Dispatcher.UIThread.Invoke(() =>
                         AppResourceService.GetResource<string>("Lang.Error").ToDialogHeader()
                     ),
-                    new ExceptionViewModel(e),
+                    InannaViewModelFactory.CreateException(e),
                     OkButton
                 ),
                 ct
@@ -265,7 +271,7 @@ public static class UiHelper
                 Dispatcher.UIThread.Invoke(() =>
                     AppResourceService.GetResource<string>("Lang.Error").ToDialogHeader()
                 ),
-                new ValidationErrorsViewModel(result.ValidationErrors.ToArray()),
+                InannaViewModelFactory.CreateValidationErrors(result.ValidationErrors.ToArray()),
                 OkButton
             ),
             ct
@@ -290,7 +296,7 @@ public static class UiHelper
                 Dispatcher.UIThread.Invoke(() =>
                     AppResourceService.GetResource<string>("Lang.Error").ToDialogHeader()
                 ),
-                new ValidationErrorsViewModel(errors.ValidationErrors.ToArray()),
+                InannaViewModelFactory.CreateValidationErrors(errors.ValidationErrors.ToArray()),
                 OkButton
             ),
             ct
