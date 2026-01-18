@@ -21,14 +21,14 @@ public static class UiHelper
 
         CancelButton = new(
             AppResourceService.GetResource<string>("Lang.Cancel"),
-            new RelayCommand(() => Dispatcher.UIThread.Post(() => DialogService.CloseMessageBox())),
+            new RelayCommand(() => DialogService.DispatchCloseMessageBox()),
             null,
             DialogButtonType.Normal
         );
 
         OkButton = new(
             AppResourceService.GetResource<string>("Lang.Ok"),
-            new RelayCommand(() => Dispatcher.UIThread.Post(() => DialogService.CloseMessageBox())),
+            new RelayCommand(() => DialogService.DispatchCloseMessageBox()),
             null,
             DialogButtonType.Primary
         );
@@ -328,7 +328,7 @@ public static class UiHelper
                     new RelayCommand(() =>
                     {
                         result = new(viewModel.SelectedItem.Cast<T>(), viewModel.IsAfter);
-                        DialogService.CloseMessageBox();
+                        DialogService.DispatchCloseMessageBox();
                     }),
                     null,
                     DialogButtonType.Primary
