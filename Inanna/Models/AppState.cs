@@ -1,8 +1,11 @@
-﻿namespace Inanna.Models;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-public class AppState
+namespace Inanna.Models;
+
+public partial class AppState : ObservableObject
 {
-    public UserState? User { get; set; }
+    [ObservableProperty]
+    private UserState? _user;
 
     public ServiceMode GetServiceMode(string serviceName)
     {

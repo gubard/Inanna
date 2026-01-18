@@ -1,8 +1,15 @@
-﻿namespace Inanna.Models;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-public class UserState
+namespace Inanna.Models;
+
+public partial class UserState : ObservableObject
 {
-    public string Login { get; set; } = string.Empty;
-    public string Email { get; set; } = string.Empty;
-    public Guid Id { get; set; }
+    [ObservableProperty]
+    private string _login = string.Empty;
+
+    [ObservableProperty]
+    private string _email = string.Empty;
+
+    [ObservableProperty]
+    private Guid _id;
 }
