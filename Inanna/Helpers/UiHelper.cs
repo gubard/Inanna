@@ -305,10 +305,7 @@ public static class UiHelper
             item.IsChangingOrder = changeOrderItems.Contains(item);
         }
 
-        var viewModel = Dispatcher.UIThread.Invoke(() =>
-            new ChangeOrderViewModel(items.OrderBy(x => x.OrderIndex))
-        );
-
+        var viewModel = new ChangeOrderViewModel(items.OrderBy(x => x.OrderIndex));
         ChangeOrderParameters<T>? result = null;
 
         await DialogService.ShowMessageBoxAsync(
