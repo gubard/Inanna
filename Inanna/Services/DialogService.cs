@@ -1,5 +1,6 @@
 using System.Runtime.CompilerServices;
 using Avalonia.Threading;
+using Gaia.Helpers;
 using Inanna.Controls;
 using Inanna.Ui;
 
@@ -8,7 +9,7 @@ namespace Inanna.Services;
 public interface IDialogService
 {
     ConfiguredValueTaskAwaitable ShowMessageBoxAsync(DialogViewModel dialog, CancellationToken ct);
-    void CloseMessageBox();
+    ConfiguredValueTaskAwaitable CloseMessageBoxAsync(CancellationToken ct);
 }
 
 public class DialogService : IDialogService
@@ -34,6 +35,11 @@ public class DialogService : IDialogService
 
     private async ValueTask ShowMessageBoxCore(DialogViewModel dialog, CancellationToken ct)
     {
+        if (dialog.Content is IInitUi initUi)
+        {
+            await initUi.InitUiAsync(ct);
+        }
+
         Dispatcher.UIThread.Post(() =>
         {
             _stackViewModel.PushView(dialog);
@@ -46,18 +52,30 @@ public class DialogService : IDialogService
         await taskCompletionSource.Task;
     }
 
-    public void CloseMessageBox()
+    public ConfiguredValueTaskAwaitable CloseMessageBoxAsync(CancellationToken ct)
     {
-        _stackViewModel.PopView();
+        var view = _stackViewModel.CurrentView;
 
-        if (_stackViewModel.CurrentView is null)
+        Dispatcher.UIThread.Post(() =>
         {
-            DialogControl.CloseDialog(_dialogId);
+            _stackViewModel.PopView();
+
+            if (_stackViewModel.CurrentView is null)
+            {
+                DialogControl.CloseDialog(_dialogId);
+            }
+
+            if (_taskStack.Count != 0)
+            {
+                _taskStack.Pop().SetResult();
+            }
+        });
+
+        if (view is ISaveUi saveUi)
+        {
+            return saveUi.SaveUiAsync(ct);
         }
 
-        if (_taskStack.Count != 0)
-        {
-            _taskStack.Pop().SetResult();
-        }
+        return TaskHelper.ConfiguredCompletedTask;
     }
 }
