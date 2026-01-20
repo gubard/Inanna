@@ -10,6 +10,7 @@ public partial class ChangeOrderViewModel : ViewModelBase
 
     public ChangeOrderViewModel(IEnumerable<IOrderedItem> items)
     {
+        _isAfter = true;
         _items = new(items);
         _selectedItem = _items.First(x => !x.IsChangingOrder);
     }
