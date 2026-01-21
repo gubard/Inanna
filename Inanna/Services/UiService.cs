@@ -10,8 +10,8 @@ namespace Inanna.Services;
 public interface IUiService<in TGetRequest, in TPostRequest, TGetResponse, TPostResponse>
     : IService<TGetRequest, TPostRequest, TGetResponse, TPostResponse>,
         IHealthCheck
-    where TGetResponse : IValidationErrors, new()
-    where TPostResponse : IValidationErrors, new()
+    where TGetResponse : IResponse, new()
+    where TPostResponse : IPostResponse, new()
 {
     string ServiceName { get; }
 
@@ -27,8 +27,8 @@ public abstract class UiService<
     TEfService,
     TCache
 > : IUiService<TGetRequest, TPostRequest, TGetResponse, TPostResponse>
-    where TGetResponse : IValidationErrors, IResponse, new()
-    where TPostResponse : IValidationErrors, IPostResponse, new()
+    where TGetResponse : IResponse, new()
+    where TPostResponse : IPostResponse, new()
     where TGetRequest : new()
     where THttpService : IHttpService<TGetRequest, TPostRequest, TGetResponse, TPostResponse>
     where TEfService : IDbService<TGetRequest, TPostRequest, TGetResponse, TPostResponse>
@@ -70,7 +70,8 @@ public abstract class UiService<
         AppState appState,
         TCache uiCache,
         INavigator navigator,
-        string serviceName
+        string serviceName,
+        IResponseHandler responseHandler
     )
     {
         _httpService = httpService;
@@ -79,6 +80,7 @@ public abstract class UiService<
         _uiCache = uiCache;
         _navigator = navigator;
         ServiceName = serviceName;
+        _responseHandler = responseHandler;
     }
 
     private readonly THttpService _httpService;
@@ -86,6 +88,7 @@ public abstract class UiService<
     private readonly AppState _appState;
     private readonly TCache _uiCache;
     private readonly INavigator _navigator;
+    private readonly IResponseHandler _responseHandler;
 
     private async ValueTask<IValidationErrors> HealthCheckCore(CancellationToken ct)
     {
@@ -131,6 +134,7 @@ public abstract class UiService<
                     response.ValidationErrors.AddRange(r.ValidationErrors);
                 }
 
+                await _responseHandler.HandleResponseAsync(response, ct);
                 await _navigator.RefreshCurrentViewAsync(ct);
 
                 return response;
@@ -158,6 +162,7 @@ public abstract class UiService<
             {
                 var response = await _httpService.GetAsync(request, ct);
                 await _uiCache.UpdateAsync(response, ct);
+                await _responseHandler.HandleResponseAsync(response, ct);
 
                 return response;
             }
