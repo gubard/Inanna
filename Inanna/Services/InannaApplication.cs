@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Data.Core.Plugins;
+using Avalonia.Input;
 using Avalonia.Layout;
 using Inanna.Helpers;
 using Inanna.Models;
@@ -21,6 +22,10 @@ public class InannaApplication : Application
 
         Layoutable.WidthProperty.Changed.AddClassHandler<TopLevel>(
             (topLevel, _) => UpdateMaterialDesignSizeType(topLevel)
+        );
+
+        InputElement.PointerPressedEvent.AddClassHandler<TreeViewItem>(
+            (item, _) => item.IsExpanded = true
         );
     }
 
