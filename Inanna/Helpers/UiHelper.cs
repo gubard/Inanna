@@ -1,5 +1,6 @@
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Input;
 using Gaia.Helpers;
 using Gaia.Services;
@@ -33,6 +34,9 @@ public static class UiHelper
             DialogButtonType.Primary
         );
     }
+
+    public static readonly SelectionMode MultipleToggle =
+        SelectionMode.Multiple | SelectionMode.Toggle;
 
     public static readonly DialogButton CancelButton;
     public static readonly DialogButton OkButton;
