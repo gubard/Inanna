@@ -17,5 +17,10 @@ public partial class AppState : ObservableObject
         _serviceModes[serviceName] = mode;
     }
 
+    public void ResetServiceModes()
+    {
+        _serviceModes.Clear();
+    }
+
     private readonly Dictionary<string, ServiceMode> _serviceModes = new();
 }
