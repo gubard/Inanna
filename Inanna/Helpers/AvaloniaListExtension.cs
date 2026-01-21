@@ -12,6 +12,15 @@ public static class AvaloniaListExtension
             if (items.Length == 0)
             {
                 list.Clear();
+
+                return;
+            }
+
+            if (list.Count == 0)
+            {
+                list.AddRange(items);
+
+                return;
             }
 
             var index = 0;
