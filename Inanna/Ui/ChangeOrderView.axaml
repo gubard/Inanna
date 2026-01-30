@@ -9,8 +9,8 @@
              x:DataType="ui:ChangeOrderViewModel">
     <StackPanel>
         <ToggleSwitch IsChecked="{Binding IsAfter}"
-                      OnContent="{DynamicResource Lang.After}"
-                      OffContent="{DynamicResource Lang.Before}" />
+                      OnContent="{StaticResource Lang.After}"
+                      OffContent="{StaticResource Lang.Before}" />
         <ListBox Classes="change-order" ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem}">
             <ListBox.Styles>
                 <Style x:DataType="m:IOrderedItem" Selector="ListBoxItem">
