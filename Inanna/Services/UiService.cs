@@ -65,8 +65,8 @@ public abstract class UiService<
     }
 
     protected UiService(
-        THttpService httpService,
-        TEfService dbService,
+        THttpService toDoFilesCredentialHttpService,
+        TEfService toDoFilesDbService,
         AppState appState,
         TCache uiCache,
         INavigator navigator,
@@ -74,8 +74,8 @@ public abstract class UiService<
         IResponseHandler responseHandler
     )
     {
-        _httpService = httpService;
-        _dbService = dbService;
+        _toDoFilesCredentialHttpService = toDoFilesCredentialHttpService;
+        _toDoFilesDbService = toDoFilesDbService;
         _appState = appState;
         _uiCache = uiCache;
         _navigator = navigator;
@@ -83,8 +83,8 @@ public abstract class UiService<
         _responseHandler = responseHandler;
     }
 
-    private readonly THttpService _httpService;
-    private readonly TEfService _dbService;
+    private readonly THttpService _toDoFilesCredentialHttpService;
+    private readonly TEfService _toDoFilesDbService;
     private readonly AppState _appState;
     private readonly TCache _uiCache;
     private readonly INavigator _navigator;
@@ -92,7 +92,7 @@ public abstract class UiService<
 
     private async ValueTask<IValidationErrors> HealthCheckCore(CancellationToken ct)
     {
-        var errors = await _httpService.HealthCheckAsync(ct);
+        var errors = await _toDoFilesCredentialHttpService.HealthCheckAsync(ct);
 
         if (errors.ValidationErrors.Count == 0)
         {
@@ -119,18 +119,22 @@ public abstract class UiService<
             case ServiceMode.Online:
             {
                 await _uiCache.UpdateAsync(request, ct);
-                var events = await _dbService.GetEventsAsync(ct);
+                var events = await _toDoFilesDbService.GetEventsAsync(ct);
                 request.Events = events;
-                var response = await _httpService.PostAsync(idempotentId, request, ct);
+                var response = await _toDoFilesCredentialHttpService.PostAsync(
+                    idempotentId,
+                    request,
+                    ct
+                );
 
                 if (response.IsEventSaved)
                 {
-                    await _dbService.ClearEventsAsync(ct);
+                    await _toDoFilesDbService.ClearEventsAsync(ct);
                 }
 
                 if (response.ValidationErrors.OfType<ExceptionsValidationError>().Any())
                 {
-                    var r = await _dbService.PostAsync(idempotentId, request, ct);
+                    var r = await _toDoFilesDbService.PostAsync(idempotentId, request, ct);
                     response.ValidationErrors.AddRange(r.ValidationErrors);
                 }
 
@@ -141,7 +145,7 @@ public abstract class UiService<
             }
             case ServiceMode.Offline:
             {
-                var response = await _dbService.PostAsync(idempotentId, request, ct);
+                var response = await _toDoFilesDbService.PostAsync(idempotentId, request, ct);
                 await _navigator.RefreshCurrentViewAsync(ct);
 
                 return response;
@@ -160,7 +164,7 @@ public abstract class UiService<
         {
             case ServiceMode.Online:
             {
-                var response = await _httpService.GetAsync(request, ct);
+                var response = await _toDoFilesCredentialHttpService.GetAsync(request, ct);
                 await _uiCache.UpdateAsync(response, ct);
                 await _responseHandler.HandleResponseAsync(response, ct);
 
@@ -168,7 +172,7 @@ public abstract class UiService<
             }
             case ServiceMode.Offline:
             {
-                var response = await _dbService.GetAsync(request, ct);
+                var response = await _toDoFilesDbService.GetAsync(request, ct);
                 await _uiCache.MemoryCache.UpdateAsync(response, ct);
 
                 return response;
