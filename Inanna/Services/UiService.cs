@@ -24,14 +24,14 @@ public abstract class UiService<
     TGetResponse,
     TPostResponse,
     THttpService,
-    TEfService,
+    TDbService,
     TCache
 > : IUiService<TGetRequest, TPostRequest, TGetResponse, TPostResponse>
     where TGetResponse : IResponse, new()
     where TPostResponse : IPostResponse, new()
     where TGetRequest : new()
     where THttpService : IHttpService<TGetRequest, TPostRequest, TGetResponse, TPostResponse>
-    where TEfService : IDbService<TGetRequest, TPostRequest, TGetResponse, TPostResponse>
+    where TDbService : IDbService<TGetRequest, TPostRequest, TGetResponse, TPostResponse>
     where TPostRequest : IPostRequest, new()
     where TCache : IUiCache<TPostRequest, TGetResponse, IMemoryCache<TPostRequest, TGetResponse>>
 {
@@ -65,8 +65,8 @@ public abstract class UiService<
     }
 
     protected UiService(
-        THttpService toDoFilesCredentialHttpService,
-        TEfService toDoFilesDbService,
+        THttpService httpService,
+        TDbService dbService,
         AppState appState,
         TCache uiCache,
         INavigator navigator,
@@ -74,8 +74,8 @@ public abstract class UiService<
         IResponseHandler responseHandler
     )
     {
-        _toDoFilesCredentialHttpService = toDoFilesCredentialHttpService;
-        _toDoFilesDbService = toDoFilesDbService;
+        _httpService = httpService;
+        _dbService = dbService;
         _appState = appState;
         _uiCache = uiCache;
         _navigator = navigator;
@@ -83,8 +83,8 @@ public abstract class UiService<
         _responseHandler = responseHandler;
     }
 
-    private readonly THttpService _toDoFilesCredentialHttpService;
-    private readonly TEfService _toDoFilesDbService;
+    private readonly THttpService _httpService;
+    private readonly TDbService _dbService;
     private readonly AppState _appState;
     private readonly TCache _uiCache;
     private readonly INavigator _navigator;
@@ -92,7 +92,7 @@ public abstract class UiService<
 
     private async ValueTask<IValidationErrors> HealthCheckCore(CancellationToken ct)
     {
-        var errors = await _toDoFilesCredentialHttpService.HealthCheckAsync(ct);
+        var errors = await _httpService.HealthCheckAsync(ct);
 
         if (errors.ValidationErrors.Count == 0)
         {
@@ -119,22 +119,18 @@ public abstract class UiService<
             case ServiceMode.Online:
             {
                 await _uiCache.UpdateAsync(request, ct);
-                var events = await _toDoFilesDbService.GetEventsAsync(ct);
+                var events = await _dbService.GetEventsAsync(ct);
                 request.Events = events;
-                var response = await _toDoFilesCredentialHttpService.PostAsync(
-                    idempotentId,
-                    request,
-                    ct
-                );
+                var response = await _httpService.PostAsync(idempotentId, request, ct);
 
                 if (response.IsEventSaved)
                 {
-                    await _toDoFilesDbService.ClearEventsAsync(ct);
+                    await _dbService.ClearEventsAsync(ct);
                 }
 
                 if (response.ValidationErrors.OfType<ExceptionsValidationError>().Any())
                 {
-                    var r = await _toDoFilesDbService.PostAsync(idempotentId, request, ct);
+                    var r = await _dbService.PostAsync(idempotentId, request, ct);
                     response.ValidationErrors.AddRange(r.ValidationErrors);
                 }
 
@@ -145,7 +141,7 @@ public abstract class UiService<
             }
             case ServiceMode.Offline:
             {
-                var response = await _toDoFilesDbService.PostAsync(idempotentId, request, ct);
+                var response = await _dbService.PostAsync(idempotentId, request, ct);
                 await _navigator.RefreshCurrentViewAsync(ct);
 
                 return response;
@@ -164,7 +160,7 @@ public abstract class UiService<
         {
             case ServiceMode.Online:
             {
-                var response = await _toDoFilesCredentialHttpService.GetAsync(request, ct);
+                var response = await _httpService.GetAsync(request, ct);
                 await _uiCache.UpdateAsync(response, ct);
                 await _responseHandler.HandleResponseAsync(response, ct);
 
@@ -172,7 +168,7 @@ public abstract class UiService<
             }
             case ServiceMode.Offline:
             {
-                var response = await _toDoFilesDbService.GetAsync(request, ct);
+                var response = await _dbService.GetAsync(request, ct);
                 await _uiCache.MemoryCache.UpdateAsync(response, ct);
 
                 return response;

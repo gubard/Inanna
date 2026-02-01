@@ -12,14 +12,14 @@ public interface IUiCache<in TPostRequest, in TGetResponse, out TMemoryCache>
     public TMemoryCache MemoryCache { get; }
 }
 
-public class UiCache<TPostRequest, TGetResponse, TDbCache, TMemoryCache>
+public abstract class UiCache<TPostRequest, TGetResponse, TDbCache, TMemoryCache>
     : IUiCache<TPostRequest, TGetResponse, TMemoryCache>
     where TDbCache : IDbCache<TPostRequest, TGetResponse>
     where TMemoryCache : IMemoryCache<TPostRequest, TGetResponse>
 {
-    public UiCache(TDbCache dbCache, TMemoryCache memoryCache)
+    protected UiCache(TDbCache dbCache, TMemoryCache memoryCache)
     {
-        DbCache = dbCache;
+        _dbCache = dbCache;
         MemoryCache = memoryCache;
     }
 
@@ -28,7 +28,7 @@ public class UiCache<TPostRequest, TGetResponse, TDbCache, TMemoryCache>
     public ConfiguredValueTaskAwaitable UpdateAsync(TPostRequest source, CancellationToken ct)
     {
         return TaskHelper.WhenAllAsync(
-            DbCache.UpdateAsync(source, ct),
+            _dbCache.UpdateAsync(source, ct),
             MemoryCache.UpdateAsync(source, ct)
         );
     }
@@ -36,10 +36,10 @@ public class UiCache<TPostRequest, TGetResponse, TDbCache, TMemoryCache>
     public ConfiguredValueTaskAwaitable UpdateAsync(TGetResponse source, CancellationToken ct)
     {
         return TaskHelper.WhenAllAsync(
-            DbCache.UpdateAsync(source, ct),
+            _dbCache.UpdateAsync(source, ct),
             MemoryCache.UpdateAsync(source, ct)
         );
     }
 
-    protected readonly TDbCache DbCache;
+    private readonly TDbCache _dbCache;
 }
