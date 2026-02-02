@@ -28,16 +28,16 @@ public abstract class UiCache<TPostRequest, TGetResponse, TDbCache, TMemoryCache
     public ConfiguredValueTaskAwaitable UpdateAsync(TPostRequest source, CancellationToken ct)
     {
         return TaskHelper.WhenAllAsync(
-            _dbCache.UpdateAsync(source, ct),
-            MemoryCache.UpdateAsync(source, ct)
+            [_dbCache.UpdateAsync(source, ct), MemoryCache.UpdateAsync(source, ct)],
+            ct
         );
     }
 
     public ConfiguredValueTaskAwaitable UpdateAsync(TGetResponse source, CancellationToken ct)
     {
         return TaskHelper.WhenAllAsync(
-            _dbCache.UpdateAsync(source, ct),
-            MemoryCache.UpdateAsync(source, ct)
+            [_dbCache.UpdateAsync(source, ct), MemoryCache.UpdateAsync(source, ct)],
+            ct
         );
     }
 
