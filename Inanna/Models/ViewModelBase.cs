@@ -53,6 +53,19 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
         return HasErrors ? TaskHelper.ConfiguredCompletedTask : UiHelper.ExecuteAsync(func, ct);
     }
 
+    protected ConfiguredValueTaskAwaitable WrapCommandAsync<TValidationErrors>(
+        Func<ValueTask<TValidationErrors>> func,
+        CancellationToken ct
+    )
+        where TValidationErrors : IValidationErrors
+    {
+        StartExecute();
+
+        return HasErrors
+            ? TaskHelper.ConfiguredCompletedTask
+            : UiHelper.ExecuteAsync(() => func.Invoke().ConfigureAwait(false), ct);
+    }
+
     protected void WrapCommand<TValidationErrors>(Func<TValidationErrors> func)
         where TValidationErrors : IValidationErrors
     {
