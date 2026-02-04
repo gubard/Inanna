@@ -14,4 +14,14 @@ public static class StringExtension
     {
         return Dispatcher.UIThread.Invoke(str.ToDialogHeader);
     }
+
+    public static TextBlock ToNotification(this string str)
+    {
+        return new() { Text = str, Classes = { "align-center", "h2", "m-5" } };
+    }
+
+    public static TextBlock DispatchToNotification(this string str)
+    {
+        return Dispatcher.UIThread.Invoke(str.ToNotification);
+    }
 }
