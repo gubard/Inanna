@@ -4,23 +4,33 @@ namespace Inanna.Models;
 
 public partial class AppState : ObservableObject
 {
-    [ObservableProperty]
-    private UserState? _user;
+    public IEnumerable<IServiceState> ServiceStates => _serviceStates.Values;
 
     public ServiceMode GetServiceMode(string serviceName)
     {
-        return _serviceModes.GetValueOrDefault(serviceName, ServiceMode.Online);
+        return _serviceStates[serviceName].Mode;
     }
 
     public void SetServiceMode(string serviceName, ServiceMode mode)
     {
-        _serviceModes[serviceName] = mode;
+        _serviceStates[serviceName].Mode = mode;
     }
 
     public void ResetServiceModes()
     {
-        _serviceModes.Clear();
+        foreach (var serviceState in _serviceStates)
+        {
+            serviceState.Value.Mode = ServiceMode.Online;
+        }
     }
 
-    private readonly Dictionary<string, ServiceMode> _serviceModes = new();
+    public void AddService(IServiceState serviceState)
+    {
+        _serviceStates.Add(serviceState.ServiceName, serviceState);
+    }
+
+    [ObservableProperty]
+    private UserState? _user;
+
+    private readonly Dictionary<string, IServiceState> _serviceStates = new();
 }

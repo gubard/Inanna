@@ -11,4 +11,5 @@
     <s:AnyOfConverter x:Key="AnyOfConverter" />
     <s:IsNullOrWhiteSpaceConverter x:Key="IsNullOrWhiteSpaceConverter" />
     <s:IsNotNullOrWhiteSpaceConverter x:Key="IsNotNullOrWhiteSpaceConverter" />
+    <s:StringLocalizationValueConverter x:Key="StringLocalizationValueConverter" />
 </ResourceDictionary>

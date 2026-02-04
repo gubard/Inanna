@@ -1,4 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Gaia.Models;
 using Gaia.Services;
 using Inanna.Models;
@@ -9,16 +10,14 @@ namespace Inanna.Services;
 
 public interface IUiService<in TGetRequest, in TPostRequest, TGetResponse, TPostResponse>
     : IService<TGetRequest, TPostRequest, TGetResponse, TPostResponse>,
-        IHealthCheck
+        IServiceState
     where TGetResponse : IResponse, new()
     where TPostResponse : IPostResponse, new()
 {
-    string ServiceName { get; }
-
     ConfiguredValueTaskAwaitable<TPostResponse> UpdateEventsAsync(CancellationToken ct);
 }
 
-public abstract class UiService<
+public abstract partial class UiService<
     TGetRequest,
     TPostRequest,
     TGetResponse,
@@ -26,7 +25,7 @@ public abstract class UiService<
     THttpService,
     TDbService,
     TCache
-> : IUiService<TGetRequest, TPostRequest, TGetResponse, TPostResponse>
+> : ObservableObject, IUiService<TGetRequest, TPostRequest, TGetResponse, TPostResponse>
     where TGetResponse : IResponse, new()
     where TPostResponse : IPostResponse, new()
     where TGetRequest : new()
@@ -67,7 +66,6 @@ public abstract class UiService<
     protected UiService(
         THttpService httpService,
         TDbService dbService,
-        AppState appState,
         TCache uiCache,
         INavigator navigator,
         string serviceName,
@@ -76,16 +74,17 @@ public abstract class UiService<
     {
         _httpService = httpService;
         _dbService = dbService;
-        _appState = appState;
         _uiCache = uiCache;
         _navigator = navigator;
         ServiceName = serviceName;
         _responseHandler = responseHandler;
     }
 
+    [ObservableProperty]
+    private ServiceMode _mode;
+
     private readonly THttpService _httpService;
     private readonly TDbService _dbService;
-    private readonly AppState _appState;
     private readonly TCache _uiCache;
     private readonly INavigator _navigator;
     private readonly IResponseHandler _responseHandler;
@@ -96,12 +95,12 @@ public abstract class UiService<
 
         if (errors.ValidationErrors.Count == 0)
         {
-            _appState.SetServiceMode(ServiceName, ServiceMode.Online);
+            Mode = ServiceMode.Online;
 
             return errors;
         }
 
-        _appState.SetServiceMode(ServiceName, ServiceMode.Offline);
+        Mode = ServiceMode.Offline;
 
         return errors;
     }
@@ -112,9 +111,7 @@ public abstract class UiService<
         CancellationToken ct
     )
     {
-        var mode = _appState.GetServiceMode(ServiceName);
-
-        switch (mode)
+        switch (Mode)
         {
             case ServiceMode.Online:
             {
@@ -148,15 +145,13 @@ public abstract class UiService<
             }
 
             default:
-                throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
+                throw new ArgumentOutOfRangeException(nameof(Mode), Mode, null);
         }
     }
 
     private async ValueTask<TGetResponse> GetCore(TGetRequest request, CancellationToken ct)
     {
-        var mode = _appState.GetServiceMode(ServiceName);
-
-        switch (mode)
+        switch (Mode)
         {
             case ServiceMode.Online:
             {
@@ -174,7 +169,7 @@ public abstract class UiService<
                 return response;
             }
             default:
-                throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
+                throw new ArgumentOutOfRangeException(nameof(Mode), Mode, null);
         }
     }
 }
