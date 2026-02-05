@@ -116,13 +116,12 @@ public class Navigator : ObservableObject, INavigator
             await saveUi.SaveUiAsync(ct);
         }
 
-        _stackViewModel.PushView(view);
-
-        if (_stackViewModel.CurrentView is IInitUi initUi)
+        if (view is IInitUi initUi)
         {
             await initUi.InitUiAsync(ct);
         }
 
+        _stackViewModel.PushView(view);
         ViewChanged?.Invoke(this, _stackViewModel.CurrentView);
     }
 }
