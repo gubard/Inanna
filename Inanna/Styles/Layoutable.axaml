@@ -1,5 +1,6 @@
 <Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:s="clr-namespace:System;assembly=System.Runtime">
     <Style Selector=":is(Layoutable).align-vertical-center">
         <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
@@ -85,5 +86,10 @@
     <Style Selector=":is(Layoutable).s-100">
         <Setter Property="Width" Value="100" />
         <Setter Property="Height" Value="100" />
+    </Style>
+
+    <Style Selector=":is(Layoutable).s-nan">
+        <Setter Property="Width" Value="{x:Static s:Double.NaN}" />
+        <Setter Property="Height" Value="{x:Static s:Double.NaN}" />
     </Style>
 </Styles>
