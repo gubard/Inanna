@@ -8,9 +8,15 @@ using Nestor.Db.Services;
 
 namespace Inanna.Services;
 
+public interface IUiService
+{
+    ConfiguredValueTaskAwaitable<IValidationErrors> RefreshServiceAsync(CancellationToken ct);
+}
+
 public interface IUiService<in TGetRequest, in TPostRequest, TGetResponse, TPostResponse>
     : IService<TGetRequest, TPostRequest, TGetResponse, TPostResponse>,
-        IServiceState
+        IServiceState,
+        IUiService
     where TGetResponse : IResponse, new()
     where TPostResponse : IPostResponse, new()
 {
@@ -63,6 +69,11 @@ public abstract partial class UiService<
         return HealthCheckCore(ct).ConfigureAwait(false);
     }
 
+    public ConfiguredValueTaskAwaitable<IValidationErrors> RefreshServiceAsync(CancellationToken ct)
+    {
+        return RefreshServiceCore(ct).ConfigureAwait(false);
+    }
+
     protected UiService(
         THttpService httpService,
         TDbService dbService,
@@ -79,6 +90,8 @@ public abstract partial class UiService<
         ServiceName = serviceName;
         _responseHandler = responseHandler;
     }
+
+    protected abstract TGetRequest CreateGetRequestRefresh();
 
     [ObservableProperty]
     private ServiceMode _mode;
@@ -103,6 +116,13 @@ public abstract partial class UiService<
         Mode = ServiceMode.Offline;
 
         return errors;
+    }
+
+    private async ValueTask<IValidationErrors> RefreshServiceCore(CancellationToken ct)
+    {
+        var response = await _dbService.GetAsync(CreateGetRequestRefresh(), ct);
+
+        return response;
     }
 
     private async ValueTask<TPostResponse> PostCore(

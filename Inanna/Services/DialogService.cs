@@ -39,7 +39,7 @@ public sealed class DialogService : IDialogService
 
     private async ValueTask ShowMessageBoxCore(DialogViewModel dialog, CancellationToken ct)
     {
-        if (!DialogControl.IsShowDialog(_dialogId))
+        if (!Dispatcher.UIThread.Invoke(() => DialogControl.IsShowDialog(_dialogId)))
         {
             Dispatcher.UIThread.Post(() => DialogControl.ShowDialog(_dialogId, _stackViewModel));
         }
