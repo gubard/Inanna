@@ -3,6 +3,8 @@ using Inanna.Ui;
 
 namespace Inanna.Services;
 
+public interface INonStatusBar;
+
 public interface IStatusBarService
 {
     void AddStatus(object status);
