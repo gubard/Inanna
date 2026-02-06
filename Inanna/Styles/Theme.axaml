@@ -12,7 +12,6 @@
                 <MergeResourceInclude Source="NotificationControl.axaml" />
                 <MergeResourceInclude Source="PathControl.axaml" />
                 <MergeResourceInclude Source="GroupBoxControl.axaml" />
-                <MergeResourceInclude Source="Converters.axaml" />
                 <MergeResourceInclude Source="Colors.axaml" />
                 <MergeResourceInclude Source="DaysOfYearSelectorControl.axaml" />
                 <MergeResourceInclude Source="IntegerSelectorItemControl.axaml" />

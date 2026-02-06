@@ -6,9 +6,9 @@ using Inanna.Helpers;
 
 namespace Inanna.Services;
 
-public sealed class EnumLocalizationValueConverter : IValueConverter
+public sealed class EnumLocalizationConverter : IValueConverter
 {
-    public static readonly EnumLocalizationValueConverter Instance = new();
+    public static readonly EnumLocalizationConverter Instance = new();
 
     private readonly Application _app = Application.Current.ThrowIfNull();
 

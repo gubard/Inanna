@@ -51,7 +51,7 @@ public class EnumSelectorControl : TemplatedControl
 
             _selectingItemsControl.DisplayMemberBinding = new Binding
             {
-                Converter = EnumLocalizationValueConverter.Instance,
+                Converter = EnumLocalizationConverter.Instance,
             };
         }
 

@@ -162,7 +162,7 @@ public class EnumsSelectorControl : TemplatedControl
                 {
                     Value = x,
                     DisplayValue =
-                        EnumLocalizationValueConverter.Instance.Convert(
+                        EnumLocalizationConverter.Instance.Convert(
                             x,
                             x.GetType(),
                             null,
