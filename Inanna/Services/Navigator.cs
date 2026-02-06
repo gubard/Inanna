@@ -1,4 +1,5 @@
 using System.Runtime.CompilerServices;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Gaia.Helpers;
 using Inanna.Ui;
@@ -9,19 +10,20 @@ public interface INonNavigate;
 
 public interface INavigator
 {
-    public event ViewChangedEventHandler? ViewChanged;
+    event ViewChangedEventHandler? ViewChanged;
+
     bool IsEmpty { get; }
     object? CurrentView { get; }
+
     ConfiguredValueTaskAwaitable<object?> NavigateBackOrNullAsync(CancellationToken ct);
     ConfiguredValueTaskAwaitable NavigateToAsync(object view, CancellationToken ct);
     ConfiguredValueTaskAwaitable RefreshCurrentViewAsync(CancellationToken ct);
-    void RefreshCurrentView();
     void RefreshUiCurrentView();
 }
 
 public delegate void ViewChangedEventHandler(object? sender, object? view);
 
-public class Navigator : ObservableObject, INavigator
+public sealed class Navigator : ObservableObject, INavigator
 {
     private readonly StackViewModel _stackViewModel;
 
@@ -69,14 +71,6 @@ public class Navigator : ObservableObject, INavigator
         return TaskHelper.ConfiguredCompletedTask;
     }
 
-    public void RefreshCurrentView()
-    {
-        if (CurrentView is IRefresh refresh)
-        {
-            refresh.RefreshAsync(CancellationToken.None);
-        }
-    }
-
     public void RefreshUiCurrentView()
     {
         if (CurrentView is IRefreshUi refresh)
@@ -92,28 +86,34 @@ public class Navigator : ObservableObject, INavigator
             await saveUi.SaveUiAsync(ct);
         }
 
-        _stackViewModel.PopView();
+        Dispatcher.UIThread.Invoke(() => _stackViewModel.RemoveLastView());
 
-        if (_stackViewModel.CurrentView is IInitUi initUi)
+        if (_stackViewModel.GetCurrentView() is IInitUi initUi)
         {
             await initUi.InitUiAsync(ct);
         }
 
+        Dispatcher.UIThread.Invoke(() => _stackViewModel.SetCurrentView());
         ViewChanged?.Invoke(this, _stackViewModel.CurrentView);
+
+        if (_stackViewModel.CurrentView is ILoadUi loadUi)
+        {
+            await loadUi.LoadUiAsync(ct);
+        }
 
         return _stackViewModel.CurrentView;
     }
 
     private async ValueTask NavigateToCore(object view, CancellationToken ct)
     {
-        if (_stackViewModel.CurrentView is INonNavigate)
-        {
-            _stackViewModel.RemoveLastView();
-        }
-
         if (_stackViewModel.CurrentView is ISaveUi saveUi)
         {
             await saveUi.SaveUiAsync(ct);
+        }
+
+        if (_stackViewModel.CurrentView is INonNavigate)
+        {
+            Dispatcher.UIThread.Invoke(() => _stackViewModel.RemoveLastView());
         }
 
         if (view is IInitUi initUi)
@@ -121,7 +121,12 @@ public class Navigator : ObservableObject, INavigator
             await initUi.InitUiAsync(ct);
         }
 
-        _stackViewModel.PushView(view);
+        Dispatcher.UIThread.Invoke(() => _stackViewModel.PushView(view));
         ViewChanged?.Invoke(this, _stackViewModel.CurrentView);
+
+        if (view is ILoadUi loadUi)
+        {
+            await loadUi.LoadUiAsync(ct);
+        }
     }
 }

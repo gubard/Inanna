@@ -1,6 +1,5 @@
 using System.Runtime.CompilerServices;
 using Avalonia.Threading;
-using Gaia.Helpers;
 using Inanna.Controls;
 using Inanna.Ui;
 
@@ -12,12 +11,8 @@ public interface IDialogService
     ConfiguredValueTaskAwaitable CloseMessageBoxAsync(CancellationToken ct);
 }
 
-public class DialogService : IDialogService
+public sealed class DialogService : IDialogService
 {
-    private readonly Stack<TaskCompletionSource> _taskStack;
-    private readonly StackViewModel _stackViewModel;
-    private readonly string _dialogId;
-
     public DialogService(string dialogId)
     {
         _dialogId = dialogId;
@@ -33,49 +28,65 @@ public class DialogService : IDialogService
         return ShowMessageBoxCore(dialog, ct).ConfigureAwait(false);
     }
 
+    public ConfiguredValueTaskAwaitable CloseMessageBoxAsync(CancellationToken ct)
+    {
+        return CloseMessageBoxCore(ct).ConfigureAwait(false);
+    }
+
+    private readonly Stack<TaskCompletionSource> _taskStack;
+    private readonly StackViewModel _stackViewModel;
+    private readonly string _dialogId;
+
     private async ValueTask ShowMessageBoxCore(DialogViewModel dialog, CancellationToken ct)
     {
-        if (dialog.Content is IInitUi initUi)
+        if (!DialogControl.IsShowDialog(_dialogId))
         {
-            await initUi.InitUiAsync(ct);
+            Dispatcher.UIThread.Post(() => DialogControl.ShowDialog(_dialogId, _stackViewModel));
         }
 
-        Dispatcher.UIThread.Post(() =>
+        if (_stackViewModel.CurrentView is ISaveUi saveUi)
         {
-            _stackViewModel.PushView(dialog);
-            DialogControl.ShowDialog(_dialogId, _stackViewModel);
-        });
+            await saveUi.SaveUiAsync(ct);
+        }
 
+        await dialog.InitUiAsync(ct);
+        Dispatcher.UIThread.Invoke(() => _stackViewModel.PushView(dialog));
+        await dialog.LoadUiAsync(ct);
         var taskCompletionSource = new TaskCompletionSource();
         _taskStack.Push(taskCompletionSource);
         ct.ThrowIfCancellationRequested();
         await taskCompletionSource.Task;
     }
 
-    public ConfiguredValueTaskAwaitable CloseMessageBoxAsync(CancellationToken ct)
+    private async ValueTask CloseMessageBoxCore(CancellationToken ct)
     {
-        var view = _stackViewModel.CurrentView;
-
-        Dispatcher.UIThread.Post(() =>
+        if (_stackViewModel.CurrentView is ISaveUi saveUi)
         {
-            _stackViewModel.PopView();
-
-            if (_stackViewModel.CurrentView is null)
-            {
-                DialogControl.CloseDialog(_dialogId);
-            }
-
-            if (_taskStack.Count != 0)
-            {
-                _taskStack.Pop().SetResult();
-            }
-        });
-
-        if (view is ISaveUi saveUi)
-        {
-            return saveUi.SaveUiAsync(ct);
+            await saveUi.SaveUiAsync(ct);
         }
 
-        return TaskHelper.ConfiguredCompletedTask;
+        Dispatcher.UIThread.Invoke(() => _stackViewModel.RemoveLastView());
+
+        if (_stackViewModel.GetCurrentView() is IInitUi initUi)
+        {
+            await initUi.InitUiAsync(ct);
+        }
+
+        Dispatcher.UIThread.Invoke(() => _stackViewModel.SetCurrentView());
+
+        if (_stackViewModel.CurrentView is ILoadUi loadUi)
+        {
+            await loadUi.LoadUiAsync(ct);
+        }
+
+        if (_stackViewModel.CurrentView is null)
+        {
+            Dispatcher.UIThread.Post(() => DialogControl.CloseDialog(_dialogId));
+        }
+
+        if (_taskStack.Count != 0)
+        {
+            _taskStack.Pop().SetResult();
+        }
     }
 }
