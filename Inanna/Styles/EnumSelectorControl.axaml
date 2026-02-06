@@ -15,6 +15,7 @@
 
         <Style Selector="^ /template/ ListBox#PART_SelectingItemsControl">
             <Setter Property="Background" Value="Transparent" />
+
             <Setter Property="ItemsPanel">
                 <ItemsPanelTemplate>
                     <WrapPanel Orientation="Horizontal" />
