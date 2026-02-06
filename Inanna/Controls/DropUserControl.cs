@@ -84,7 +84,6 @@ public abstract class DropUserControl<
         }
 
         var id = new Guid(data);
-        var postRequest = new TPostRequest();
 
         switch (tag)
         {
