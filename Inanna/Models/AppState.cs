@@ -3,7 +3,7 @@ using Inanna.Services;
 
 namespace Inanna.Models;
 
-public partial class AppState : ObservableObject
+public sealed partial class AppState : ObservableObject
 {
     public AppState(IStatusBarService statusBarService)
     {
@@ -69,7 +69,7 @@ public partial class AppState : ObservableObject
     private readonly Dictionary<string, ServiceOfflineStatus> _serviceStatuses = new();
 }
 
-public class ServiceOfflineStatus
+public sealed class ServiceOfflineStatus
 {
     public ServiceOfflineStatus(IServiceState state)
     {

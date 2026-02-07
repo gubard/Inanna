@@ -1,4 +1,3 @@
-using Avalonia.Threading;
 using Inanna.Ui;
 
 namespace Inanna.Services;
@@ -22,16 +21,11 @@ public sealed class StatusBarService : IStatusBarService
 
     public void AddStatus(object status)
     {
-        if (_viewModel.Statuses.Contains(status))
-        {
-            return;
-        }
-
-        Dispatcher.UIThread.Post(() => _viewModel.Statuses.Add(status));
+        _viewModel.AddStatus(status);
     }
 
     public void RemoveStatus(object status)
     {
-        Dispatcher.UIThread.Post(() => _viewModel.Statuses.Remove(status));
+        _viewModel.RemoveStatus(status);
     }
 }
