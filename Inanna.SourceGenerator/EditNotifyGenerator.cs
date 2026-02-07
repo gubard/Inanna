@@ -102,7 +102,7 @@ public class EditNotifyGenerator : IIncrementalGenerator
                     stringBuilder.AppendLine("    }");
 
                     stringBuilder.AppendLine(
-                        $"protected void ResetEdit() {{{string.Join(string.Empty, editProperties.Select(x => $"IsEdit{x.GetName()} = false;"))};}}"
+                        $"private void ResetEdit() {{{string.Join(string.Empty, editProperties.Select(x => $"IsEdit{x.GetName()} = false;"))};}}"
                     );
 
                     stringBuilder.AppendLine(

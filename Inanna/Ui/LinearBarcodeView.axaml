@@ -1,0 +1,37 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="clr-namespace:Inanna.Ui"
+             xmlns:s="clr-namespace:Inanna.Services"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Inanna.Ui.LinearBarcodeView"
+             x:DataType="ui:LinearBarcodeViewModel"
+             Background="{Binding BackgroundColor, Converter={x:Static s:ColorToBrushConverter.Instance}}"
+             Classes="align-center">
+    <Grid RowDefinitions="*,Auto">
+        <ItemsControl Classes="horizontal-stack m-2" ItemsSource="{Binding Barcode}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Panel>
+                        <Rectangle Classes="m-0"
+                                   IsVisible="{Binding}"
+                                   Fill="{Binding $parent[ui:LinearBarcodeView].ViewModel.BarColor, Converter={x:Static s:ColorToBrushConverter.Instance}}"
+                                   Width="{Binding $parent[ui:LinearBarcodeView].ViewModel.BarWidth}"
+                                   Height="{Binding $parent[ui:LinearBarcodeView].ViewModel.BarHeight}" />
+                        <Rectangle Classes="m-0"
+                                   IsVisible="{Binding Converter={x:Static s:BoolReverseConverter.Instance}}"
+                                   Width="{Binding $parent[ui:LinearBarcodeView].ViewModel.BarWidth}"
+                                   Height="{Binding $parent[ui:LinearBarcodeView].ViewModel.BarHeight}" />
+                    </Panel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <TextBlock Grid.Row="1"
+                   Classes="align-center small"
+                   Foreground="{Binding BarColor, Converter={x:Static s:ColorToBrushConverter.Instance}}"
+                   IsVisible="{Binding Text, Converter={x:Static s:IsNotNullOrWhiteSpaceConverter.Instance}}"
+                   Text="{Binding Text}" />
+    </Grid>
+</UserControl>

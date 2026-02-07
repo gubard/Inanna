@@ -175,6 +175,13 @@ public static class UiHelper
         return new AsyncRelayCommand(async ct => await ExecuteAsync(() => func.Invoke(ct), ct));
     }
 
+    public static ICommand CreateCommand(Func<CancellationToken, ValueTask> func)
+    {
+        return new AsyncRelayCommand(async ct =>
+            await ExecuteAsync(() => func.Invoke(ct).ConfigureAwait(false), ct)
+        );
+    }
+
     public static ICommand CreateCommand<TValidationErrors>(
         Func<CancellationToken, ConfiguredValueTaskAwaitable<TValidationErrors>> func
     )

@@ -1,0 +1,24 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="clr-namespace:Inanna.Ui"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Inanna.Ui.LinearBarcodeGeneratorView"
+             x:DataType="ui:LinearBarcodeGeneratorViewModel">
+    <StackPanel>
+        <TextBlock Classes="field" Text="{StaticResource Lang.Text}" />
+        <TextBox Text="{Binding Text}" />
+
+        <TextBlock Classes="field" Text="{StaticResource Lang.Type}" />
+        <ListBox Classes="horizontal-wrap"
+                 SelectionMode="Single"
+                 ItemsSource="{Binding Barcodes}"
+                 SelectedItem="{Binding SelectedBarcode}" />
+
+        <Button Command="{Binding GenerateBarcodeCommand}" Content="{StaticResource Lang.Generate}" />
+
+        <TextBlock Classes="field" Text="{StaticResource Lang.Barcode}" />
+        <ContentControl Content="{Binding Barcode}" />
+    </StackPanel>
+</UserControl>

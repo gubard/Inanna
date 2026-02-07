@@ -48,6 +48,14 @@
         <Setter Property="HorizontalAlignment" Value="Right" />
     </Style>
 
+    <Style Selector=":is(Layoutable).m-0">
+        <Setter Property="Margin" Value="0" />
+    </Style>
+
+    <Style Selector=":is(Layoutable).m-2">
+        <Setter Property="Margin" Value="2" />
+    </Style>
+
     <Style Selector=":is(Layoutable).m-3">
         <Setter Property="Margin" Value="3" />
     </Style>
