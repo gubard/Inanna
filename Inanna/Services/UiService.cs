@@ -120,7 +120,9 @@ public abstract partial class UiService<
 
     private async ValueTask<IValidationErrors> RefreshServiceCore(CancellationToken ct)
     {
-        var response = await _dbService.GetAsync(CreateGetRequestRefresh(), ct);
+        var request = CreateGetRequestRefresh();
+        var response = await _dbService.GetAsync(request, ct);
+        await _uiCache.UpdateAsync(response, ct);
 
         return response;
     }
