@@ -10,6 +10,11 @@
         <TextBlock Classes="field" Text="{StaticResource Lang.Text}" />
         <TextBox Text="{Binding Text}" />
 
+        <StackPanel Classes="horizontal">
+            <ToggleButton IsChecked="{Binding IsShowTopText}" Content="{StaticResource Lang.ShowTopText}" />
+            <ToggleButton IsChecked="{Binding IsShowBottomText}" Content="{StaticResource Lang.ShowBottomText}" />
+        </StackPanel>
+
         <TextBlock Classes="field" Text="{StaticResource Lang.Type}" />
         <ListBox Classes="horizontal-wrap"
                  SelectionMode="Single"
