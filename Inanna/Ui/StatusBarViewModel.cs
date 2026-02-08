@@ -11,7 +11,6 @@ public sealed partial class StatusBarViewModel : ViewModelBase
     public StatusBarViewModel()
     {
         _statuses = new();
-        _isVisible = true;
     }
 
     public IEnumerable<object> Statuses => _statuses;
