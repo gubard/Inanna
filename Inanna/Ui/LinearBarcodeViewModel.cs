@@ -18,7 +18,8 @@ public sealed partial class LinearBarcodeViewModel : ViewModelBase
         _barColor = Colors.Black;
         _barWidth = 3;
         _barHeight = 80;
-        _text = string.Empty;
+        _bottomText = string.Empty;
+        _topText = string.Empty;
     }
 
     public IEnumerable<bool> Barcode => _barcode;
@@ -58,5 +59,8 @@ public sealed partial class LinearBarcodeViewModel : ViewModelBase
     private double _barHeight;
 
     [ObservableProperty]
-    private string _text;
+    private string _bottomText;
+
+    [ObservableProperty]
+    private string _topText;
 }

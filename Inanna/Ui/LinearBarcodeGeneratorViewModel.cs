@@ -41,7 +41,9 @@ public sealed partial class LinearBarcodeGeneratorViewModel : ViewModelBase
             var serializer = _factory.Create(SelectedBarcode);
             var bytes = serializer.Serialize(Text);
             Barcode.SetBarcode(bytes.ToArray());
-            Barcode.Text = Text;
+            Barcode.BottomText = Text;
+            Barcode.TopText = SelectedBarcode;
+            Barcode.BarWidth = serializer.BarWidth;
         });
     }
 }

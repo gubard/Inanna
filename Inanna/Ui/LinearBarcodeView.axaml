@@ -9,8 +9,13 @@
              x:DataType="ui:LinearBarcodeViewModel"
              Background="{Binding BackgroundColor, Converter={x:Static s:ColorToBrushConverter.Instance}}"
              Classes="align-center">
-    <Grid RowDefinitions="*,Auto">
-        <ItemsControl Classes="horizontal-stack m-2" ItemsSource="{Binding Barcode}">
+    <Grid RowDefinitions="Auto,*,Auto">
+        <TextBlock Classes="align-center small"
+                   Foreground="{Binding BarColor, Converter={x:Static s:ColorToBrushConverter.Instance}}"
+                   IsVisible="{Binding TopText, Converter={x:Static s:IsNotNullOrWhiteSpaceConverter.Instance}}"
+                   Text="{Binding TopText}" />
+
+        <ItemsControl Grid.Row="1" Classes="horizontal-stack" ItemsSource="{Binding Barcode}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Panel>
@@ -28,10 +33,10 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
 
-        <TextBlock Grid.Row="1"
+        <TextBlock Grid.Row="2"
                    Classes="align-center small"
                    Foreground="{Binding BarColor, Converter={x:Static s:ColorToBrushConverter.Instance}}"
-                   IsVisible="{Binding Text, Converter={x:Static s:IsNotNullOrWhiteSpaceConverter.Instance}}"
-                   Text="{Binding Text}" />
+                   IsVisible="{Binding BottomText, Converter={x:Static s:IsNotNullOrWhiteSpaceConverter.Instance}}"
+                   Text="{Binding BottomText}" />
     </Grid>
 </UserControl>
