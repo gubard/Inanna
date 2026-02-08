@@ -18,21 +18,12 @@ public interface INavigator
     ConfiguredValueTaskAwaitable<object?> NavigateBackOrNullAsync(CancellationToken ct);
     ConfiguredValueTaskAwaitable NavigateToAsync(object view, CancellationToken ct);
     ConfiguredValueTaskAwaitable RefreshCurrentViewAsync(CancellationToken ct);
-    void RefreshUiCurrentView();
 }
 
 public delegate void ViewChangedEventHandler(object? sender, object? view);
 
 public sealed class Navigator : ObservableObject, INavigator
 {
-    private readonly StackViewModel _stackViewModel;
-
-    public event ViewChangedEventHandler? ViewChanged;
-
-    public bool IsEmpty => _stackViewModel.IsEmpty;
-
-    public object? CurrentView => _stackViewModel.CurrentView;
-
     public Navigator(StackViewModel stackViewModel)
     {
         _stackViewModel = stackViewModel;
@@ -50,6 +41,11 @@ public sealed class Navigator : ObservableObject, INavigator
             }
         };
     }
+
+    public event ViewChangedEventHandler? ViewChanged;
+
+    public bool IsEmpty => _stackViewModel.IsEmpty;
+    public object? CurrentView => _stackViewModel.CurrentView;
 
     public ConfiguredValueTaskAwaitable<object?> NavigateBackOrNullAsync(CancellationToken ct)
     {
@@ -71,13 +67,7 @@ public sealed class Navigator : ObservableObject, INavigator
         return TaskHelper.ConfiguredCompletedTask;
     }
 
-    public void RefreshUiCurrentView()
-    {
-        if (CurrentView is IRefreshUi refresh)
-        {
-            refresh.RefreshUi();
-        }
-    }
+    private readonly StackViewModel _stackViewModel;
 
     private async ValueTask<object?> NavigateBackOrNullCore(CancellationToken ct)
     {
