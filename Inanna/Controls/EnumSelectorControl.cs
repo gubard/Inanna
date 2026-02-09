@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
+using Avalonia.Markup.Xaml.MarkupExtensions;
 using Inanna.Services;
 
 namespace Inanna.Controls;
@@ -49,7 +50,7 @@ public class EnumSelectorControl : TemplatedControl
         {
             _selectingItemsControl.SelectionChanged += OnSelectionChanged;
 
-            _selectingItemsControl.DisplayMemberBinding = new Binding
+            _selectingItemsControl.DisplayMemberBinding = new CompiledBindingExtension
             {
                 Converter = EnumLocalizationConverter.Instance,
             };
