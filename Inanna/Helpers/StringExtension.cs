@@ -17,7 +17,7 @@ public static class StringExtension
 
     public static TextBlock ToNotification(this string str)
     {
-        return new() { Text = str, Classes = { "align-center", "h2", "m-5" } };
+        return new() { Text = str, Classes = { "align-center", "h2", "m-5", "text-wrap" } };
     }
 
     public static TextBlock DispatchToNotification(this string str)

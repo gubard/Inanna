@@ -13,9 +13,9 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate x:DataType="s:Exception">
                     <StackPanel>
-                        <TextBlock Classes="field" Text="{StaticResource Lang.Message}" />
+                        <TextBlock Classes="field" Text="{DynamicResource Lang.Message}" />
                         <TextBox Classes="plain-text" Text="{Binding Message}" />
-                        <TextBlock Classes="field" Text="{StaticResource Lang.StackTrace}" />
+                        <TextBlock Classes="field" Text="{DynamicResource Lang.StackTrace}" />
                         <TextBox Classes="plain-text" Text="{Binding StackTrace}" TextWrapping="Wrap" />
                     </StackPanel>
                 </DataTemplate>

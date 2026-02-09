@@ -43,4 +43,10 @@
       OutputItemType="Analyzer"
     />
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Services\LangResource.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
 </Project>

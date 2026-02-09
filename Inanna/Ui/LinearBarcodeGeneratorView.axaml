@@ -7,23 +7,23 @@
              x:Class="Inanna.Ui.LinearBarcodeGeneratorView"
              x:DataType="ui:LinearBarcodeGeneratorViewModel">
     <StackPanel>
-        <TextBlock Classes="field" Text="{StaticResource Lang.Text}" />
+        <TextBlock Classes="field" Text="{DynamicResource Lang.Text}" />
         <TextBox Text="{Binding Text}" />
 
         <StackPanel Classes="horizontal">
-            <ToggleButton IsChecked="{Binding IsShowTopText}" Content="{StaticResource Lang.ShowTopText}" />
-            <ToggleButton IsChecked="{Binding IsShowBottomText}" Content="{StaticResource Lang.ShowBottomText}" />
+            <ToggleButton IsChecked="{Binding IsShowTopText}" Content="{DynamicResource Lang.ShowTopText}" />
+            <ToggleButton IsChecked="{Binding IsShowBottomText}" Content="{DynamicResource Lang.ShowBottomText}" />
         </StackPanel>
 
-        <TextBlock Classes="field" Text="{StaticResource Lang.Type}" />
+        <TextBlock Classes="field" Text="{DynamicResource Lang.Type}" />
         <ListBox Classes="horizontal-wrap"
                  SelectionMode="Single"
                  ItemsSource="{Binding Barcodes}"
                  SelectedItem="{Binding SelectedBarcode}" />
 
-        <Button Command="{Binding GenerateBarcodeCommand}" Content="{StaticResource Lang.Generate}" />
+        <Button Command="{Binding GenerateBarcodeCommand}" Content="{DynamicResource Lang.Generate}" />
 
-        <TextBlock Classes="field" Text="{StaticResource Lang.Barcode}" />
+        <TextBlock Classes="field" Text="{DynamicResource Lang.Barcode}" />
         <ContentControl Content="{Binding Barcode}" />
     </StackPanel>
 </UserControl>
