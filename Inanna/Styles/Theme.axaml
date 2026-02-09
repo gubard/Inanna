@@ -17,6 +17,7 @@
                 <MergeResourceInclude Source="IntegerSelectorItemControl.axaml" />
                 <MergeResourceInclude Source="IntegersSelectorControl.axaml" />
                 <MergeResourceInclude Source="EnumsSelectorControl.axaml" />
+                <MergeResourceInclude Source="BusyAreaControl.axaml" />
                 <MergeResourceInclude Source="Resources.axaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
