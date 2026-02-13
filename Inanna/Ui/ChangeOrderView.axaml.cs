@@ -2,7 +2,7 @@
 
 namespace Inanna.Ui;
 
-public partial class ChangeOrderView : UserControl
+public sealed partial class ChangeOrderView : UserControl
 {
     public ChangeOrderView()
     {

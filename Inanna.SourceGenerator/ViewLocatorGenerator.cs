@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace Inanna.SourceGenerator;
 
 [Generator]
-public class ViewLocatorGenerator : IIncrementalGenerator
+public sealed class ViewLocatorGenerator : IIncrementalGenerator
 {
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {

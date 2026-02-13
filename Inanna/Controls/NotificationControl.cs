@@ -4,7 +4,7 @@ using Inanna.Models;
 
 namespace Inanna.Controls;
 
-public class NotificationControl : Button
+public sealed class NotificationControl : Button
 {
     public static readonly StyledProperty<NotificationType> TypeProperty =
         AvaloniaProperty.Register<NotificationControl, NotificationType>(nameof(Type));

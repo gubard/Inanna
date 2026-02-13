@@ -1,6 +1,6 @@
 ﻿namespace Inanna.Models;
 
-public class ChangeOrderParameters<T>
+public sealed class ChangeOrderParameters<T>
     where T : IOrderedItem
 {
     public ChangeOrderParameters(T item, bool isAfter)

@@ -7,7 +7,7 @@ using Inanna.Services;
 
 namespace Inanna.Ui;
 
-public partial class ValidationErrorsViewModel : ViewModelBase
+public sealed partial class ValidationErrorsViewModel : ViewModelBase
 {
     public ValidationErrorsViewModel(
         IClipboardService clipboardService,

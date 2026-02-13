@@ -3,7 +3,7 @@ using Avalonia.Controls;
 
 namespace Inanna.Controls;
 
-public class BusyAreaControl : ContentControl
+public sealed class BusyAreaControl : ContentControl
 {
     public static readonly StyledProperty<object?> BusyAreaProperty = AvaloniaProperty.Register<
         BusyAreaControl,

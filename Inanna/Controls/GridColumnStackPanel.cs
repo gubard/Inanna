@@ -3,7 +3,7 @@ using Avalonia.Controls;
 
 namespace Inanna.Controls;
 
-public class GridColumnStackPanel : Panel
+public sealed class GridColumnStackPanel : Panel
 {
     public static readonly StyledProperty<int> ColumnsProperty = AvaloniaProperty.Register<
         GridColumnStackPanel,

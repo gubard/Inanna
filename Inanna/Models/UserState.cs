@@ -2,7 +2,7 @@
 
 namespace Inanna.Models;
 
-public partial class UserState : ObservableObject
+public sealed partial class UserState : ObservableObject
 {
     [ObservableProperty]
     private string _login = string.Empty;

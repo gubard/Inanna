@@ -2,7 +2,7 @@
 
 namespace Inanna.Ui;
 
-public partial class ValidationErrorsView : UserControl
+public sealed partial class ValidationErrorsView : UserControl
 {
     public ValidationErrorsView()
     {

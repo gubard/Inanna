@@ -4,7 +4,7 @@ using Inanna.Models;
 
 namespace Inanna.Ui;
 
-public partial class ChangeOrderViewModel : ViewModelBase
+public sealed partial class ChangeOrderViewModel : ViewModelBase
 {
     public IEnumerable<IOrderedItem> Items => _items;
 

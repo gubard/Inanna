@@ -10,7 +10,7 @@ public interface IClipboardService
     ConfiguredValueTaskAwaitable SetTextAsync(string? text, CancellationToken ct);
 }
 
-public class AvaloniaClipboardService : IClipboardService
+public sealed class AvaloniaClipboardService : IClipboardService
 {
     private readonly Application _application;
 

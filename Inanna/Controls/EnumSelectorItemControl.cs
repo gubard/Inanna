@@ -5,7 +5,7 @@ using Avalonia.Interactivity;
 
 namespace Inanna.Controls;
 
-public class EnumSelectorItemControl : TemplatedControl
+public sealed class EnumSelectorItemControl : TemplatedControl
 {
     public static readonly StyledProperty<object> ValueProperty = AvaloniaProperty.Register<
         EnumSelectorItemControl,

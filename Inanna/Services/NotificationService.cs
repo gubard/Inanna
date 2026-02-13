@@ -10,7 +10,7 @@ public interface INotificationService
     void ShowNotification(object content, NotificationType type);
 }
 
-public class NotificationService : INotificationService
+public sealed class NotificationService : INotificationService
 {
     private readonly string _identifier;
     private readonly TimeSpan _duration;

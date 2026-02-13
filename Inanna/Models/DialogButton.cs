@@ -2,7 +2,7 @@ using System.Windows.Input;
 
 namespace Inanna.Models;
 
-public class DialogButton
+public sealed class DialogButton
 {
     public DialogButton(
         object content,

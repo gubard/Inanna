@@ -10,7 +10,7 @@ using Inanna.Models;
 
 namespace Inanna.Services;
 
-public class InannaApplication : Application
+public abstract class InannaApplication : Application
 {
     private static readonly HashSet<TopLevel> InitedTopLevels = new();
 

@@ -2,7 +2,7 @@ using Gaia.Helpers;
 
 namespace Inanna.Models;
 
-public class StringCutParameters
+public sealed class StringCutParameters
 {
     public StringCutParameters(byte maxLineCount, ushort maxLineLength)
     {

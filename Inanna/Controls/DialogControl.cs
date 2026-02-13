@@ -4,7 +4,7 @@ using Avalonia.Data;
 
 namespace Inanna.Controls;
 
-public class DialogControl : ContentControl
+public sealed class DialogControl : ContentControl
 {
     private static readonly Dictionary<string, DialogControl> Dialogs = new();
 

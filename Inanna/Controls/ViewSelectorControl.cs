@@ -8,7 +8,7 @@ using Avalonia.Metadata;
 
 namespace Inanna.Controls;
 
-public class ViewSelectorControl : TemplatedControl
+public sealed class ViewSelectorControl : TemplatedControl
 {
     public static readonly StyledProperty<IEnumerable<ViewSelectorItemControl>> ItemsProperty =
         AvaloniaProperty.Register<ViewSelectorControl, IEnumerable<ViewSelectorItemControl>>(

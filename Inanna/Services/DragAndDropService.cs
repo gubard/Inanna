@@ -10,7 +10,7 @@ public interface IDragAndDropService
     bool IsDragging { get; }
 }
 
-public partial class DragAndDropService : ObservableObject, IDragAndDropService
+public sealed partial class DragAndDropService : ObservableObject, IDragAndDropService
 {
     private object? _data;
 

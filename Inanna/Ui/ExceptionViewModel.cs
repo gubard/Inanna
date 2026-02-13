@@ -6,7 +6,7 @@ using Inanna.Services;
 
 namespace Inanna.Ui;
 
-public partial class ExceptionViewModel : ViewModelBase
+public sealed partial class ExceptionViewModel : ViewModelBase
 {
     public ExceptionViewModel(IClipboardService clipboardService, params Span<Exception> exceptions)
     {

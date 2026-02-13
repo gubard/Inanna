@@ -5,7 +5,7 @@ using Avalonia.Interactivity;
 
 namespace Inanna.Controls;
 
-public class IntegerSelectorItemControl : TemplatedControl
+public sealed class IntegerSelectorItemControl : TemplatedControl
 {
     public static readonly StyledProperty<int> ValueProperty = AvaloniaProperty.Register<
         IntegerSelectorItemControl,

@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace Inanna.SourceGenerator;
 
 [Generator]
-public class EditNotifyGenerator : IIncrementalGenerator
+public sealed class EditNotifyGenerator : IIncrementalGenerator
 {
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
@@ -42,7 +42,7 @@ public class EditNotifyGenerator : IIncrementalGenerator
                     stringBuilder.AppendLine();
                     stringBuilder.AppendLine($"namespace {source.GetNamespace()};");
                     stringBuilder.AppendLine();
-                    stringBuilder.AppendLine($"public partial class {source.GetName()}");
+                    stringBuilder.AppendLine($"public sealed partial class {source.GetName()}");
                     stringBuilder.AppendLine("{");
 
                     stringBuilder.AppendLine(

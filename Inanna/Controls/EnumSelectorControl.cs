@@ -7,7 +7,7 @@ using Inanna.Services;
 
 namespace Inanna.Controls;
 
-public class EnumSelectorControl : TemplatedControl
+public sealed class EnumSelectorControl : TemplatedControl
 {
     public static readonly StyledProperty<ValueType?> SelectedEnumProperty =
         AvaloniaProperty.Register<EnumSelectorControl, ValueType?>(

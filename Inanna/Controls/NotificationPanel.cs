@@ -6,7 +6,7 @@ using Inanna.Models;
 
 namespace Inanna.Controls;
 
-public class NotificationPanel : ContentControl
+public sealed class NotificationPanel : ContentControl
 {
     private static readonly Dictionary<string, NotificationPanel> NotificationPanels = new();
 

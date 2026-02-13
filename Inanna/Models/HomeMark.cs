@@ -1,13 +1,13 @@
 namespace Inanna.Models;
 
-public class HomeMark
+public sealed class HomeMark
 {
     public static readonly HomeMark Instance = new();
 
     private HomeMark() { }
 }
 
-public class AddMark
+public sealed class AddMark
 {
     public static readonly AddMark Instance = new();
 

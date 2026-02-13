@@ -2,7 +2,7 @@ using Avalonia.Controls;
 
 namespace Inanna.Ui;
 
-public partial class DialogView : UserControl
+public sealed partial class DialogView : UserControl
 {
     public DialogView()
     {

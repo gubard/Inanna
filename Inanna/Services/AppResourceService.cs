@@ -7,7 +7,7 @@ public interface IAppResourceService
     T GetResource<T>(string key);
 }
 
-public class AppResourceService : IAppResourceService
+public sealed class AppResourceService : IAppResourceService
 {
     private readonly Application _application;
 

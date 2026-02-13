@@ -5,7 +5,7 @@ using Avalonia.Controls.Primitives;
 
 namespace Inanna.Controls;
 
-public class IntegersSelectorControl : TemplatedControl
+public sealed class IntegersSelectorControl : TemplatedControl
 {
     public static readonly StyledProperty<IList<int>?> SelectedIntegersProperty =
         AvaloniaProperty.Register<IntegersSelectorControl, IList<int>?>(nameof(SelectedIntegers));

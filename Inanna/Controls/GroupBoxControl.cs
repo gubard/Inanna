@@ -4,7 +4,7 @@ using Avalonia.Data;
 
 namespace Inanna.Controls;
 
-public class GroupBoxControl : ContentControl
+public sealed class GroupBoxControl : ContentControl
 {
     public static readonly StyledProperty<object?> HeaderProperty = AvaloniaProperty.Register<
         GroupBoxControl,

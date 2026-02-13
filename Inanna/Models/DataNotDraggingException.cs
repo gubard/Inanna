@@ -1,5 +1,5 @@
 namespace Inanna.Models;
 
-public class DataNotDraggingException : Exception;
+public sealed class DataNotDraggingException : Exception;
 
-public class DataDraggingException : Exception;
+public sealed class DataDraggingException : Exception;

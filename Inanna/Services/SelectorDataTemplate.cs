@@ -4,7 +4,7 @@ using Avalonia.Controls.Templates;
 
 namespace Inanna.Services;
 
-public class SelectorDataTemplate : AvaloniaList<IDataTemplate>, IDataTemplate
+public sealed class SelectorDataTemplate : AvaloniaList<IDataTemplate>, IDataTemplate
 {
     public SelectorDataTemplate()
     {
