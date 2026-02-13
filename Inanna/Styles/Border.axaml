@@ -5,8 +5,13 @@
         <Setter Property="CornerRadius" Value="5" />
         <Setter Property="BorderThickness" Value="2" />
     </Style>
-    
+
     <Style Selector="Border.cr-5">
         <Setter Property="CornerRadius" Value="5" />
+    </Style>
+
+    <Style Selector="Border.for-drop">
+        <Setter Property="CornerRadius" Value="5" />
+        <Setter Property="Background" Value="{DynamicResource SystemAccentColorDark1}" />
     </Style>
 </Styles>

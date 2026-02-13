@@ -35,4 +35,8 @@
     <Style Selector="TextBlock.small">
         <Setter Property="FontSize" Value="11.2" />
     </Style>
+
+    <Style Selector="TextBlock.error">
+        <Setter Property="Foreground" Value="{DynamicResource SystemErrorTextColor}" />
+    </Style>
 </Styles>
