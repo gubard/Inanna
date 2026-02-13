@@ -1,5 +1,7 @@
-﻿using Gaia.Models;
+﻿using Avalonia.Collections;
+using Gaia.Models;
 using Gaia.Services;
+using Inanna.Models;
 using Inanna.Ui;
 
 namespace Inanna.Services;
@@ -10,6 +12,7 @@ public interface IInannaViewModelFactory
     LinearBarcodeViewModel CreateLinearBarcode();
     ValidationErrorsViewModel CreateValidationErrors(ValidationError[] errors);
     ExceptionViewModel CreateException(params Span<Exception> exceptions);
+    AdaptiveButtonsViewModel CreateAdaptiveButtons(IAvaloniaReadOnlyList<InannaCommand> commands);
 }
 
 public sealed class InannaViewModelFactory : IInannaViewModelFactory
@@ -41,6 +44,13 @@ public sealed class InannaViewModelFactory : IInannaViewModelFactory
     public ExceptionViewModel CreateException(params Span<Exception> exceptions)
     {
         return new(_clipboardService, exceptions);
+    }
+
+    public AdaptiveButtonsViewModel CreateAdaptiveButtons(
+        IAvaloniaReadOnlyList<InannaCommand> commands
+    )
+    {
+        return new(commands);
     }
 
     private readonly IClipboardService _clipboardService;

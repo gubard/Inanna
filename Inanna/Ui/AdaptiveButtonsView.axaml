@@ -1,0 +1,50 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="clr-namespace:Inanna.Ui"
+             xmlns:sm="clr-namespace:Inanna.Models"
+             xmlns:s="clr-namespace:Inanna.Services"
+             xmlns:ih="clr-namespace:Inanna.Helpers"
+             xmlns:ip="https://github.com/MahApps/IconPacks.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Inanna.Ui.AdaptiveButtonsView"
+             x:DataType="ui:AdaptiveButtonsViewModel">
+    <UserControl.Styles>
+        <Style Selector="MenuItem" x:DataType="sm:InannaCommand">
+            <Setter Property="Command" Value="{Binding Command}" />
+            <Setter Property="CommandParameter" Value="{Binding Parameter}" />
+            <Setter Property="Icon" Value="{Binding Icon}" />
+        </Style>
+
+        <Style Selector="Button.adaptive-buttons">
+            <Setter Property="IsVisible" Value="False" />
+        </Style>
+
+        <Style Selector=":is(TopLevel):extra-small Button.adaptive-buttons">
+            <Setter Property="IsVisible" Value="True" />
+        </Style>
+
+        <Style Selector=":is(TopLevel):extra-small ItemsControl.adaptive-items">
+            <Setter Property="IsVisible" Value="False" />
+        </Style>
+    </UserControl.Styles>
+
+    <Panel IsVisible="{Binding Commands.Count, Converter={x:Static s:IsNotValueConverter.Instance}, ConverterParameter={x:Static ih:Numbers.Int32_0}}">
+        <Button Classes="adaptive-buttons" 
+                Content="{ip:MaterialDesign MoreHoriz}">
+            <Button.DataTemplates>
+                <DataTemplate x:DataType="sm:InannaCommand">
+                    <ContentControl Content="{Binding Content}" />
+                </DataTemplate>
+            </Button.DataTemplates>
+
+            <Button.Flyout>
+                <MenuFlyout ItemsSource="{Binding Commands}" />
+            </Button.Flyout>
+        </Button>
+
+        <ItemsControl Classes="horizontal-stack adaptive-items"
+                      ItemsSource="{Binding Commands}" />
+    </Panel>
+</UserControl>
