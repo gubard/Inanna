@@ -27,11 +27,6 @@
         <Setter Property="Padding" Value="0" />
     </Style>
 
-    <Style Selector="Button.password-visibility">
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Padding" Value="0" />
-    </Style>
-
     <Style Selector="Button:show-password">
         <Setter Property="Content">
             <Template>

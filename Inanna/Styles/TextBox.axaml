@@ -1,9 +1,48 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:h="clr-namespace:Inanna.Helpers"
-        xmlns:s="clr-namespace:System;assembly=System.Runtime">
+        xmlns:s="clr-namespace:System;assembly=System.Runtime"
+        xmlns:ip="https://github.com/MahApps/IconPacks.Avalonia">
     <Style Selector="TextBox">
         <Setter Property="Margin" Value="5" />
+        <Setter Property="InnerRightContent">
+            <Template>
+                <StackPanel Orientation="Horizontal">
+                    <Button Classes="mini show-password-button"
+                            h:ButtonAssist.IsPasswordHandler="True" />
+                    <Button Classes="mini show-select-all-button"
+                            Content="{ip:MaterialDesign SelectAll}"
+                            h:ButtonAssist.IsSelectAllHandler="True" />
+                    <Button Classes="mini show-clear-all-button"
+                            Content="{ip:MaterialDesign Clear}"
+                            h:ButtonAssist.IsClearAllHandler="True" />
+                </StackPanel>
+            </Template>
+        </Setter>
+    </Style>
+
+    <Style Selector="TextBox Button.show-select-all-button">
+        <Setter Property="IsVisible" Value="False" />
+    </Style>
+
+    <Style Selector="TextBox Button.show-password-button">
+        <Setter Property="IsVisible" Value="False" />
+    </Style>
+
+    <Style Selector="TextBox Button.show-clear-all-button">
+        <Setter Property="IsVisible" Value="False" />
+    </Style>
+
+    <Style Selector="TextBox.password Button.show-password-button">
+        <Setter Property="IsVisible" Value="True" />
+    </Style>
+
+    <Style Selector="TextBox.clear-all Button.show-clear-all-button">
+        <Setter Property="IsVisible" Value="True" />
+    </Style>
+
+    <Style Selector="TextBox.select-all Button.show-select-all-button">
+        <Setter Property="IsVisible" Value="True" />
     </Style>
 
     <Style Selector="TextBox.is-readonly">
@@ -40,11 +79,6 @@
 
     <Style Selector="TextBox.password">
         <Setter Property="PasswordChar" Value="*" />
-        <Setter Property="InnerRightContent">
-            <Template>
-                <Button Classes="password-visibility" h:ButtonAssist.IsPasswordHandler="True" />
-            </Template>
-        </Setter>
     </Style>
 
     <Style Selector="TextBox:show-password">
@@ -53,5 +87,17 @@
 
     <Style Selector="TextBox:hide-password">
         <Setter Property="PasswordChar" Value="{x:Static s:Char.MinValue}" />
+    </Style>
+
+    <Style Selector="TextBox.plain-text Button.show-password-button">
+        <Setter Property="IsVisible" Value="False" />
+    </Style>
+
+    <Style Selector="TextBox.plain-text Button.show-clear-all-button">
+        <Setter Property="IsVisible" Value="False" />
+    </Style>
+
+    <Style Selector="TextBox.plain-text Button.show-select-all-button">
+        <Setter Property="IsVisible" Value="False" />
     </Style>
 </Styles>
