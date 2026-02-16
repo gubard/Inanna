@@ -32,8 +32,12 @@
     <Style Selector=":is(TemplatedControl).small">
         <Setter Property="FontSize" Value="11.2" />
     </Style>
-    
+
     <Style Selector=":is(TemplatedControl).p-5">
         <Setter Property="Padding" Value="5" />
+    </Style>
+
+    <Style Selector=":is(TemplatedControl).p-4">
+        <Setter Property="Padding" Value="4" />
     </Style>
 </Styles>
