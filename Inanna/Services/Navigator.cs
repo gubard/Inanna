@@ -15,7 +15,7 @@ public interface INavigator
     bool IsEmpty { get; }
     object? CurrentView { get; }
 
-    ConfiguredValueTaskAwaitable<object?> NavigateBackOrNullAsync(CancellationToken ct);
+    ConfiguredValueTaskAwaitable NavigateBackAsync(CancellationToken ct);
     ConfiguredValueTaskAwaitable NavigateToAsync(object view, CancellationToken ct);
     ConfiguredValueTaskAwaitable RefreshCurrentViewAsync(CancellationToken ct);
 }
@@ -47,7 +47,7 @@ public sealed class Navigator : ObservableObject, INavigator
     public bool IsEmpty => _stackViewModel.IsEmpty;
     public object? CurrentView => _stackViewModel.CurrentView;
 
-    public ConfiguredValueTaskAwaitable<object?> NavigateBackOrNullAsync(CancellationToken ct)
+    public ConfiguredValueTaskAwaitable NavigateBackAsync(CancellationToken ct)
     {
         return NavigateBackOrNullCore(ct).ConfigureAwait(false);
     }
@@ -69,7 +69,7 @@ public sealed class Navigator : ObservableObject, INavigator
 
     private readonly StackViewModel _stackViewModel;
 
-    private async ValueTask<object?> NavigateBackOrNullCore(CancellationToken ct)
+    private async ValueTask NavigateBackOrNullCore(CancellationToken ct)
     {
         if (_stackViewModel.CurrentView is ISaveUi saveUi)
         {
@@ -90,8 +90,6 @@ public sealed class Navigator : ObservableObject, INavigator
         {
             await loadUi.LoadUiAsync(ct);
         }
-
-        return _stackViewModel.CurrentView;
     }
 
     private async ValueTask NavigateToCore(object view, CancellationToken ct)
