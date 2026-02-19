@@ -14,6 +14,7 @@ public static class UiHelper
 {
     static UiHelper()
     {
+        ProgressService = DiHelper.ServiceProvider.GetService<IProgressService>();
         InannaViewModelFactory = DiHelper.ServiceProvider.GetService<IInannaViewModelFactory>();
         DialogService = DiHelper.ServiceProvider.GetService<IDialogService>();
         Navigator = DiHelper.ServiceProvider.GetService<INavigator>();
@@ -68,8 +69,11 @@ public static class UiHelper
     public static void Execute<TValidationErrors>(Func<TValidationErrors> func)
         where TValidationErrors : IValidationErrors
     {
+        var progress = new ProgressItem(1);
+
         try
         {
+            ProgressService.AddProgress(progress);
             var result = func.Invoke();
 
             if (result.ValidationErrors is not { Count: 0 })
@@ -99,12 +103,19 @@ public static class UiHelper
                 CancellationToken.None
             );
         }
+        finally
+        {
+            progress.CurrentValue++;
+        }
     }
 
     public static void Execute(Action action)
     {
+        var progress = new ProgressItem(1);
+
         try
         {
+            ProgressService.AddProgress(progress);
             action.Invoke();
         }
         catch (Exception e)
@@ -117,6 +128,10 @@ public static class UiHelper
                 ),
                 CancellationToken.None
             );
+        }
+        finally
+        {
+            progress.CurrentValue++;
         }
     }
 
@@ -134,8 +149,11 @@ public static class UiHelper
         CancellationToken ct
     )
     {
+        var progress = new ProgressItem(1);
+
         try
         {
+            ProgressService.AddProgress(progress);
             await func.Invoke();
         }
         catch (Exception e)
@@ -148,6 +166,10 @@ public static class UiHelper
                 ),
                 ct
             );
+        }
+        finally
+        {
+            progress.CurrentValue++;
         }
     }
 
@@ -225,6 +247,7 @@ public static class UiHelper
     private static readonly INavigator Navigator;
     private static readonly IAppResourceService AppResourceService;
     private static readonly IInannaViewModelFactory InannaViewModelFactory;
+    private static readonly IProgressService ProgressService;
 
     private static async ValueTask ExecuteCore<TValidationErrors>(
         Func<ConfiguredValueTaskAwaitable<TValidationErrors>> func,
@@ -232,8 +255,11 @@ public static class UiHelper
     )
         where TValidationErrors : IValidationErrors
     {
+        var progress = new ProgressItem(1);
+
         try
         {
+            ProgressService.AddProgress(progress);
             var result = await func.Invoke();
 
             if (result.ValidationErrors is not { Count: 0 })
@@ -262,6 +288,10 @@ public static class UiHelper
                 ),
                 ct
             );
+        }
+        finally
+        {
+            progress.CurrentValue++;
         }
     }
 
