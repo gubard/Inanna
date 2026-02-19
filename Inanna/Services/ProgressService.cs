@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Inanna.Models;
 
@@ -18,7 +19,6 @@ public sealed partial class ProgressService : ObservableObject, IProgressService
     {
         _items.Add(item);
         item.PropertyChanged += OnCurrentValueChanged;
-        NeedValue += item.NeedValue;
         UpdateValues();
     }
 
@@ -28,7 +28,7 @@ public sealed partial class ProgressService : ObservableObject, IProgressService
     [ObservableProperty]
     private uint _currentValue;
 
-    private List<ProgressItem> _items = new();
+    private readonly List<ProgressItem> _items = new();
 
     private void OnCurrentValueChanged(object? sender, PropertyChangedEventArgs e)
     {
@@ -41,7 +41,6 @@ public sealed partial class ProgressService : ObservableObject, IProgressService
     private void UpdateValues()
     {
         var removeItems = _items.Where(x => x.CurrentValue >= x.NeedValue).ToArray();
-        NeedValue -= (uint)removeItems.Sum(x => x.NeedValue);
 
         foreach (var item in removeItems)
         {
@@ -49,6 +48,10 @@ public sealed partial class ProgressService : ObservableObject, IProgressService
             _items.Remove(item);
         }
 
-        CurrentValue = (uint)_items.Sum(x => x.CurrentValue);
+        Dispatcher.UIThread.Post(() =>
+        {
+            NeedValue = (uint)_items.Sum(x => x.NeedValue);
+            CurrentValue = (uint)_items.Sum(x => x.CurrentValue);
+        });
     }
 }

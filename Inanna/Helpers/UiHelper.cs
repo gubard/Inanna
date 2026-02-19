@@ -1,6 +1,7 @@
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Avalonia.Controls;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
 using Gaia.Helpers;
 using Gaia.Services;
@@ -105,7 +106,7 @@ public static class UiHelper
         }
         finally
         {
-            progress.CurrentValue++;
+            Dispatcher.UIThread.Post(() => progress.CurrentValue++);
         }
     }
 
@@ -131,17 +132,8 @@ public static class UiHelper
         }
         finally
         {
-            progress.CurrentValue++;
+            Dispatcher.UIThread.Post(() => progress.CurrentValue++);
         }
-    }
-
-    public static ConfiguredValueTaskAwaitable<bool> CheckValidationErrorsAsync<TValidationErrors>(
-        ConfiguredValueTaskAwaitable<TValidationErrors> task,
-        CancellationToken ct
-    )
-        where TValidationErrors : IValidationErrors
-    {
-        return CheckValidationErrorsCore(task, ct).ConfigureAwait(false);
     }
 
     private static async ValueTask ExecuteCore(
@@ -169,17 +161,8 @@ public static class UiHelper
         }
         finally
         {
-            progress.CurrentValue++;
+            Dispatcher.UIThread.Post(() => progress.CurrentValue++);
         }
-    }
-
-    public static ConfiguredValueTaskAwaitable<bool> CheckValidationErrorsAsync<TValidationErrors>(
-        TValidationErrors errors,
-        CancellationToken ct
-    )
-        where TValidationErrors : IValidationErrors
-    {
-        return CheckValidationErrorsCore(errors, ct).ConfigureAwait(false);
     }
 
     public static ICommand CreateCommand<T>(
@@ -291,56 +274,8 @@ public static class UiHelper
         }
         finally
         {
-            progress.CurrentValue++;
+            Dispatcher.UIThread.Post(() => progress.CurrentValue++);
         }
-    }
-
-    private static async ValueTask<bool> CheckValidationErrorsCore<TValidationErrors>(
-        ConfiguredValueTaskAwaitable<TValidationErrors> task,
-        CancellationToken ct
-    )
-        where TValidationErrors : IValidationErrors
-    {
-        var result = await task;
-
-        if (result.ValidationErrors is { Count: 0 })
-        {
-            return true;
-        }
-
-        await DialogService.ShowMessageBoxAsync(
-            new(
-                AppResourceService.GetResource<string>("Lang.Error").DispatchToDialogHeader(),
-                InannaViewModelFactory.CreateValidationErrors(result.ValidationErrors.ToArray()),
-                OkButton
-            ),
-            ct
-        );
-
-        return false;
-    }
-
-    private static async ValueTask<bool> CheckValidationErrorsCore<TValidationErrors>(
-        TValidationErrors errors,
-        CancellationToken ct
-    )
-        where TValidationErrors : IValidationErrors
-    {
-        if (errors.ValidationErrors is { Count: 0 })
-        {
-            return true;
-        }
-
-        await DialogService.ShowMessageBoxAsync(
-            new(
-                AppResourceService.GetResource<string>("Lang.Error").DispatchToDialogHeader(),
-                InannaViewModelFactory.CreateValidationErrors(errors.ValidationErrors.ToArray()),
-                OkButton
-            ),
-            ct
-        );
-
-        return false;
     }
 
     private static async ValueTask<ChangeOrderParameters<T>?> ShowChangeOrderCore<T>(
