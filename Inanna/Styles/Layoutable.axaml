@@ -29,6 +29,11 @@
         <Setter Property="VerticalAlignment" Value="Top" />
     </Style>
 
+    <Style Selector=":is(Layoutable).align-stretch-top">
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="VerticalAlignment" Value="Top" />
+    </Style>
+
     <Style Selector=":is(Layoutable).align-right-top">
         <Setter Property="HorizontalAlignment" Value="Right" />
         <Setter Property="VerticalAlignment" Value="Top" />
