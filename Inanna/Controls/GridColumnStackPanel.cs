@@ -10,11 +10,24 @@ public sealed class GridColumnStackPanel : Panel
         int
     >(nameof(Columns), 1);
 
+    public static readonly StyledProperty<bool> FixedColumnsProperty = AvaloniaProperty.Register<
+        GridColumnStackPanel,
+        bool
+    >(nameof(FixedColumns), true);
+
     private int _columns;
+    private bool _fixedColumns;
 
     static GridColumnStackPanel()
     {
         AffectsMeasure<GridColumnStackPanel>(ColumnsProperty);
+        AffectsMeasure<GridColumnStackPanel>(FixedColumnsProperty);
+    }
+
+    public bool FixedColumns
+    {
+        get => GetValue(FixedColumnsProperty);
+        set => SetValue(FixedColumnsProperty, value);
     }
 
     public int Columns
@@ -26,10 +39,16 @@ public sealed class GridColumnStackPanel : Panel
     protected override Size MeasureOverride(Size availableSize)
     {
         UpdateColumns();
+
+        var columns = Math.Max(
+            _fixedColumns ? _columns : Math.Min(Children.Count(x => x.IsVisible), _columns),
+            1
+        );
+
         var maxWidth = 0d;
         var columnsHeight = new Dictionary<int, double>();
 
-        for (var i = 0; i < _columns; i++)
+        for (var i = 0; i < columns; i++)
         {
             columnsHeight[i] = 0;
         }
@@ -37,7 +56,7 @@ public sealed class GridColumnStackPanel : Panel
         var currentColumn = 0;
 
         var layoutSlotSize = new Size()
-            .WithWidth(availableSize.Width / _columns)
+            .WithWidth(availableSize.Width / columns)
             .WithHeight(double.PositiveInfinity);
 
         foreach (var child in Children)
@@ -57,7 +76,7 @@ public sealed class GridColumnStackPanel : Panel
                 continue;
             }
 
-            if (currentColumn >= _columns)
+            if (currentColumn >= columns)
             {
                 currentColumn = 0;
             }
@@ -66,21 +85,26 @@ public sealed class GridColumnStackPanel : Panel
             currentColumn++;
         }
 
-        return new(maxWidth * _columns, columnsHeight.Values.Max());
+        return new(maxWidth * columns, columnsHeight.Values.Max());
     }
 
     protected override Size ArrangeOverride(Size finalSize)
     {
         var columnsHeight = new Dictionary<int, double>();
 
-        for (var i = 0; i < _columns; i++)
+        var columns = Math.Max(
+            _fixedColumns ? _columns : Math.Min(Children.Count(x => x.IsVisible), _columns),
+            1
+        );
+
+        for (var i = 0; i < columns; i++)
         {
             columnsHeight[i] = 0;
         }
 
         var x = 0;
         var maxWidth = 0d;
-        var width = finalSize.Width / _columns;
+        var width = finalSize.Width / columns;
 
         foreach (var child in Children)
         {
@@ -91,7 +115,7 @@ public sealed class GridColumnStackPanel : Panel
                 continue;
             }
 
-            if (x >= _columns)
+            if (x >= columns)
             {
                 x = 0;
             }
@@ -112,5 +136,6 @@ public sealed class GridColumnStackPanel : Panel
     private void UpdateColumns()
     {
         _columns = Columns;
+        _fixedColumns = FixedColumns;
     }
 }
