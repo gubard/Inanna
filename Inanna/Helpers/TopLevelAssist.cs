@@ -3,7 +3,6 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.VisualTree;
 using Inanna.Models;
-using Inanna.Services;
 
 namespace Inanna.Helpers;
 
