@@ -78,9 +78,9 @@ public sealed class Navigator : ObservableObject, INavigator
 
         Dispatcher.UIThread.Invoke(() => _stackViewModel.RemoveLastViewUi());
 
-        if (_stackViewModel.GetCurrentView() is IInitUi initUi)
+        if (_stackViewModel.GetCurrentView() is IInit initUi)
         {
-            await initUi.InitUiAsync(ct);
+            await initUi.InitAsync(ct);
         }
 
         Dispatcher.UIThread.Invoke(() => _stackViewModel.SetCurrentViewUi());
@@ -104,9 +104,9 @@ public sealed class Navigator : ObservableObject, INavigator
             Dispatcher.UIThread.Invoke(() => _stackViewModel.RemoveLastViewUi());
         }
 
-        if (view is IInitUi initUi)
+        if (view is IInit initUi)
         {
-            await initUi.InitUiAsync(ct);
+            await initUi.InitAsync(ct);
         }
 
         Dispatcher.UIThread.Invoke(() => _stackViewModel.PushViewUi(view));

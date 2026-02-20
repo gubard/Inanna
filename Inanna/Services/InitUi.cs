@@ -2,7 +2,7 @@
 
 namespace Inanna.Services;
 
-public interface IInitUi
+public interface IInit
 {
-    ConfiguredValueTaskAwaitable InitUiAsync(CancellationToken ct);
+    ConfiguredValueTaskAwaitable InitAsync(CancellationToken ct);
 }
