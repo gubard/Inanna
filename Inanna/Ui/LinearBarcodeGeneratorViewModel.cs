@@ -1,4 +1,5 @@
 using Avalonia.Collections;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Gaia.Services;
@@ -49,9 +50,13 @@ public sealed partial class LinearBarcodeGeneratorViewModel : ViewModelBase
             var serializer = _factory.Create(SelectedBarcode);
             var bytes = serializer.Serialize(Text);
             Barcode.SetBarcode(bytes.ToArray());
-            Barcode.BottomText = IsShowBottomText ? Text : string.Empty;
-            Barcode.TopText = IsShowTopText ? SelectedBarcode : string.Empty;
-            Barcode.BarWidth = serializer.BarWidth;
+
+            Dispatcher.UIThread.Post(() =>
+            {
+                Barcode.BottomText = IsShowBottomText ? Text : string.Empty;
+                Barcode.TopText = IsShowTopText ? SelectedBarcode : string.Empty;
+                Barcode.BarWidth = serializer.BarWidth;
+            });
         });
     }
 }

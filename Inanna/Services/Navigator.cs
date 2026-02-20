@@ -76,14 +76,14 @@ public sealed class Navigator : ObservableObject, INavigator
             await saveUi.SaveUiAsync(ct);
         }
 
-        Dispatcher.UIThread.Invoke(() => _stackViewModel.RemoveLastView());
+        Dispatcher.UIThread.Invoke(() => _stackViewModel.RemoveLastViewUi());
 
         if (_stackViewModel.GetCurrentView() is IInitUi initUi)
         {
             await initUi.InitUiAsync(ct);
         }
 
-        Dispatcher.UIThread.Invoke(() => _stackViewModel.SetCurrentView());
+        Dispatcher.UIThread.Invoke(() => _stackViewModel.SetCurrentViewUi());
         ViewChanged?.Invoke(this, _stackViewModel.CurrentView);
 
         if (_stackViewModel.CurrentView is ILoadUi loadUi)
@@ -101,7 +101,7 @@ public sealed class Navigator : ObservableObject, INavigator
 
         if (_stackViewModel.CurrentView is INonNavigate)
         {
-            Dispatcher.UIThread.Invoke(() => _stackViewModel.RemoveLastView());
+            Dispatcher.UIThread.Invoke(() => _stackViewModel.RemoveLastViewUi());
         }
 
         if (view is IInitUi initUi)
@@ -109,7 +109,7 @@ public sealed class Navigator : ObservableObject, INavigator
             await initUi.InitUiAsync(ct);
         }
 
-        Dispatcher.UIThread.Invoke(() => _stackViewModel.PushView(view));
+        Dispatcher.UIThread.Invoke(() => _stackViewModel.PushViewUi(view));
         ViewChanged?.Invoke(this, _stackViewModel.CurrentView);
 
         if (view is ILoadUi loadUi)

@@ -7,14 +7,14 @@ public sealed partial class StackViewModel : ViewModelBase
 {
     public bool IsEmpty => _views.Count <= 1;
 
-    public void PushView(object view)
+    public void PushViewUi(object view)
     {
         CurrentView = view;
         _views.Push(view);
         OnPropertyChanged(nameof(IsEmpty));
     }
 
-    public void RemoveLastView()
+    public void RemoveLastViewUi()
     {
         if (_views.Count == 0)
         {
@@ -25,7 +25,7 @@ public sealed partial class StackViewModel : ViewModelBase
         OnPropertyChanged(nameof(IsEmpty));
     }
 
-    public void SetCurrentView()
+    public void SetCurrentViewUi()
     {
         if (_views.Count == 0)
         {

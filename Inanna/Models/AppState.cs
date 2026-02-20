@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using Avalonia.Threading;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Inanna.Services;
 
 namespace Inanna.Models;
@@ -19,15 +20,18 @@ public sealed partial class AppState : ObservableObject
 
     public void SetServiceMode(string serviceName, ServiceMode mode)
     {
-        _serviceStates[serviceName].Mode = mode;
+        Dispatcher.UIThread.Invoke(() => _serviceStates[serviceName].Mode = mode);
     }
 
     public void ResetServiceModes()
     {
-        foreach (var serviceState in _serviceStates)
+        Dispatcher.UIThread.Invoke(() =>
         {
-            serviceState.Value.Mode = ServiceMode.Online;
-        }
+            foreach (var serviceState in _serviceStates)
+            {
+                serviceState.Value.Mode = ServiceMode.Online;
+            }
+        });
     }
 
     public void AddService(IServiceState serviceState)

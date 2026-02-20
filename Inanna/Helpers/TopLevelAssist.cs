@@ -16,10 +16,7 @@ public static class TopLevelAssist
         );
 
     public static readonly AvaloniaProperty<bool> IsDraggingProperty =
-        AvaloniaProperty.RegisterAttached<TopLevel, bool>(
-            nameof(IDragAndDropService.IsDragging),
-            typeof(TopLevel)
-        );
+        AvaloniaProperty.RegisterAttached<TopLevel, bool>("IsDragging", typeof(TopLevel));
 
     public static MaterialDesignSizeType GetMaterialDesignSizeType(TopLevel element)
     {
