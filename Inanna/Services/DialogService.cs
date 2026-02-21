@@ -44,14 +44,14 @@ public sealed class DialogService : IDialogService
             Dispatcher.UIThread.Invoke(() => DialogControl.ShowDialog(_dialogId, _stackViewModel));
         }
 
-        if (_stackViewModel.CurrentView is ISaveUi saveUi)
+        if (_stackViewModel.CurrentView is ISave saveUi)
         {
-            await saveUi.SaveUiAsync(ct);
+            await saveUi.SaveAsync(ct);
         }
 
         await dialog.InitAsync(ct);
         Dispatcher.UIThread.Invoke(() => _stackViewModel.PushViewUi(dialog));
-        await dialog.LoadUiAsync(ct);
+        await dialog.LoadAsync(ct);
         var taskCompletionSource = new TaskCompletionSource();
         _taskStack.Push(taskCompletionSource);
         ct.ThrowIfCancellationRequested();
@@ -60,9 +60,9 @@ public sealed class DialogService : IDialogService
 
     private async ValueTask CloseMessageBoxCore(CancellationToken ct)
     {
-        if (_stackViewModel.CurrentView is ISaveUi saveUi)
+        if (_stackViewModel.CurrentView is ISave saveUi)
         {
-            await saveUi.SaveUiAsync(ct);
+            await saveUi.SaveAsync(ct);
         }
 
         Dispatcher.UIThread.Invoke(() => _stackViewModel.RemoveLastViewUi());
@@ -74,9 +74,9 @@ public sealed class DialogService : IDialogService
 
         Dispatcher.UIThread.Invoke(() => _stackViewModel.SetCurrentViewUi());
 
-        if (_stackViewModel.CurrentView is ILoadUi loadUi)
+        if (_stackViewModel.CurrentView is ILoad loadUi)
         {
-            await loadUi.LoadUiAsync(ct);
+            await loadUi.LoadAsync(ct);
         }
 
         if (_stackViewModel.CurrentView is null)

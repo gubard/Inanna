@@ -5,7 +5,7 @@ using Inanna.Services;
 
 namespace Inanna.Ui;
 
-public sealed class DialogViewModel : ViewModelBase, IInit, ILoadUi
+public sealed class DialogViewModel : ViewModelBase, IInit, ILoad
 {
     public DialogViewModel(object header, object content, params Span<DialogButton> buttons)
     {
@@ -28,11 +28,11 @@ public sealed class DialogViewModel : ViewModelBase, IInit, ILoadUi
         return TaskHelper.ConfiguredCompletedTask;
     }
 
-    public ConfiguredValueTaskAwaitable LoadUiAsync(CancellationToken ct)
+    public ConfiguredValueTaskAwaitable LoadAsync(CancellationToken ct)
     {
-        if (Content is ILoadUi loadUi)
+        if (Content is ILoad loadUi)
         {
-            return loadUi.LoadUiAsync(ct);
+            return loadUi.LoadAsync(ct);
         }
 
         return TaskHelper.ConfiguredCompletedTask;

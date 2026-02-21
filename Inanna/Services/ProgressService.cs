@@ -29,6 +29,7 @@ public sealed partial class ProgressService : ObservableObject, IProgressService
     private uint _currentValue;
 
     private readonly List<ProgressItem> _items = new();
+    private bool _isUpdating;
 
     private void OnCurrentValueChanged(object? sender, PropertyChangedEventArgs e)
     {
@@ -40,18 +41,35 @@ public sealed partial class ProgressService : ObservableObject, IProgressService
 
     private void UpdateValues()
     {
-        var removeItems = _items.Where(x => x.CurrentValue >= x.NeedValue).ToArray();
-
-        foreach (var item in removeItems)
-        {
-            item.PropertyChanged -= OnCurrentValueChanged;
-            _items.Remove(item);
-        }
-
         Dispatcher.UIThread.Post(() =>
         {
-            NeedValue = (uint)_items.Sum(x => x.NeedValue);
-            CurrentValue = (uint)_items.Sum(x => x.CurrentValue);
+            if (_isUpdating)
+            {
+                return;
+            }
+
+            _isUpdating = true;
+            var needValue = (uint)_items.Sum(x => x.NeedValue);
+            var currentValue = (uint)_items.Sum(x => x.CurrentValue);
+
+            if (currentValue >= needValue)
+            {
+                foreach (var item in _items)
+                {
+                    item.PropertyChanged -= OnCurrentValueChanged;
+                }
+
+                _items.Clear();
+                NeedValue = 0;
+                CurrentValue = 0;
+            }
+            else
+            {
+                NeedValue = needValue;
+                CurrentValue = currentValue;
+            }
+
+            _isUpdating = false;
         });
     }
 }
