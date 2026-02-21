@@ -20,6 +20,7 @@ public static class UiHelper
         DialogService = DiHelper.ServiceProvider.GetService<IDialogService>();
         Navigator = DiHelper.ServiceProvider.GetService<INavigator>();
         AppResourceService = DiHelper.ServiceProvider.GetService<IAppResourceService>();
+        ErrorDialogFactory = DiHelper.ServiceProvider.GetService<IErrorDialogFactory>();
         EmptyCommand = new RelayCommand(() => { });
 
         CancelButton = new(
@@ -80,15 +81,7 @@ public static class UiHelper
             if (result.ValidationErrors is not { Count: 0 })
             {
                 DialogService.ShowMessageBoxAsync(
-                    new(
-                        AppResourceService
-                            .GetResource<string>("Lang.Error")
-                            .DispatchToDialogHeader(),
-                        InannaViewModelFactory.CreateValidationErrors(
-                            result.ValidationErrors.ToArray()
-                        ),
-                        OkButton
-                    ),
+                    ErrorDialogFactory.Create(result.ValidationErrors.ToArray()),
                     CancellationToken.None
                 );
             }
@@ -96,11 +89,7 @@ public static class UiHelper
         catch (Exception e)
         {
             DialogService.ShowMessageBoxAsync(
-                new(
-                    AppResourceService.GetResource<string>("Lang.Error").DispatchToDialogHeader(),
-                    InannaViewModelFactory.CreateException(e),
-                    OkButton
-                ),
+                ErrorDialogFactory.Create([e]),
                 CancellationToken.None
             );
         }
@@ -122,11 +111,7 @@ public static class UiHelper
         catch (Exception e)
         {
             DialogService.ShowMessageBoxAsync(
-                new(
-                    AppResourceService.GetResource<string>("Lang.Error").DispatchToDialogHeader(),
-                    InannaViewModelFactory.CreateException(e),
-                    OkButton
-                ),
+                ErrorDialogFactory.Create([e]),
                 CancellationToken.None
             );
         }
@@ -150,14 +135,7 @@ public static class UiHelper
         }
         catch (Exception e)
         {
-            await DialogService.ShowMessageBoxAsync(
-                new(
-                    AppResourceService.GetResource<string>("Lang.Error").DispatchToDialogHeader(),
-                    InannaViewModelFactory.CreateException(e),
-                    OkButton
-                ),
-                ct
-            );
+            await DialogService.ShowMessageBoxAsync(ErrorDialogFactory.Create([e]), ct);
         }
         finally
         {
@@ -231,6 +209,7 @@ public static class UiHelper
     private static readonly IAppResourceService AppResourceService;
     private static readonly IInannaViewModelFactory InannaViewModelFactory;
     private static readonly IProgressService ProgressService;
+    private static readonly IErrorDialogFactory ErrorDialogFactory;
 
     private static async ValueTask ExecuteCore<TValidationErrors>(
         Func<ConfiguredValueTaskAwaitable<TValidationErrors>> func,
@@ -248,29 +227,14 @@ public static class UiHelper
             if (result.ValidationErrors is not { Count: 0 })
             {
                 await DialogService.ShowMessageBoxAsync(
-                    new(
-                        AppResourceService
-                            .GetResource<string>("Lang.Error")
-                            .DispatchToDialogHeader(),
-                        InannaViewModelFactory.CreateValidationErrors(
-                            result.ValidationErrors.ToArray()
-                        ),
-                        OkButton
-                    ),
+                    ErrorDialogFactory.Create(result.ValidationErrors.ToArray()),
                     ct
                 );
             }
         }
         catch (Exception e)
         {
-            await DialogService.ShowMessageBoxAsync(
-                new(
-                    AppResourceService.GetResource<string>("Lang.Error").DispatchToDialogHeader(),
-                    InannaViewModelFactory.CreateException(e),
-                    OkButton
-                ),
-                ct
-            );
+            await DialogService.ShowMessageBoxAsync(ErrorDialogFactory.Create([e]), ct);
         }
         finally
         {

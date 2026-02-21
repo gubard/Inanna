@@ -10,7 +10,7 @@ public interface IInannaViewModelFactory
 {
     LinearBarcodeGeneratorViewModel CreateLinearBarcodeGenerator();
     LinearBarcodeViewModel CreateLinearBarcode();
-    ValidationErrorsViewModel CreateValidationErrors(ValidationError[] errors);
+    ValidationErrorsViewModel CreateValidationErrors(params Span<ValidationError> errors);
     ExceptionViewModel CreateException(params Span<Exception> exceptions);
     AdaptiveButtonsViewModel CreateAdaptiveButtons(IAvaloniaReadOnlyList<InannaCommand> commands);
 }
@@ -36,7 +36,7 @@ public sealed class InannaViewModelFactory : IInannaViewModelFactory
         return new();
     }
 
-    public ValidationErrorsViewModel CreateValidationErrors(ValidationError[] errors)
+    public ValidationErrorsViewModel CreateValidationErrors(params Span<ValidationError> errors)
     {
         return new(_clipboardService, errors);
     }

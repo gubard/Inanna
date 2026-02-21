@@ -79,8 +79,7 @@ public abstract partial class UiService<
         TDbService dbService,
         TCache uiCache,
         INavigator navigator,
-        string serviceName,
-        IResponseHandler responseHandler
+        string serviceName
     )
     {
         _httpService = httpService;
@@ -88,7 +87,6 @@ public abstract partial class UiService<
         _uiCache = uiCache;
         _navigator = navigator;
         ServiceName = serviceName;
-        _responseHandler = responseHandler;
     }
 
     protected abstract TGetRequest CreateGetRequestRefresh();
@@ -100,7 +98,6 @@ public abstract partial class UiService<
     private readonly TDbService _dbService;
     private readonly TCache _uiCache;
     private readonly INavigator _navigator;
-    private readonly IResponseHandler _responseHandler;
 
     private async ValueTask<IValidationErrors> HealthCheckCore(CancellationToken ct)
     {
@@ -153,7 +150,6 @@ public abstract partial class UiService<
                     response.ValidationErrors.AddRange(r.ValidationErrors);
                 }
 
-                await _responseHandler.HandleResponseAsync(response, ct);
                 await _navigator.RefreshCurrentViewAsync(ct);
 
                 return response;
@@ -179,7 +175,6 @@ public abstract partial class UiService<
             {
                 var response = await _httpService.GetAsync(request, ct);
                 await _uiCache.UpdateAsync(response, ct);
-                await _responseHandler.HandleResponseAsync(response, ct);
 
                 return response;
             }
