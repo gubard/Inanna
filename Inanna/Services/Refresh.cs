@@ -6,8 +6,3 @@ public interface IRefresh
 {
     ConfiguredValueTaskAwaitable RefreshAsync(CancellationToken ct);
 }
-
-public interface IRefreshUi
-{
-    void RefreshUi();
-}
