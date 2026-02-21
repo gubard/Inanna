@@ -16,7 +16,6 @@ public static class UiHelper
     static UiHelper()
     {
         ProgressService = DiHelper.ServiceProvider.GetService<IProgressService>();
-        InannaViewModelFactory = DiHelper.ServiceProvider.GetService<IInannaViewModelFactory>();
         DialogService = DiHelper.ServiceProvider.GetService<IDialogService>();
         Navigator = DiHelper.ServiceProvider.GetService<INavigator>();
         AppResourceService = DiHelper.ServiceProvider.GetService<IAppResourceService>();
@@ -207,7 +206,6 @@ public static class UiHelper
     private static readonly IDialogService DialogService;
     private static readonly INavigator Navigator;
     private static readonly IAppResourceService AppResourceService;
-    private static readonly IInannaViewModelFactory InannaViewModelFactory;
     private static readonly IProgressService ProgressService;
     private static readonly IErrorDialogFactory ErrorDialogFactory;
 
