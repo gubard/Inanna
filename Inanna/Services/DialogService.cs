@@ -41,7 +41,7 @@ public sealed class DialogService : IDialogService
     {
         if (!Dispatcher.UIThread.Invoke(() => DialogControl.IsShowDialog(_dialogId)))
         {
-            Dispatcher.UIThread.Post(() => DialogControl.ShowDialog(_dialogId, _stackViewModel));
+            Dispatcher.UIThread.Invoke(() => DialogControl.ShowDialog(_dialogId, _stackViewModel));
         }
 
         if (_stackViewModel.CurrentView is ISaveUi saveUi)
@@ -81,7 +81,7 @@ public sealed class DialogService : IDialogService
 
         if (_stackViewModel.CurrentView is null)
         {
-            Dispatcher.UIThread.Post(() => DialogControl.CloseDialog(_dialogId));
+            Dispatcher.UIThread.Invoke(() => DialogControl.CloseDialog(_dialogId));
         }
 
         if (_taskStack.Count != 0)
