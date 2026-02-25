@@ -14,4 +14,12 @@
         <Setter Property="CornerRadius" Value="5" />
         <Setter Property="Background" Value="{DynamicResource SystemAccentColorDark1}" />
     </Style>
+
+    <Style Selector="Border.item">
+        <Setter Property="CornerRadius" Value="5" />
+        <Setter Property="Margin" Value="5" />
+        <Setter Property="Padding" Value="5" />
+        <Setter Property="Background"
+                Value="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}" />
+    </Style>
 </Styles>
