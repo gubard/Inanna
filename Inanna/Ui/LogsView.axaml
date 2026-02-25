@@ -1,0 +1,28 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="clr-namespace:Inanna.Ui"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Inanna.Ui.LogsView"
+             x:DataType="ui:LogsViewModel">
+    <ItemsControl ItemsSource="{Binding Logs}">
+        <ItemsControl.ItemTemplate>
+            <DataTemplate>
+                <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,Auto,*">
+                    <TextBlock Classes="align-center m-2"
+                               Text="{Binding DateTime.LocalDateTime.Date, StringFormat={}{0:dd.MM.yyyy}}" />
+                    <TextBlock Grid.Row="1"
+                               Classes="align-center m-2"
+                               Text="{Binding DateTime.LocalDateTime.TimeOfDay, StringFormat={}{0:hh\\:mm}}" />
+                    <TextBlock Grid.Column="1" Classes="align-center m-2" Text="{Binding Level}" />
+                    <TextBlock Grid.Row="1" Grid.Column="1" Classes="align-center m-2" Text="{Binding EventId}" />
+                    <TextBlock Grid.Column="2"
+                               Grid.RowSpan="2"
+                               Classes="text-wrap align-center m-2"
+                               Text="{Binding Text}" />
+                </Grid>
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
+    </ItemsControl>
+</UserControl>

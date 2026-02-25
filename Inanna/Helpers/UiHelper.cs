@@ -8,6 +8,7 @@ using Gaia.Services;
 using Inanna.Models;
 using Inanna.Services;
 using Inanna.Ui;
+using Microsoft.Extensions.Logging;
 
 namespace Inanna.Helpers;
 
@@ -15,6 +16,7 @@ public static class UiHelper
 {
     static UiHelper()
     {
+        Logger = DiHelper.ServiceProvider.GetService<ILogger>();
         ProgressService = DiHelper.ServiceProvider.GetService<IProgressService>();
         DialogService = DiHelper.ServiceProvider.GetService<IDialogService>();
         Navigator = DiHelper.ServiceProvider.GetService<INavigator>();
@@ -79,6 +81,8 @@ public static class UiHelper
 
             if (result.ValidationErrors is not { Count: 0 })
             {
+                Logger.CommandErrors(result.ValidationErrors);
+
                 DialogService.ShowMessageBoxAsync(
                     ErrorDialogFactory.Create(result.ValidationErrors.ToArray()),
                     CancellationToken.None
@@ -87,6 +91,8 @@ public static class UiHelper
         }
         catch (Exception e)
         {
+            Logger.CommandException(e);
+
             DialogService.ShowMessageBoxAsync(
                 ErrorDialogFactory.Create([e]),
                 CancellationToken.None
@@ -109,6 +115,8 @@ public static class UiHelper
         }
         catch (Exception e)
         {
+            Logger.CommandException(e);
+
             DialogService.ShowMessageBoxAsync(
                 ErrorDialogFactory.Create([e]),
                 CancellationToken.None
@@ -134,6 +142,7 @@ public static class UiHelper
         }
         catch (Exception e)
         {
+            Logger.CommandException(e);
             await DialogService.ShowMessageBoxAsync(ErrorDialogFactory.Create([e]), ct);
         }
         finally
@@ -208,6 +217,7 @@ public static class UiHelper
     private static readonly IAppResourceService AppResourceService;
     private static readonly IProgressService ProgressService;
     private static readonly IErrorDialogFactory ErrorDialogFactory;
+    private static readonly ILogger Logger;
 
     private static async ValueTask ExecuteCore<TValidationErrors>(
         Func<ConfiguredValueTaskAwaitable<TValidationErrors>> func,
@@ -224,6 +234,8 @@ public static class UiHelper
 
             if (result.ValidationErrors is not { Count: 0 })
             {
+                Logger.CommandErrors(result.ValidationErrors);
+
                 await DialogService.ShowMessageBoxAsync(
                     ErrorDialogFactory.Create(result.ValidationErrors.ToArray()),
                     ct
@@ -232,6 +244,7 @@ public static class UiHelper
         }
         catch (Exception e)
         {
+            Logger.CommandException(e);
             await DialogService.ShowMessageBoxAsync(ErrorDialogFactory.Create([e]), ct);
         }
         finally
