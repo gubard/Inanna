@@ -81,6 +81,10 @@
         <Setter Property="Margin" Value="10" />
     </Style>
 
+    <Style Selector=":is(Layoutable).w-5">
+        <Setter Property="Width" Value="5" />
+    </Style>
+
     <Style Selector=":is(Layoutable).h-100">
         <Setter Property="Height" Value="100" />
     </Style>
@@ -89,7 +93,6 @@
         <Setter Property="Width" Value="20" />
         <Setter Property="Height" Value="20" />
     </Style>
-
 
     <Style Selector=":is(Layoutable).s-40">
         <Setter Property="Width" Value="40" />

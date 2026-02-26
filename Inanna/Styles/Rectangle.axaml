@@ -18,4 +18,28 @@
     <Style Selector="Rectangle.drop-aria:pointerover">
         <Setter Property="Fill" Value="{DynamicResource ComboBoxItemBackgroundPointerOver}" />
     </Style>
+
+    <Style Selector="Rectangle.trace">
+        <Setter Property="Fill" Value="DarkGray" />
+    </Style>
+
+    <Style Selector="Rectangle.debug">
+        <Setter Property="Fill" Value="Cyan" />
+    </Style>
+
+    <Style Selector="Rectangle.information">
+        <Setter Property="Fill" Value="Green" />
+    </Style>
+
+    <Style Selector="Rectangle.warning">
+        <Setter Property="Fill" Value="Yellow" />
+    </Style>
+
+    <Style Selector="Rectangle.error">
+        <Setter Property="Fill" Value="DarkRed" />
+    </Style>
+
+    <Style Selector="Rectangle.critical">
+        <Setter Property="Fill" Value="Red" />
+    </Style>
 </Styles>
