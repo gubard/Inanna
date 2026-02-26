@@ -38,7 +38,6 @@
     <StyleInclude Source="StackPanel.axaml" />
     <StyleInclude Source="TemplatedControl.axaml" />
     <StyleInclude Source="ItemsControl.axaml" />
-    <StyleInclude Source="CheckBox.axaml" />
     <StyleInclude Source="TextBox.axaml" />
     <StyleInclude Source="ScrollViewer.axaml" />
     <StyleInclude Source="Visual.axaml" />
