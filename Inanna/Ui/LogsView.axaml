@@ -11,24 +11,20 @@
     <ItemsControl ItemsSource="{Binding Logs}">
         <ItemsControl.ItemTemplate>
             <DataTemplate>
-                <Border Classes="item">
-                    <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto, Auto,*">
-                        <Rectangle Grid.RowSpan="2"
-                                   Classes="w-5"
-                                   Classes.trace="{Binding Level, Converter={x:Static is:IsValueConverter.Instance}, ConverterParameter={x:Static hm:LogLevel.Trace}}"
-                                   Classes.debug="{Binding Level, Converter={x:Static is:IsValueConverter.Instance}, ConverterParameter={x:Static hm:LogLevel.Debug}}"
-                                   Classes.information="{Binding Level, Converter={x:Static is:IsValueConverter.Instance}, ConverterParameter={x:Static hm:LogLevel.Information}}"
-                                   Classes.warning="{Binding Level, Converter={x:Static is:IsValueConverter.Instance}, ConverterParameter={x:Static hm:LogLevel.Warning}}"
-                                   Classes.error="{Binding Level, Converter={x:Static is:IsValueConverter.Instance}, ConverterParameter={x:Static hm:LogLevel.Error}}"
-                                   Classes.critical="{Binding Level, Converter={x:Static is:IsValueConverter.Instance}, ConverterParameter={x:Static hm:LogLevel.Critical}}" />
-                        <TextBlock Grid.Column="1"
-                                   Classes="align-center m-2"
+                <Border Classes="item status"
+                        Classes.trace="{Binding Level, Converter={x:Static is:IsValueConverter.Instance}, ConverterParameter={x:Static hm:LogLevel.Trace}}"
+                        Classes.debug="{Binding Level, Converter={x:Static is:IsValueConverter.Instance}, ConverterParameter={x:Static hm:LogLevel.Debug}}"
+                        Classes.information="{Binding Level, Converter={x:Static is:IsValueConverter.Instance}, ConverterParameter={x:Static hm:LogLevel.Information}}"
+                        Classes.warning="{Binding Level, Converter={x:Static is:IsValueConverter.Instance}, ConverterParameter={x:Static hm:LogLevel.Warning}}"
+                        Classes.error="{Binding Level, Converter={x:Static is:IsValueConverter.Instance}, ConverterParameter={x:Static hm:LogLevel.Error}}"
+                        Classes.critical="{Binding Level, Converter={x:Static is:IsValueConverter.Instance}, ConverterParameter={x:Static hm:LogLevel.Critical}}">
+                    <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*">
+                        <TextBlock Classes="align-center m-2"
                                    Text="{Binding DateTime.LocalDateTime.Date, StringFormat={}{0:dd.MM.yyyy}}" />
                         <TextBlock Grid.Row="1"
-                                   Grid.Column="1"
                                    Classes="align-center m-2"
                                    Text="{Binding DateTime.LocalDateTime.TimeOfDay, StringFormat={}{0:hh\\:mm}}" />
-                        <TextBlock Grid.Column="2"
+                        <TextBlock Grid.Column="1"
                                    Grid.RowSpan="2"
                                    Classes="text-wrap align-left-center m-2"
                                    Text="{Binding Text}" />

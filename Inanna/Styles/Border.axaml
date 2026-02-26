@@ -22,4 +22,32 @@
         <Setter Property="Background"
                 Value="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}" />
     </Style>
+
+    <Style Selector="Border.status">
+        <Setter Property="BorderThickness" Value="5,0,0,0" />
+    </Style>
+
+    <Style Selector="Border.trace">
+        <Setter Property="BorderBrush" Value="DarkGray" />
+    </Style>
+
+    <Style Selector="Border.debug">
+        <Setter Property="BorderBrush" Value="Cyan" />
+    </Style>
+
+    <Style Selector="Border.information">
+        <Setter Property="BorderBrush" Value="Green" />
+    </Style>
+
+    <Style Selector="Border.warning">
+        <Setter Property="BorderBrush" Value="Yellow" />
+    </Style>
+
+    <Style Selector="Border.error">
+        <Setter Property="BorderBrush" Value="DarkRed" />
+    </Style>
+
+    <Style Selector="Border.critical">
+        <Setter Property="BorderBrush" Value="Red" />
+    </Style>
 </Styles>
