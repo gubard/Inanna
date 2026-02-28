@@ -24,10 +24,15 @@
                         <TextBlock Grid.Row="1"
                                    Classes="align-center m-2"
                                    Text="{Binding DateTime.LocalDateTime.TimeOfDay, StringFormat={}{0:hh\\:mm}}" />
-                        <TextBlock Grid.Column="1"
-                                   Grid.RowSpan="2"
-                                   Classes="text-wrap align-left-center m-2"
-                                   Text="{Binding Text}" />
+
+                        <StackPanel Grid.Column="1" Grid.RowSpan="2">
+                            <TextBlock Classes="text-wrap align-left-center m-2"
+                                       Text="{Binding Text}" />
+                            <Expander Header="{DynamicResource Lang.Exception}"
+                                      IsVisible="{Binding Exception, Converter={x:Static is:IsNotValueConverter.Instance}, ConverterParameter={x:Null}}">
+                                <TextBlock Classes="text-wrap m-5" Text="{Binding Exception}" />
+                            </Expander>
+                        </StackPanel>
                     </Grid>
                 </Border>
             </DataTemplate>
