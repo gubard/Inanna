@@ -17,10 +17,9 @@
                                             x:TypeArguments="m:Month,c:IntegersSelectorControl" />
                                 </DataTemplate.DataType>
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{Binding Key}" />
-                                    <TextBlock Text=" "
-                                               IsVisible="{Binding Value.SelectedIntegers.Count, Converter={x:Static s:IsNotValueConverter.Instance}, ConverterParameter={x:Static h:Numbers.Int32_0}}" />
-                                    <TextBlock Text="{Binding Value.SelectedIntegers.Count}"
+                                    <TextBlock
+                                        Text="{Binding Key, Converter={x:Static s:EnumToFullStringConverter.Instance}}" />
+                                    <TextBlock Text="{Binding Value.SelectedIntegers.Count, StringFormat='({0})'}"
                                                IsVisible="{Binding Value.SelectedIntegers.Count, Converter={x:Static s:IsNotValueConverter.Instance}, ConverterParameter={x:Static h:Numbers.Int32_0}}" />
                                 </StackPanel>
                             </DataTemplate>
