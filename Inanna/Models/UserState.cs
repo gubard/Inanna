@@ -1,15 +1,17 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿namespace Inanna.Models;
 
-namespace Inanna.Models;
-
-public sealed partial class UserState : ObservableObject
+public sealed class UserState
 {
-    [ObservableProperty]
-    private string _login = string.Empty;
+    public UserState(Guid id, string login, string email, DateTimeOffset expired)
+    {
+        Id = id;
+        Login = login;
+        Email = email;
+        Expired = expired;
+    }
 
-    [ObservableProperty]
-    private string _email = string.Empty;
-
-    [ObservableProperty]
-    private Guid _id;
+    public Guid Id { get; }
+    public string Login { get; }
+    public string Email { get; }
+    public DateTimeOffset Expired { get; }
 }
