@@ -49,9 +49,7 @@ public sealed class DialogService : IDialogService
             await saveUi.SaveAsync(ct);
         }
 
-        await dialog.InitAsync(ct);
         Dispatcher.UIThread.Invoke(() => _stackViewModel.PushViewUi(dialog));
-        await dialog.LoadAsync(ct);
         var taskCompletionSource = new TaskCompletionSource();
         _taskStack.Push(taskCompletionSource);
         ct.ThrowIfCancellationRequested();
@@ -66,18 +64,7 @@ public sealed class DialogService : IDialogService
         }
 
         Dispatcher.UIThread.Invoke(() => _stackViewModel.RemoveLastViewUi());
-
-        if (_stackViewModel.GetCurrentView() is IInit initUi)
-        {
-            await initUi.InitAsync(ct);
-        }
-
         Dispatcher.UIThread.Invoke(() => _stackViewModel.SetCurrentViewUi());
-
-        if (_stackViewModel.CurrentView is ILoad loadUi)
-        {
-            await loadUi.LoadAsync(ct);
-        }
 
         if (_stackViewModel.CurrentView is null)
         {

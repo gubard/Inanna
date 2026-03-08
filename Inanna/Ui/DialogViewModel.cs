@@ -1,11 +1,8 @@
-using System.Runtime.CompilerServices;
-using Gaia.Helpers;
 using Inanna.Models;
-using Inanna.Services;
 
 namespace Inanna.Ui;
 
-public sealed class DialogViewModel : ViewModelBase, IInit, ILoad
+public sealed class DialogViewModel : ViewModelBase
 {
     public DialogViewModel(object header, object content, params Span<DialogButton> buttons)
     {
@@ -17,24 +14,4 @@ public sealed class DialogViewModel : ViewModelBase, IInit, ILoad
     public object Header { get; }
     public object Content { get; }
     public IReadOnlySet<DialogButton> Buttons { get; }
-
-    public ConfiguredValueTaskAwaitable InitAsync(CancellationToken ct)
-    {
-        if (Content is IInit initUi)
-        {
-            return initUi.InitAsync(ct);
-        }
-
-        return TaskHelper.ConfiguredCompletedTask;
-    }
-
-    public ConfiguredValueTaskAwaitable LoadAsync(CancellationToken ct)
-    {
-        if (Content is ILoad loadUi)
-        {
-            return loadUi.LoadAsync(ct);
-        }
-
-        return TaskHelper.ConfiguredCompletedTask;
-    }
 }
