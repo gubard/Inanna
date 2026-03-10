@@ -56,13 +56,12 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
 
     protected ConfiguredValueTaskAwaitable WrapCommandAsync<TValidationErrors>(
         Func<ConfiguredValueTaskAwaitable<TValidationErrors>> func,
-        CancellationToken ct
+        CancellationToken ct,
+        bool isBackground = false
     )
         where TValidationErrors : IValidationErrors
     {
-        StartExecute();
-
-        return HasErrors ? TaskHelper.ConfiguredCompletedTask : UiHelper.ExecuteAsync(func, ct);
+        return WrapCommandCore(func, ct, isBackground).ConfigureAwait(false);
     }
 
     protected ConfiguredValueTaskAwaitable WrapCommandAsync<TValidationErrors>(
@@ -123,5 +122,30 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
     protected void SetValidation(string propertyName, Func<IEnumerable<ValidationError>> validation)
     {
         _errors[propertyName] = validation;
+    }
+
+    private async ValueTask WrapCommandCore<TValidationErrors>(
+        Func<ConfiguredValueTaskAwaitable<TValidationErrors>> func,
+        CancellationToken ct,
+        bool isBackground = false
+    )
+        where TValidationErrors : IValidationErrors
+    {
+        StartExecute();
+
+        if (HasErrors)
+        {
+            return;
+        }
+
+        var c = isBackground ? CancellationToken.None : ct;
+        var task = UiHelper.ExecuteAsync(func, c);
+
+        if (isBackground)
+        {
+            return;
+        }
+
+        await task;
     }
 }

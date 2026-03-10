@@ -152,53 +152,123 @@ public static class UiHelper
     }
 
     public static ICommand CreateCommand<T>(
-        Func<T, CancellationToken, ConfiguredValueTaskAwaitable> func
+        Func<T, CancellationToken, ConfiguredValueTaskAwaitable> func,
+        bool isBackground = false
     )
     {
         return new AsyncRelayCommand<T>(
             async (parameter, ct) =>
-                await ExecuteAsync(() => func.Invoke(parameter.ThrowIfNull(), ct), ct)
+            {
+                var c = isBackground ? CancellationToken.None : ct;
+                var task = ExecuteAsync(() => func.Invoke(parameter.ThrowIfNull(), c), c);
+
+                if (isBackground)
+                {
+                    return;
+                }
+
+                await task;
+            }
         );
     }
 
-    public static ICommand CreateCommand(Func<CancellationToken, ConfiguredValueTaskAwaitable> func)
-    {
-        return new AsyncRelayCommand(async ct => await ExecuteAsync(() => func.Invoke(ct), ct));
-    }
-
-    public static ICommand CreateCommand(Func<CancellationToken, ValueTask> func)
+    public static ICommand CreateCommand(
+        Func<CancellationToken, ConfiguredValueTaskAwaitable> func,
+        bool isBackground = false
+    )
     {
         return new AsyncRelayCommand(async ct =>
-            await ExecuteAsync(() => func.Invoke(ct).ConfigureAwait(false), ct)
-        );
+        {
+            var c = isBackground ? CancellationToken.None : ct;
+            var task = ExecuteAsync(() => func.Invoke(c), c);
+
+            if (isBackground)
+            {
+                return;
+            }
+
+            await task;
+        });
+    }
+
+    public static ICommand CreateCommand(
+        Func<CancellationToken, ValueTask> func,
+        bool isBackground = false
+    )
+    {
+        return new AsyncRelayCommand(async ct =>
+        {
+            var c = isBackground ? CancellationToken.None : ct;
+            var task = ExecuteAsync(() => func.Invoke(c).ConfigureAwait(false), c);
+
+            if (isBackground)
+            {
+                return;
+            }
+
+            await task;
+        });
     }
 
     public static ICommand CreateCommand<TValidationErrors>(
-        Func<CancellationToken, ConfiguredValueTaskAwaitable<TValidationErrors>> func
-    )
-        where TValidationErrors : IValidationErrors
-    {
-        return new AsyncRelayCommand(async ct => await ExecuteAsync(() => func.Invoke(ct), ct));
-    }
-
-    public static ICommand CreateCommand<TValidationErrors>(
-        Func<CancellationToken, ValueTask<TValidationErrors>> func
+        Func<CancellationToken, ConfiguredValueTaskAwaitable<TValidationErrors>> func,
+        bool isBackground = false
     )
         where TValidationErrors : IValidationErrors
     {
         return new AsyncRelayCommand(async ct =>
-            await ExecuteAsync(() => func.Invoke(ct).ConfigureAwait(false), ct)
-        );
+        {
+            var c = isBackground ? CancellationToken.None : ct;
+            var task = ExecuteAsync(() => func.Invoke(c), c);
+
+            if (isBackground)
+            {
+                return;
+            }
+
+            await task;
+        });
+    }
+
+    public static ICommand CreateCommand<TValidationErrors>(
+        Func<CancellationToken, ValueTask<TValidationErrors>> func,
+        bool isBackground = false
+    )
+        where TValidationErrors : IValidationErrors
+    {
+        return new AsyncRelayCommand(async ct =>
+        {
+            var c = isBackground ? CancellationToken.None : ct;
+            var task = ExecuteAsync(() => func.Invoke(c).ConfigureAwait(false), c);
+
+            if (isBackground)
+            {
+                return;
+            }
+
+            await task;
+        });
     }
 
     public static ICommand CreateCommand<T, TValidationErrors>(
-        Func<T, CancellationToken, ConfiguredValueTaskAwaitable<TValidationErrors>> func
+        Func<T, CancellationToken, ConfiguredValueTaskAwaitable<TValidationErrors>> func,
+        bool isBackground = false
     )
         where TValidationErrors : IValidationErrors
     {
         return new AsyncRelayCommand<T>(
             async (parameter, ct) =>
-                await ExecuteAsync(() => func.Invoke(parameter.ThrowIfNull(), ct), ct)
+            {
+                var c = isBackground ? CancellationToken.None : ct;
+                var task = ExecuteAsync(() => func.Invoke(parameter.ThrowIfNull(), c), c);
+
+                if (isBackground)
+                {
+                    return;
+                }
+
+                await task;
+            }
         );
     }
 
