@@ -89,6 +89,10 @@ public static class UiHelper
                 );
             }
         }
+        catch (OperationCanceledException e)
+        {
+            Logger.OperationCanceled(e);
+        }
         catch (Exception e)
         {
             Logger.CommandException(e);
@@ -112,6 +116,10 @@ public static class UiHelper
         {
             ProgressService.AddProgress(progress);
             action.Invoke();
+        }
+        catch (OperationCanceledException e)
+        {
+            Logger.OperationCanceled(e);
         }
         catch (Exception e)
         {
@@ -140,6 +148,10 @@ public static class UiHelper
             ProgressService.AddProgress(progress);
             await func.Invoke();
         }
+        catch (OperationCanceledException e)
+        {
+            Logger.OperationCanceled(e);
+        }
         catch (Exception e)
         {
             Logger.CommandException(e);
@@ -153,13 +165,14 @@ public static class UiHelper
 
     public static ICommand CreateCommand<T>(
         Func<T, CancellationToken, ConfiguredValueTaskAwaitable> func,
-        bool isBackground = false
+        bool isBackground = false,
+        bool canCancel = true
     )
     {
         return new AsyncRelayCommand<T>(
             async (parameter, ct) =>
             {
-                var c = isBackground ? CancellationToken.None : ct;
+                var c = canCancel ? ct : CancellationToken.None;
                 var task = ExecuteAsync(() => func.Invoke(parameter.ThrowIfNull(), c), c);
 
                 if (isBackground)
@@ -174,12 +187,13 @@ public static class UiHelper
 
     public static ICommand CreateCommand(
         Func<CancellationToken, ConfiguredValueTaskAwaitable> func,
-        bool isBackground = false
+        bool isBackground = false,
+        bool canCancel = true
     )
     {
         return new AsyncRelayCommand(async ct =>
         {
-            var c = isBackground ? CancellationToken.None : ct;
+            var c = canCancel ? ct : CancellationToken.None;
             var task = ExecuteAsync(() => func.Invoke(c), c);
 
             if (isBackground)
@@ -193,12 +207,13 @@ public static class UiHelper
 
     public static ICommand CreateCommand(
         Func<CancellationToken, ValueTask> func,
-        bool isBackground = false
+        bool isBackground = false,
+        bool canCancel = true
     )
     {
         return new AsyncRelayCommand(async ct =>
         {
-            var c = isBackground ? CancellationToken.None : ct;
+            var c = canCancel ? ct : CancellationToken.None;
             var task = ExecuteAsync(() => func.Invoke(c).ConfigureAwait(false), c);
 
             if (isBackground)
@@ -212,13 +227,14 @@ public static class UiHelper
 
     public static ICommand CreateCommand<TValidationErrors>(
         Func<CancellationToken, ConfiguredValueTaskAwaitable<TValidationErrors>> func,
-        bool isBackground = false
+        bool isBackground = false,
+        bool canCancel = true
     )
         where TValidationErrors : IValidationErrors
     {
         return new AsyncRelayCommand(async ct =>
         {
-            var c = isBackground ? CancellationToken.None : ct;
+            var c = canCancel ? ct : CancellationToken.None;
             var task = ExecuteAsync(() => func.Invoke(c), c);
 
             if (isBackground)
@@ -232,13 +248,14 @@ public static class UiHelper
 
     public static ICommand CreateCommand<TValidationErrors>(
         Func<CancellationToken, ValueTask<TValidationErrors>> func,
-        bool isBackground = false
+        bool isBackground = false,
+        bool canCancel = true
     )
         where TValidationErrors : IValidationErrors
     {
         return new AsyncRelayCommand(async ct =>
         {
-            var c = isBackground ? CancellationToken.None : ct;
+            var c = canCancel ? ct : CancellationToken.None;
             var task = ExecuteAsync(() => func.Invoke(c).ConfigureAwait(false), c);
 
             if (isBackground)
@@ -252,14 +269,15 @@ public static class UiHelper
 
     public static ICommand CreateCommand<T, TValidationErrors>(
         Func<T, CancellationToken, ConfiguredValueTaskAwaitable<TValidationErrors>> func,
-        bool isBackground = false
+        bool isBackground = false,
+        bool canCancel = true
     )
         where TValidationErrors : IValidationErrors
     {
         return new AsyncRelayCommand<T>(
             async (parameter, ct) =>
             {
-                var c = isBackground ? CancellationToken.None : ct;
+                var c = canCancel ? ct : CancellationToken.None;
                 var task = ExecuteAsync(() => func.Invoke(parameter.ThrowIfNull(), c), c);
 
                 if (isBackground)
@@ -311,6 +329,10 @@ public static class UiHelper
                     ct
                 );
             }
+        }
+        catch (OperationCanceledException e)
+        {
+            Logger.OperationCanceled(e);
         }
         catch (Exception e)
         {
