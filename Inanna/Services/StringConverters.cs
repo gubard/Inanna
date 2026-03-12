@@ -89,3 +89,38 @@ public sealed class IsNotNullOrWhiteSpaceConverter : IValueConverter
         throw new NotSupportedException();
     }
 }
+
+public sealed class StringToUriConverter : IValueConverter
+{
+    public static readonly StringToUriConverter Instance = new();
+
+    public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+    {
+        if (value is not string str)
+        {
+            return value;
+        }
+
+        if (str.IsNullOrWhiteSpace())
+        {
+            return value;
+        }
+
+        return str.ToUri();
+    }
+
+    public object? ConvertBack(
+        object? value,
+        Type targetType,
+        object? parameter,
+        CultureInfo culture
+    )
+    {
+        if (value is not Uri uri)
+        {
+            return value;
+        }
+
+        return uri.AbsoluteUri;
+    }
+}
