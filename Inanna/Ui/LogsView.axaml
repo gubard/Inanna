@@ -27,9 +27,10 @@
 
                         <StackPanel Grid.Column="1" Grid.RowSpan="2" Classes="align-left-center">
                             <TextBlock Classes="text-wrap align-left-center m-2"
-                                       Text="{Binding Text}" />
+                                       Text="{Binding Text}"
+                                       IsVisible="{Binding Exception, Converter={x:Static is:IsValueConverter.Instance}, ConverterParameter={x:Null}}" />
                             <Expander IsExpanded="False"
-                                      Header="{DynamicResource Lang.Exception}"
+                                      Header="{Binding Text}"
                                       IsVisible="{Binding Exception, Converter={x:Static is:IsNotValueConverter.Instance}, ConverterParameter={x:Null}}">
                                 <TextBlock Classes="text-wrap m-5" Text="{Binding Exception}" />
                             </Expander>
