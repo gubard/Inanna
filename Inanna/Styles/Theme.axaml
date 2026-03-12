@@ -23,6 +23,7 @@
         </ResourceDictionary>
     </Styles.Resources>
 
+    <StyleInclude Source="CheckBox.axaml" />
     <StyleInclude Source="Expander.axaml" />
     <StyleInclude Source="ToggleButton.axaml" />
     <StyleInclude Source="ListBoxItem.axaml" />
