@@ -15,6 +15,12 @@ public interface ICommandFactory
         bool canCancel = true
     );
 
+    ICommand CreateCommand<T>(
+        Func<T, CancellationToken, ValueTask> func,
+        bool isBackground = false,
+        bool canCancel = true
+    );
+
     ICommand CreateCommand(
         Func<CancellationToken, ConfiguredValueTaskAwaitable> func,
         bool isBackground = false,
@@ -76,6 +82,33 @@ public sealed class CommandFactory : ICommandFactory
                 var task = _serviceProvider
                     .GetService<ISafeExecuteWrapper>()
                     .ExecuteAsync(() => func.Invoke(parameter.ThrowIfNull(), c), c);
+
+                if (isBackground)
+                {
+                    return;
+                }
+
+                await task;
+            }
+        );
+    }
+
+    public ICommand CreateCommand<T>(
+        Func<T, CancellationToken, ValueTask> func,
+        bool isBackground = false,
+        bool canCancel = true
+    )
+    {
+        return new AsyncRelayCommand<T>(
+            async (value, ct) =>
+            {
+                var c = canCancel ? ct : CancellationToken.None;
+                var task = _serviceProvider
+                    .GetService<ISafeExecuteWrapper>()
+                    .ExecuteAsync(
+                        () => func.Invoke(value.ThrowIfNull(), c).ConfigureAwait(false),
+                        c
+                    );
 
                 if (isBackground)
                 {
