@@ -11,8 +11,10 @@ public sealed partial class ValidationErrorsViewModel : ViewModelBase
 {
     public ValidationErrorsViewModel(
         IClipboardService clipboardService,
+        ISafeExecuteWrapper safeExecuteWrapper,
         params Span<ValidationError> errors
     )
+        : base(safeExecuteWrapper)
     {
         _clipboardService = clipboardService;
         _errors = new(errors.ToArray());

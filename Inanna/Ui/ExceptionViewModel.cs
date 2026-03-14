@@ -8,7 +8,12 @@ namespace Inanna.Ui;
 
 public sealed partial class ExceptionViewModel : ViewModelBase
 {
-    public ExceptionViewModel(IClipboardService clipboardService, params Span<Exception> exceptions)
+    public ExceptionViewModel(
+        IClipboardService clipboardService,
+        ISafeExecuteWrapper safeExecuteWrapper,
+        params Span<Exception> exceptions
+    )
+        : base(safeExecuteWrapper)
     {
         _clipboardService = clipboardService;
         _exceptions = new(exceptions.ToArray());

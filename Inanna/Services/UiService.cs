@@ -1,8 +1,10 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Gaia.Models;
 using Gaia.Services;
 using Inanna.Models;
+using Inanna.Ui;
 using Nestor.Db.Models;
 using Nestor.Db.Services;
 
@@ -79,7 +81,9 @@ public abstract partial class UiService<
         TDbService dbService,
         TCache uiCache,
         INavigator navigator,
-        string serviceName
+        string serviceName,
+        IStatusBarService statusBarService,
+        IInannaViewModelFactory factory
     )
     {
         _httpService = httpService;
@@ -87,17 +91,41 @@ public abstract partial class UiService<
         _uiCache = uiCache;
         _navigator = navigator;
         ServiceName = serviceName;
+        _statusBarService = statusBarService;
+        _viewModel = factory.CreateServiceOfflineStatus(this);
     }
 
     protected abstract TGetRequest CreateGetRequestRefresh();
 
+    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
+    {
+        base.OnPropertyChanged(e);
+
+        if (e.PropertyName == nameof(Mode))
+        {
+            switch (Mode)
+            {
+                case ServiceMode.Online:
+                    _statusBarService.RemoveStatus(_viewModel);
+                    break;
+                case ServiceMode.Offline:
+                    _statusBarService.AddStatus(_viewModel);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+    }
+
     [ObservableProperty]
     private ServiceMode _mode;
 
+    private readonly ServiceOfflineStatusViewModel _viewModel;
     private readonly THttpService _httpService;
     private readonly TDbService _dbService;
     private readonly TCache _uiCache;
     private readonly INavigator _navigator;
+    private readonly IStatusBarService _statusBarService;
 
     private async ValueTask<IValidationErrors> HealthCheckCore(CancellationToken ct)
     {

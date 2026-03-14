@@ -1,24 +1,50 @@
 using System.Runtime.CompilerServices;
 using Avalonia.Threading;
 using Inanna.Controls;
+using Inanna.Models;
 using Inanna.Ui;
 
 namespace Inanna.Services;
 
 public interface IDialogService
 {
+    DialogButton CancelButton { get; }
+    DialogButton OkButton { get; }
+
     ConfiguredValueTaskAwaitable ShowMessageBoxAsync(DialogViewModel dialog, CancellationToken ct);
     ConfiguredValueTaskAwaitable CloseMessageBoxAsync(CancellationToken ct);
 }
 
 public sealed class DialogService : IDialogService
 {
-    public DialogService(string dialogId)
+    public DialogService(
+        string dialogId,
+        IAppResourceService appResourceService,
+        ICommandFactory commandFactory,
+        IInannaViewModelFactory factory
+    )
     {
         _dialogId = dialogId;
-        _stackViewModel = new();
+        _stackViewModel = factory.CreateStack();
         _taskStack = new();
+
+        CancelButton = new(
+            appResourceService.GetResource<string>("Lang.Cancel"),
+            commandFactory.CreateCommand(async ct => await CloseMessageBoxAsync(ct)),
+            null,
+            DialogButtonType.Normal
+        );
+
+        OkButton = new(
+            appResourceService.GetResource<string>("Lang.Ok"),
+            commandFactory.CreateCommand(async ct => await CloseMessageBoxAsync(ct)),
+            null,
+            DialogButtonType.Primary
+        );
     }
+
+    public DialogButton CancelButton { get; }
+    public DialogButton OkButton { get; }
 
     public ConfiguredValueTaskAwaitable ShowMessageBoxAsync(
         DialogViewModel dialog,

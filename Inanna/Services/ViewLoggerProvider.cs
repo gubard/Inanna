@@ -1,21 +1,25 @@
 ﻿using Avalonia.Threading;
 using Inanna.Ui;
 using Microsoft.Extensions.Logging;
+using IServiceProvider = Gaia.Services.IServiceProvider;
 
 namespace Inanna.Services;
 
 public sealed class ViewLoggerProvider : ILoggerProvider
 {
-    public ViewLoggerProvider(LogsViewModel logsViewModel)
+    public ViewLoggerProvider(IServiceProvider serviceProvider)
     {
-        _logsViewModel = logsViewModel;
+        _serviceProvider = serviceProvider;
     }
 
-    public ILogger CreateLogger(string categoryName) => new ViewLogger(_logsViewModel);
+    public ILogger CreateLogger(string categoryName)
+    {
+        return new ViewLogger(_serviceProvider.GetService<LogsViewModel>());
+    }
 
     public void Dispose() { }
 
-    private readonly LogsViewModel _logsViewModel;
+    private readonly IServiceProvider _serviceProvider;
 
     private sealed class ViewLogger : ILogger
     {

@@ -1,6 +1,5 @@
 using Gaia.Helpers;
 using Inanna.Controls;
-using Inanna.Helpers;
 using Inanna.Models;
 
 namespace Inanna.Services;
@@ -12,20 +11,18 @@ public interface INotificationService
 
 public sealed class NotificationService : INotificationService
 {
-    private readonly string _identifier;
-    private readonly TimeSpan _duration;
-
-    public NotificationService(string identifier, TimeSpan duration)
+    public NotificationService(string identifier, TimeSpan duration, ICommandFactory commandFactory)
     {
         _identifier = identifier;
         _duration = duration;
+        _commandFactory = commandFactory;
     }
 
     public void ShowNotification(object content, NotificationType type)
     {
         var notification = new NotificationControl { Type = type, Content = content };
 
-        notification.Command = UiHelper.CreateCommand(_ =>
+        notification.Command = _commandFactory.CreateCommand(_ =>
         {
             NotificationPanel.CloseNotification(_identifier, notification);
 
@@ -39,4 +36,8 @@ public sealed class NotificationService : INotificationService
             _duration
         );
     }
+
+    private readonly string _identifier;
+    private readonly TimeSpan _duration;
+    private readonly ICommandFactory _commandFactory;
 }

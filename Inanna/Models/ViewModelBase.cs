@@ -5,90 +5,16 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using Gaia.Helpers;
 using Gaia.Models;
 using Gaia.Services;
-using Inanna.Helpers;
+using Inanna.Services;
 
 namespace Inanna.Models;
 
 public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
 {
-    private bool _isAnyExecute;
-
-    private readonly Dictionary<string, Func<IEnumerable<ValidationError>>> _errors = new();
-
     public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
 
     public bool HasErrors =>
         _isAnyExecute && _errors.Count != 0 && _errors.Any(x => x.Value.Invoke().Any());
-
-    protected void WrapCommand(Action action)
-    {
-        StartExecute();
-
-        if (HasErrors)
-        {
-            return;
-        }
-
-        UiHelper.Execute(action);
-    }
-
-    protected ConfiguredValueTaskAwaitable WrapCommandAsync(
-        Func<ConfiguredValueTaskAwaitable> func,
-        CancellationToken ct
-    )
-    {
-        StartExecute();
-
-        return HasErrors ? TaskHelper.ConfiguredCompletedTask : UiHelper.ExecuteAsync(func, ct);
-    }
-
-    protected ConfiguredValueTaskAwaitable WrapCommandAsync(
-        Func<ValueTask> func,
-        CancellationToken ct
-    )
-    {
-        StartExecute();
-
-        return HasErrors
-            ? TaskHelper.ConfiguredCompletedTask
-            : UiHelper.ExecuteAsync(() => func.Invoke().ConfigureAwait(false), ct);
-    }
-
-    protected ConfiguredValueTaskAwaitable WrapCommandAsync<TValidationErrors>(
-        Func<ConfiguredValueTaskAwaitable<TValidationErrors>> func,
-        CancellationToken ct,
-        bool isBackground = false
-    )
-        where TValidationErrors : IValidationErrors
-    {
-        return WrapCommandCore(func, ct, isBackground).ConfigureAwait(false);
-    }
-
-    protected ConfiguredValueTaskAwaitable WrapCommandAsync<TValidationErrors>(
-        Func<ValueTask<TValidationErrors>> func,
-        CancellationToken ct
-    )
-        where TValidationErrors : IValidationErrors
-    {
-        StartExecute();
-
-        return HasErrors
-            ? TaskHelper.ConfiguredCompletedTask
-            : UiHelper.ExecuteAsync(() => func.Invoke().ConfigureAwait(false), ct);
-    }
-
-    protected void WrapCommand<TValidationErrors>(Func<TValidationErrors> func)
-        where TValidationErrors : IValidationErrors
-    {
-        StartExecute();
-
-        if (HasErrors)
-        {
-            return;
-        }
-
-        UiHelper.Execute(func);
-    }
 
     public void StartExecute()
     {
@@ -119,10 +45,92 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
         return errors;
     }
 
+    protected readonly ISafeExecuteWrapper SafeExecuteWrapper;
+
+    protected ViewModelBase(ISafeExecuteWrapper safeExecuteWrapper)
+    {
+        SafeExecuteWrapper = safeExecuteWrapper;
+    }
+
+    protected void WrapCommand(Action action)
+    {
+        StartExecute();
+
+        if (HasErrors)
+        {
+            return;
+        }
+
+        SafeExecuteWrapper.Execute(action);
+    }
+
+    protected ConfiguredValueTaskAwaitable WrapCommandAsync(
+        Func<ConfiguredValueTaskAwaitable> func,
+        CancellationToken ct
+    )
+    {
+        StartExecute();
+
+        return HasErrors
+            ? TaskHelper.ConfiguredCompletedTask
+            : SafeExecuteWrapper.ExecuteAsync(func, ct);
+    }
+
+    protected ConfiguredValueTaskAwaitable WrapCommandAsync(
+        Func<ValueTask> func,
+        CancellationToken ct
+    )
+    {
+        StartExecute();
+
+        return HasErrors
+            ? TaskHelper.ConfiguredCompletedTask
+            : SafeExecuteWrapper.ExecuteAsync(() => func.Invoke().ConfigureAwait(false), ct);
+    }
+
+    protected ConfiguredValueTaskAwaitable WrapCommandAsync<TValidationErrors>(
+        Func<ConfiguredValueTaskAwaitable<TValidationErrors>> func,
+        CancellationToken ct,
+        bool isBackground = false
+    )
+        where TValidationErrors : IValidationErrors
+    {
+        return WrapCommandCore(func, ct, isBackground).ConfigureAwait(false);
+    }
+
+    protected ConfiguredValueTaskAwaitable WrapCommandAsync<TValidationErrors>(
+        Func<ValueTask<TValidationErrors>> func,
+        CancellationToken ct
+    )
+        where TValidationErrors : IValidationErrors
+    {
+        StartExecute();
+
+        return HasErrors
+            ? TaskHelper.ConfiguredCompletedTask
+            : SafeExecuteWrapper.ExecuteAsync(() => func.Invoke().ConfigureAwait(false), ct);
+    }
+
+    protected void WrapCommand<TValidationErrors>(Func<TValidationErrors> func)
+        where TValidationErrors : IValidationErrors
+    {
+        StartExecute();
+
+        if (HasErrors)
+        {
+            return;
+        }
+
+        SafeExecuteWrapper.Execute(func);
+    }
+
     protected void SetValidation(string propertyName, Func<IEnumerable<ValidationError>> validation)
     {
         _errors[propertyName] = validation;
     }
+
+    private bool _isAnyExecute;
+    private readonly Dictionary<string, Func<IEnumerable<ValidationError>>> _errors = new();
 
     private async ValueTask WrapCommandCore<TValidationErrors>(
         Func<ConfiguredValueTaskAwaitable<TValidationErrors>> func,
@@ -139,7 +147,7 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
         }
 
         var c = isBackground ? CancellationToken.None : ct;
-        var task = UiHelper.ExecuteAsync(func, c);
+        var task = SafeExecuteWrapper.ExecuteAsync(func, c);
 
         if (isBackground)
         {

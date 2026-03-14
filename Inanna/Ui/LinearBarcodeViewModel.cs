@@ -6,12 +6,14 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using Gaia.Helpers;
 using Inanna.Helpers;
 using Inanna.Models;
+using Inanna.Services;
 
 namespace Inanna.Ui;
 
 public sealed partial class LinearBarcodeViewModel : ViewModelBase
 {
-    public LinearBarcodeViewModel()
+    public LinearBarcodeViewModel(ISafeExecuteWrapper safeExecuteWrapper)
+        : base(safeExecuteWrapper)
     {
         _barcode = new();
         _backgroundColor = Colors.White;

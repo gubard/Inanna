@@ -24,4 +24,11 @@
       OutputItemType="Analyzer"
     />
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Ui\ServiceOfflineStatusView.axaml.cs">
+      <DependentUpon>ServiceOfflineStatusView.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
 </Project>

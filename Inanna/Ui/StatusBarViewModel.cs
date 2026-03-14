@@ -3,15 +3,14 @@ using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Inanna.Models;
+using Inanna.Services;
 
 namespace Inanna.Ui;
 
 public sealed partial class StatusBarViewModel : ViewModelBase
 {
-    public StatusBarViewModel()
-    {
-        _statuses = new();
-    }
+    public StatusBarViewModel(ISafeExecuteWrapper safeExecuteWrapper)
+        : base(safeExecuteWrapper) { }
 
     public IEnumerable<object> Statuses => _statuses;
 
@@ -45,7 +44,7 @@ public sealed partial class StatusBarViewModel : ViewModelBase
     [ObservableProperty]
     private bool _isVisible;
 
-    private readonly AvaloniaList<object> _statuses;
+    private readonly AvaloniaList<object> _statuses = new();
 
     [RelayCommand]
     private void Hide()

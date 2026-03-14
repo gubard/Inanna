@@ -1,6 +1,7 @@
 ﻿using Avalonia.Collections;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Inanna.Models;
+using Inanna.Services;
 
 namespace Inanna.Ui;
 
@@ -8,7 +9,11 @@ public sealed partial class ChangeOrderViewModel : ViewModelBase
 {
     public IEnumerable<IOrderedItem> Items => _items;
 
-    public ChangeOrderViewModel(IEnumerable<IOrderedItem> items)
+    public ChangeOrderViewModel(
+        IEnumerable<IOrderedItem> items,
+        ISafeExecuteWrapper safeExecuteWrapper
+    )
+        : base(safeExecuteWrapper)
     {
         _isAfter = true;
         _items = new(items);

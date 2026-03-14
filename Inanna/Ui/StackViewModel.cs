@@ -1,10 +1,14 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using Inanna.Models;
+using Inanna.Services;
 
 namespace Inanna.Ui;
 
 public sealed partial class StackViewModel : ViewModelBase
 {
+    public StackViewModel(ISafeExecuteWrapper safeExecuteWrapper)
+        : base(safeExecuteWrapper) { }
+
     public bool IsEmpty => _views.Count <= 1;
 
     public void PushViewUi(object view)
