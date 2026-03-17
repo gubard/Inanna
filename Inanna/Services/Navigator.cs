@@ -18,6 +18,7 @@ public interface INavigator
     ConfiguredValueTaskAwaitable NavigateBackAsync(CancellationToken ct);
     ConfiguredValueTaskAwaitable NavigateToAsync(object view, CancellationToken ct);
     ConfiguredValueTaskAwaitable RefreshCurrentViewAsync(CancellationToken ct);
+    void RefreshCurrentViewUi();
 }
 
 public delegate void ViewChangedEventHandler(object? sender, object? view);
@@ -65,6 +66,14 @@ public sealed class Navigator : ObservableObject, INavigator
         }
 
         return TaskHelper.ConfiguredCompletedTask;
+    }
+
+    public void RefreshCurrentViewUi()
+    {
+        if (CurrentView is IRefreshUi refreshUi)
+        {
+            refreshUi.RefreshUi();
+        }
     }
 
     private readonly StackViewModel _stackViewModel;
