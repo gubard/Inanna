@@ -41,7 +41,7 @@ public sealed class LangResource : Styles, IResourceNode
 
         if (change.Property == LangProperty)
         {
-            Owner?.NotifyHostedResourcesChanged(ResourcesChangedEventArgs.Empty);
+            Owner?.NotifyHostedResourcesChanged(ResourcesChangedEventArgs.Create());
         }
     }
 }

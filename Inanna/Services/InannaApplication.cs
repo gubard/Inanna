@@ -2,7 +2,6 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
-using Avalonia.Data.Core.Plugins;
 using Avalonia.Input;
 using Avalonia.Layout;
 using Inanna.Helpers;
@@ -27,20 +26,6 @@ public abstract class InannaApplication : Application
         InputElement.PointerPressedEvent.AddClassHandler<TreeViewItem>(
             (item, _) => item.IsExpanded = true
         );
-    }
-
-    protected void DisableAvaloniaDataAnnotationValidation()
-    {
-        // Get an array of plugins to remove
-        var dataValidationPluginsToRemove = BindingPlugins
-            .DataValidators.OfType<DataAnnotationsValidationPlugin>()
-            .ToArray();
-
-        // remove each entry found
-        foreach (var plugin in dataValidationPluginsToRemove)
-        {
-            BindingPlugins.DataValidators.Remove(plugin);
-        }
     }
 
     public static void UpdateMaterialDesignSizeType(TopLevel topLevel)

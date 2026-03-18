@@ -1,7 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
-using Avalonia.VisualTree;
 using Inanna.Models;
 
 namespace Inanna.Helpers;
@@ -33,10 +32,14 @@ public static class TopLevelAssist
         DragDropEffects allowedEffects
     )
     {
-        if (
-            triggerEvent.Source is not Visual source
-            || source.GetVisualRoot() is not TopLevel topLevel
-        )
+        if (triggerEvent.Source is not Visual source)
+        {
+            return await DragDrop.DoDragDropAsync(triggerEvent, dataTransfer, allowedEffects);
+        }
+
+        var topLevel = TopLevel.GetTopLevel(source);
+
+        if (topLevel is null)
         {
             return await DragDrop.DoDragDropAsync(triggerEvent, dataTransfer, allowedEffects);
         }
