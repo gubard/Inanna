@@ -127,6 +127,8 @@ public abstract partial class UiService<
     private readonly INavigator _navigator;
     private readonly IStatusBarService _statusBarService;
 
+    private CancellationTokenSource? _cts;
+
     private async ValueTask<IValidationErrors> HealthCheckCore(CancellationToken ct)
     {
         var errors = await _httpService.HealthCheckAsync(ct);
@@ -158,6 +160,13 @@ public abstract partial class UiService<
         CancellationToken ct
     )
     {
+        if (_cts is not null)
+        {
+            await _cts.CancelAsync();
+        }
+
+        _cts = new CancellationTokenSource();
+
         switch (Mode)
         {
             case ServiceMode.Online:
@@ -178,14 +187,21 @@ public abstract partial class UiService<
                     response.ValidationErrors.AddRange(r.ValidationErrors);
                 }
 
-                await _navigator.RefreshCurrentViewAsync(ct);
+                if (!_cts.IsCancellationRequested)
+                {
+                    await _navigator.RefreshCurrentViewAsync(_cts.Token);
+                }
 
                 return response;
             }
             case ServiceMode.Offline:
             {
                 var response = await _dbService.PostAsync(idempotentId, request, ct);
-                await _navigator.RefreshCurrentViewAsync(ct);
+
+                if (!_cts.IsCancellationRequested)
+                {
+                    await _navigator.RefreshCurrentViewAsync(_cts.Token);
+                }
 
                 return response;
             }
