@@ -165,7 +165,16 @@ public abstract partial class UiService<
             await _cts.CancelAsync();
         }
 
-        _cts = new CancellationTokenSource();
+        var cts = new CancellationTokenSource();
+        _cts = cts;
+
+        await using var fin = new FinallyAsync(async () =>
+        {
+            if (!cts.IsCancellationRequested)
+            {
+                await _navigator.RefreshCurrentViewAsync(cts.Token);
+            }
+        });
 
         switch (Mode)
         {
@@ -187,21 +196,11 @@ public abstract partial class UiService<
                     response.ValidationErrors.AddRange(r.ValidationErrors);
                 }
 
-                if (!_cts.IsCancellationRequested)
-                {
-                    await _navigator.RefreshCurrentViewAsync(_cts.Token);
-                }
-
                 return response;
             }
             case ServiceMode.Offline:
             {
                 var response = await _dbService.PostAsync(idempotentId, request, ct);
-
-                if (!_cts.IsCancellationRequested)
-                {
-                    await _navigator.RefreshCurrentViewAsync(_cts.Token);
-                }
 
                 return response;
             }
