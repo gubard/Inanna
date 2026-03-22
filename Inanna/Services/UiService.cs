@@ -20,10 +20,7 @@ public interface IUiService<in TGetRequest, in TPostRequest, TGetResponse, TPost
         IServiceState,
         IUiService
     where TGetResponse : IResponse, new()
-    where TPostResponse : IPostResponse, new()
-{
-    ConfiguredValueTaskAwaitable<TPostResponse> UpdateEventsAsync(CancellationToken ct);
-}
+    where TPostResponse : IPostResponse, new();
 
 public abstract partial class UiService<
     TGetRequest,
@@ -43,11 +40,6 @@ public abstract partial class UiService<
     where TCache : IUiCache<TPostRequest, TGetResponse, IMemoryCache<TPostRequest, TGetResponse>>
 {
     public string ServiceName { get; }
-
-    public ConfiguredValueTaskAwaitable<TPostResponse> UpdateEventsAsync(CancellationToken ct)
-    {
-        return PostCore(Guid.NewGuid(), new(), ct).ConfigureAwait(false);
-    }
 
     public virtual ConfiguredValueTaskAwaitable<TGetResponse> GetAsync(
         TGetRequest request,
