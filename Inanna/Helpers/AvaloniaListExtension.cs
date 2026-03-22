@@ -7,6 +7,26 @@ public static class AvaloniaListExtension
     extension<TAvaloniaList, T>(TAvaloniaList list)
         where TAvaloniaList : IAvaloniaList<T>
     {
+        public void SetItems(T[] items)
+        {
+            if (items.Length == 0)
+            {
+                list.Clear();
+
+                return;
+            }
+
+            if (list.Count == 0)
+            {
+                list.AddRange(items);
+
+                return;
+            }
+
+            list.RemoveAll(list.Where(x => !items.Contains(x)));
+            list.AddRange(items.Where(x => !list.Contains(x)));
+        }
+
         public void UpdateOrder(T[] items)
         {
             if (items.Length == 0)
