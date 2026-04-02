@@ -68,6 +68,9 @@ public abstract partial class UiService<
         return RefreshServiceCore(ct).ConfigureAwait(false);
     }
 
+    protected readonly TDbService DbService;
+    protected readonly TCache UiCache;
+
     protected UiService(
         THttpService httpService,
         TDbService dbService,
@@ -79,15 +82,15 @@ public abstract partial class UiService<
     )
     {
         _httpService = httpService;
-        _dbService = dbService;
-        _uiCache = uiCache;
+        DbService = dbService;
+        UiCache = uiCache;
         _navigator = navigator;
         ServiceName = serviceName;
         _statusBarService = statusBarService;
         _viewModel = factory.CreateServiceOfflineStatus(this);
     }
 
-    protected abstract TGetRequest CreateGetRequestRefresh();
+    protected abstract ValueTask<IValidationErrors> RefreshServiceCore(CancellationToken ct);
 
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
@@ -114,8 +117,6 @@ public abstract partial class UiService<
 
     private readonly ServiceOfflineStatusViewModel _viewModel;
     private readonly THttpService _httpService;
-    private readonly TDbService _dbService;
-    private readonly TCache _uiCache;
     private readonly INavigator _navigator;
     private readonly IStatusBarService _statusBarService;
 
@@ -135,15 +136,6 @@ public abstract partial class UiService<
         Mode = ServiceMode.Offline;
 
         return errors;
-    }
-
-    private async ValueTask<IValidationErrors> RefreshServiceCore(CancellationToken ct)
-    {
-        var request = CreateGetRequestRefresh();
-        var response = await _dbService.GetAsync(request, ct);
-        await _uiCache.UpdateAsync(response, ct);
-
-        return response;
     }
 
     private async ValueTask<TPostResponse> PostCore(
@@ -172,19 +164,19 @@ public abstract partial class UiService<
         {
             case ServiceMode.Online:
             {
-                await _uiCache.UpdateAsync(request, ct);
-                var events = await _dbService.GetEventsAsync(ct);
+                await UiCache.UpdateAsync(request, ct);
+                var events = await DbService.GetEventsAsync(ct);
                 request.Events = events;
                 var response = await _httpService.PostAsync(idempotentId, request, ct);
 
                 if (response.IsEventSaved)
                 {
-                    await _dbService.ClearEventsAsync(ct);
+                    await DbService.ClearEventsAsync(ct);
                 }
 
                 if (response.ValidationErrors.OfType<ExceptionsValidationError>().Any())
                 {
-                    var r = await _dbService.PostAsync(idempotentId, request, ct);
+                    var r = await DbService.PostAsync(idempotentId, request, ct);
                     response.ValidationErrors.AddRange(r.ValidationErrors);
                 }
 
@@ -192,7 +184,7 @@ public abstract partial class UiService<
             }
             case ServiceMode.Offline:
             {
-                var response = await _dbService.PostAsync(idempotentId, request, ct);
+                var response = await DbService.PostAsync(idempotentId, request, ct);
 
                 return response;
             }
@@ -209,14 +201,14 @@ public abstract partial class UiService<
             case ServiceMode.Online:
             {
                 var response = await _httpService.GetAsync(request, ct);
-                await _uiCache.UpdateAsync(response, ct);
+                await UiCache.UpdateAsync(response, ct);
 
                 return response;
             }
             case ServiceMode.Offline:
             {
-                var response = await _dbService.GetAsync(request, ct);
-                await _uiCache.MemoryCache.UpdateAsync(response, ct);
+                var response = await DbService.GetAsync(request, ct);
+                await UiCache.MemoryCache.UpdateAsync(response, ct);
 
                 return response;
             }
