@@ -27,7 +27,7 @@ public static class TopLevelAssist
     }
 
     public static async Task<DragDropEffects> DoDragDropAsync(
-        PointerEventArgs triggerEvent,
+        PointerPressedEventArgs triggerEvent,
         IDataTransfer dataTransfer,
         DragDropEffects allowedEffects
     )
