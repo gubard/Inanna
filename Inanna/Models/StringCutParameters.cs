@@ -20,7 +20,7 @@ public sealed class StringCutParameters
         return lines
             .Take(MaxLineCount)
             .Select(x => x.Length > MaxLineLength ? x.Substring(0, MaxLineLength) + "..." : x)
-            .Concat(lines.Length > MaxLineCount ? ["..."] : Enumerable.Empty<string>())
+            .Concat(lines.Length > MaxLineCount ? ["..."] : [])
             .JoinString(Environment.NewLine);
     }
 }
