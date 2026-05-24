@@ -22,10 +22,6 @@ public abstract class InannaApplication : Application
         Layoutable.WidthProperty.Changed.AddClassHandler<TopLevel>(
             (topLevel, _) => UpdateMaterialDesignSizeType(topLevel)
         );
-
-        InputElement.PointerPressedEvent.AddClassHandler<TreeViewItem>(
-            (item, _) => item.IsExpanded = true
-        );
     }
 
     public static void UpdateMaterialDesignSizeType(TopLevel topLevel)
