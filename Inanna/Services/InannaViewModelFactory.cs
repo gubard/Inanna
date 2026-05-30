@@ -18,6 +18,7 @@ public interface IInannaViewModelFactory
     ServiceOfflineStatusViewModel CreateServiceOfflineStatus(IServiceState state);
     StackViewModel CreateStack();
     LogsViewModel CreateLogs();
+    StatusBarViewModel CreateStatusBar();
 }
 
 public sealed class InannaViewModelFactory : IInannaViewModelFactory
@@ -25,6 +26,11 @@ public sealed class InannaViewModelFactory : IInannaViewModelFactory
     public InannaViewModelFactory(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
+    }
+
+    public StatusBarViewModel CreateStatusBar()
+    {
+        return new(_serviceProvider.GetService<ISafeExecuteWrapper>());
     }
 
     public ServiceOfflineStatusViewModel CreateServiceOfflineStatus(IServiceState state)
