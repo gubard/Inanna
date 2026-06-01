@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Gaia.Helpers;
 using Inanna.Models;
 
 namespace Inanna.Services;
@@ -9,6 +10,7 @@ public interface IProgressService
 {
     uint NeedValue { get; }
     uint CurrentValue { get; }
+    string Status { get; }
 
     void AddProgress(ProgressItem item);
 }
@@ -20,6 +22,7 @@ public sealed partial class ProgressService : ObservableObject, IProgressService
         _items.Add(item);
         item.PropertyChanged += OnCurrentValueChanged;
         UpdateValues();
+        Status = _items.Select(x => x.Status).Where(x => !x.IsNullOrWhiteSpace()).JoinString(";");
     }
 
     [ObservableProperty]
@@ -28,14 +31,26 @@ public sealed partial class ProgressService : ObservableObject, IProgressService
     [ObservableProperty]
     private uint _currentValue;
 
+    [ObservableProperty]
+    private string _status = string.Empty;
+
     private readonly List<ProgressItem> _items = new();
     private bool _isUpdating;
 
     private void OnCurrentValueChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(ProgressItem.CurrentValue))
+        switch (e.PropertyName)
         {
-            UpdateValues();
+            case nameof(ProgressItem.CurrentValue):
+                UpdateValues();
+                break;
+
+            case nameof(ProgressItem.Status):
+                Status = _items
+                    .Select(x => x.Status)
+                    .Where(x => !x.IsNullOrWhiteSpace())
+                    .JoinString(";");
+                break;
         }
     }
 

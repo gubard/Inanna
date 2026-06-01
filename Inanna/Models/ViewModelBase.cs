@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Gaia.Helpers;
 using Gaia.Models;
@@ -50,6 +51,16 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
     protected ViewModelBase(ISafeExecuteWrapper safeExecuteWrapper)
     {
         SafeExecuteWrapper = safeExecuteWrapper;
+    }
+
+    protected void Post(Action action)
+    {
+        Dispatcher.UIThread.Post(action);
+    }
+
+    protected void PostBackground(Action action)
+    {
+        Dispatcher.UIThread.Post(action, DispatcherPriority.Background);
     }
 
     protected void WrapCommand(Action action)

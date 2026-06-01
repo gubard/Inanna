@@ -12,5 +12,8 @@ public sealed partial class ProgressItem : ObservableObject
     public uint NeedValue { get; }
 
     [ObservableProperty]
+    private string _status = string.Empty;
+
+    [ObservableProperty]
     private uint _currentValue;
 }
