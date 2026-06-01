@@ -64,9 +64,7 @@ public sealed class SafeExecuteWrapper : ISafeExecuteWrapper
 
             if (result.ValidationErrors is not { Count: 0 })
             {
-                _serviceProvider
-                    .GetService<ILogger<SafeExecuteWrapper>>()
-                    .CommandErrors(result.ValidationErrors);
+                _serviceProvider.GetService<ILogger>().CommandErrors(result.ValidationErrors);
 
                 _serviceProvider
                     .GetService<IDialogService>()
@@ -80,11 +78,11 @@ public sealed class SafeExecuteWrapper : ISafeExecuteWrapper
         }
         catch (OperationCanceledException e)
         {
-            _serviceProvider.GetService<ILogger<SafeExecuteWrapper>>().OperationCanceled(e);
+            _serviceProvider.GetService<ILogger>().OperationCanceled(e);
         }
         catch (Exception e)
         {
-            _serviceProvider.GetService<ILogger<SafeExecuteWrapper>>().CommandException(e);
+            _serviceProvider.GetService<ILogger>().CommandException(e);
 
             _serviceProvider
                 .GetService<IDialogService>()
@@ -110,11 +108,11 @@ public sealed class SafeExecuteWrapper : ISafeExecuteWrapper
         }
         catch (OperationCanceledException e)
         {
-            _serviceProvider.GetService<ILogger<SafeExecuteWrapper>>().OperationCanceled(e);
+            _serviceProvider.GetService<ILogger>().OperationCanceled(e);
         }
         catch (Exception e)
         {
-            _serviceProvider.GetService<ILogger<SafeExecuteWrapper>>().CommandException(e);
+            _serviceProvider.GetService<ILogger>().CommandException(e);
 
             _serviceProvider
                 .GetService<IDialogService>()
@@ -145,11 +143,11 @@ public sealed class SafeExecuteWrapper : ISafeExecuteWrapper
         }
         catch (OperationCanceledException e)
         {
-            _serviceProvider.GetService<ILogger<SafeExecuteWrapper>>().OperationCanceled(e);
+            _serviceProvider.GetService<ILogger>().OperationCanceled(e);
         }
         catch (Exception e)
         {
-            _serviceProvider.GetService<ILogger<SafeExecuteWrapper>>().CommandException(e);
+            _serviceProvider.GetService<ILogger>().CommandException(e);
             await _serviceProvider
                 .GetService<IDialogService>()
                 .ShowMessageBoxAsync(
@@ -178,9 +176,7 @@ public sealed class SafeExecuteWrapper : ISafeExecuteWrapper
 
             if (result.ValidationErrors is not { Count: 0 })
             {
-                _serviceProvider
-                    .GetService<ILogger<SafeExecuteWrapper>>()
-                    .CommandErrors(result.ValidationErrors);
+                _serviceProvider.GetService<ILogger>().CommandErrors(result.ValidationErrors);
 
                 await _serviceProvider
                     .GetService<IDialogService>()
@@ -194,11 +190,11 @@ public sealed class SafeExecuteWrapper : ISafeExecuteWrapper
         }
         catch (OperationCanceledException e)
         {
-            _serviceProvider.GetService<ILogger<SafeExecuteWrapper>>().OperationCanceled(e);
+            _serviceProvider.GetService<ILogger>().OperationCanceled(e);
         }
         catch (Exception e)
         {
-            _serviceProvider.GetService<ILogger<SafeExecuteWrapper>>().CommandException(e);
+            _serviceProvider.GetService<ILogger>().CommandException(e);
             await _serviceProvider
                 .GetService<IDialogService>()
                 .ShowMessageBoxAsync(

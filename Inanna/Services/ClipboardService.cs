@@ -13,8 +13,6 @@ public interface IClipboardService
 
 public sealed class AvaloniaClipboardService : IClipboardService
 {
-    private readonly Application _application;
-
     public AvaloniaClipboardService(Application application)
     {
         _application = application;
@@ -24,6 +22,8 @@ public sealed class AvaloniaClipboardService : IClipboardService
     {
         return SetTextCore(text, ct).ConfigureAwait(false);
     }
+
+    private readonly Application _application;
 
     private async ValueTask SetTextCore(string? text, CancellationToken ct)
     {
