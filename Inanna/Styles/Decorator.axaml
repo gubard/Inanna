@@ -7,4 +7,8 @@
     <Style Selector=":is(Decorator).p-4">
         <Setter Property="Padding" Value="4" />
     </Style>
+
+    <Style Selector=":is(Decorator).p-0">
+        <Setter Property="Padding" Value="0" />
+    </Style>
 </Styles>
