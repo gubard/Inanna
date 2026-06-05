@@ -1,0 +1,23 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="clr-namespace:Inanna.Ui"
+             xmlns:ip="https://github.com/MahApps/IconPacks.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Inanna.Ui.NavigationBarView"
+             x:DataType="ui:NavigationBarViewModel"
+             IsVisible="{Binding IsHeaderVisible}">
+    <Grid ColumnDefinitions="Auto,*">
+        <StackPanel Grid.Column="0" Classes="horizontal">
+            <Button Content="="
+                    Command="{Binding Commands.ShowPaneCommand}" />
+            <Button Content="&lt;"
+                    Command="{Binding BackCommand}"
+                    IsEnabled="{Binding IsCanBack}"
+                    IsVisible="{OnPlatform Android=false, iOS=false, Default=true}" />
+        </StackPanel>
+
+        <ContentControl Grid.Column="1" Content="{Binding Header}" />
+    </Grid>
+</UserControl>

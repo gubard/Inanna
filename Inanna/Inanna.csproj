@@ -30,5 +30,9 @@
       <DependentUpon>ServiceOfflineStatusView.axaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Ui\NavigationBarView.axaml.cs">
+      <DependentUpon>NavigationBarView.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 </Project>

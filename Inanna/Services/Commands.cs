@@ -131,6 +131,20 @@ public sealed class InannaCommands : Commands
     public InannaCommands(IServiceProvider serviceProvider)
         : base(serviceProvider)
     {
+        _showPaneCommand = CreateLazyCommand(_ =>
+        {
+            ServiceProvider.GetService<IPaneService>().ShowPane();
+
+            return TaskHelper.ConfiguredCompletedTask;
+        });
+
+        _hidePaneCommand = CreateLazyCommand(_ =>
+        {
+            ServiceProvider.GetService<IPaneService>().HidePane();
+
+            return TaskHelper.ConfiguredCompletedTask;
+        });
+
         _openLinkCommand = CreateLazyCommand<Uri>(
             ServiceProvider.GetService<IOpenerLink>().OpenLinkAsync
         );
@@ -166,6 +180,8 @@ public sealed class InannaCommands : Commands
         );
     }
 
+    public ICommand ShowPaneCommand => _showPaneCommand.Value;
+    public ICommand HidePaneCommand => _hidePaneCommand.Value;
     public ICommand NavigateToCommand => _navigateToCommand.Value;
     public ICommand OpenLinkCommand => _openLinkCommand.Value;
     public ICommand SwitchServiceModeCommand => _switchServiceModeCommand.Value;
@@ -173,4 +189,6 @@ public sealed class InannaCommands : Commands
     private readonly Lazy<ICommand> _navigateToCommand;
     private readonly Lazy<ICommand> _openLinkCommand;
     private readonly Lazy<ICommand> _switchServiceModeCommand;
+    private readonly Lazy<ICommand> _showPaneCommand;
+    private readonly Lazy<ICommand> _hidePaneCommand;
 }
