@@ -89,12 +89,13 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
 
     protected ConfiguredValueTaskAwaitable WrapCommandAsync(
         Func<ValueTask> func,
-        CancellationToken ct
+        CancellationToken ct,
+        bool isIgnoreErrors = false
     )
     {
         StartExecute();
 
-        return HasErrors
+        return HasErrors && !isIgnoreErrors
             ? TaskHelper.ConfiguredCompletedTask
             : SafeExecuteWrapper.ExecuteAsync(() => func.Invoke().ConfigureAwait(false), ct);
     }
