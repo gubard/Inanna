@@ -13,9 +13,9 @@ public sealed partial class LinearBarcodeGeneratorViewModel : ViewModelBase
     public LinearBarcodeGeneratorViewModel(
         ILinearBarcodeSerializerFactory factory,
         IInannaViewModelFactory viewModelFactory,
-        ISafeExecuteWrapper safeExecuteWrapper
+        ViewModelServices services
     )
-        : base(safeExecuteWrapper)
+        : base(services)
     {
         _text = string.Empty;
         _factory = factory;

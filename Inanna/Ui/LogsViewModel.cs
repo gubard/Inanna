@@ -6,8 +6,8 @@ namespace Inanna.Ui;
 
 public sealed class LogsViewModel : ViewModelBase
 {
-    public LogsViewModel(ISafeExecuteWrapper safeExecuteWrapper)
-        : base(safeExecuteWrapper) { }
+    public LogsViewModel(ViewModelServices services)
+        : base(services) { }
 
     public AvaloniaList<LogNotify> Logs { get; } = new();
 }

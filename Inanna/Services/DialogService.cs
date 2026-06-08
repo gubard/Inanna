@@ -11,8 +11,19 @@ public interface IDialogService
     DialogButton CancelButton { get; }
     DialogButton OkButton { get; }
 
-    ConfiguredValueTaskAwaitable ShowMessageBoxAsync(DialogViewModel dialog, CancellationToken ct);
     ConfiguredValueTaskAwaitable CloseMessageBoxAsync(CancellationToken ct);
+    DialogButton CreateButton(
+        object content,
+        Func<CancellationToken, ValueTask> func,
+        DialogButtonType type
+    );
+
+    ConfiguredValueTaskAwaitable ShowMessageBoxAsync(
+        object header,
+        object content,
+        CancellationToken ct,
+        params DialogButton[] buttons
+    );
 }
 
 public sealed class DialogService : IDialogService
@@ -21,10 +32,13 @@ public sealed class DialogService : IDialogService
         string dialogId,
         IAppResourceService appResourceService,
         ICommandFactory commandFactory,
-        IInannaViewModelFactory factory
+        IInannaViewModelFactory factory,
+        ViewModelServices services
     )
     {
         _dialogId = dialogId;
+        _commandFactory = commandFactory;
+        _services = services;
         _stackViewModel = factory.CreateStack();
         _taskStack = new();
 
@@ -46,12 +60,23 @@ public sealed class DialogService : IDialogService
     public DialogButton CancelButton { get; }
     public DialogButton OkButton { get; }
 
-    public ConfiguredValueTaskAwaitable ShowMessageBoxAsync(
-        DialogViewModel dialog,
-        CancellationToken ct
+    public DialogButton CreateButton(
+        object content,
+        Func<CancellationToken, ValueTask> func,
+        DialogButtonType type
     )
     {
-        return ShowMessageBoxCore(dialog, ct).ConfigureAwait(false);
+        return new(content, _commandFactory.CreateCommand(func), null, type);
+    }
+
+    public ConfiguredValueTaskAwaitable ShowMessageBoxAsync(
+        object header,
+        object content,
+        CancellationToken ct,
+        params DialogButton[] buttons
+    )
+    {
+        return ShowMessageBoxCore(header, content, ct, buttons).ConfigureAwait(false);
     }
 
     public ConfiguredValueTaskAwaitable CloseMessageBoxAsync(CancellationToken ct)
@@ -59,11 +84,18 @@ public sealed class DialogService : IDialogService
         return CloseMessageBoxCore(ct).ConfigureAwait(false);
     }
 
+    private readonly ICommandFactory _commandFactory;
+    private readonly ViewModelServices _services;
     private readonly Stack<TaskCompletionSource> _taskStack;
     private readonly StackViewModel _stackViewModel;
     private readonly string _dialogId;
 
-    private async ValueTask ShowMessageBoxCore(DialogViewModel dialog, CancellationToken ct)
+    private async ValueTask ShowMessageBoxCore(
+        object header,
+        object content,
+        CancellationToken ct,
+        params DialogButton[] buttons
+    )
     {
         if (!Dispatcher.UIThread.Invoke(() => DialogControl.IsShowDialog(_dialogId)))
         {
@@ -75,7 +107,10 @@ public sealed class DialogService : IDialogService
             await saveUi.SaveAsync(ct);
         }
 
-        Dispatcher.UIThread.Invoke(() => _stackViewModel.PushViewUi(dialog));
+        Dispatcher.UIThread.Invoke(() =>
+            _stackViewModel.PushViewUi(new DialogViewModel(header, content, _services, buttons))
+        );
+
         var taskCompletionSource = new TaskCompletionSource();
         _taskStack.Push(taskCompletionSource);
         ct.ThrowIfCancellationRequested();

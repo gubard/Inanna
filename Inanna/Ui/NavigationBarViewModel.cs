@@ -10,10 +10,10 @@ public sealed partial class NavigationBarViewModel : ViewModelBase
     public NavigationBarViewModel(
         INavigator navigator,
         IAppResourceService appResourceService,
-        ISafeExecuteWrapper safeExecuteWrapper,
+        ViewModelServices services,
         InannaCommands сommands
     )
-        : base(safeExecuteWrapper)
+        : base(services)
     {
         _navigator = navigator;
         _appResourceService = appResourceService;

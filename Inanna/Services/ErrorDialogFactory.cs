@@ -6,41 +6,25 @@ using Inanna.Ui;
 namespace Inanna.Services;
 
 public interface IErrorDialogFactory
-    : IFactory<Exception[], DialogViewModel>,
-        IFactory<ValidationError[], DialogViewModel>;
+    : IFactory<Exception[], object>,
+        IFactory<ValidationError[], object>;
 
 public sealed class ErrorDialogFactory : IErrorDialogFactory
 {
-    public ErrorDialogFactory(Gaia.Services.IServiceProvider serviceProvider)
+    public ErrorDialogFactory(IInannaViewModelFactory factory)
     {
-        _serviceProvider = serviceProvider;
+        _factory = factory;
     }
 
-    public DialogViewModel Create(Exception[] input)
+    public object Create(Exception[] input)
     {
-        return new(
-            _serviceProvider
-                .GetService<IAppResourceService>()
-                .GetResource<string>("Lang.Error")
-                .DispatchToDialogHeader(),
-            _serviceProvider.GetService<IInannaViewModelFactory>().CreateException(input),
-            _serviceProvider.GetService<ISafeExecuteWrapper>(),
-            _serviceProvider.GetService<IDialogService>().OkButton
-        );
+        return _factory.CreateException(input);
     }
 
-    public DialogViewModel Create(ValidationError[] input)
+    public object Create(ValidationError[] input)
     {
-        return new(
-            _serviceProvider
-                .GetService<IAppResourceService>()
-                .GetResource<string>("Lang.Error")
-                .DispatchToDialogHeader(),
-            _serviceProvider.GetService<IInannaViewModelFactory>().CreateValidationErrors(input),
-            _serviceProvider.GetService<ISafeExecuteWrapper>(),
-            _serviceProvider.GetService<IDialogService>().OkButton
-        );
+        return _factory.CreateValidationErrors(input);
     }
 
-    private readonly Gaia.Services.IServiceProvider _serviceProvider;
+    private readonly IInannaViewModelFactory _factory;
 }

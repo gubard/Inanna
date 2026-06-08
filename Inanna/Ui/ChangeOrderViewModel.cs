@@ -9,11 +9,8 @@ public sealed partial class ChangeOrderViewModel : ViewModelBase
 {
     public IEnumerable<IOrderedItem> Items => _items;
 
-    public ChangeOrderViewModel(
-        IEnumerable<IOrderedItem> items,
-        ISafeExecuteWrapper safeExecuteWrapper
-    )
-        : base(safeExecuteWrapper)
+    public ChangeOrderViewModel(IEnumerable<IOrderedItem> items, ViewModelServices services)
+        : base(services)
     {
         _isAfter = true;
         _items = new(items);

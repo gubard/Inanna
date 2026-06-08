@@ -6,8 +6,8 @@ namespace Inanna.Ui;
 
 public sealed partial class StackViewModel : ViewModelBase
 {
-    public StackViewModel(ISafeExecuteWrapper safeExecuteWrapper)
-        : base(safeExecuteWrapper) { }
+    public StackViewModel(ViewModelServices services)
+        : base(services) { }
 
     public bool IsEmpty => _views.Count <= 1;
 

@@ -64,25 +64,20 @@ public sealed class ItemMutationService : IItemMutationService
         ChangeOrderParameters<T>? result = null;
 
         await _dialogService.ShowMessageBoxAsync(
+            _appResourceService.GetResource<string>("Lang.ChangeOrder").DispatchToDialogHeader(),
+            viewModel,
+            ct,
             new(
-                _appResourceService
-                    .GetResource<string>("Lang.ChangeOrder")
-                    .DispatchToDialogHeader(),
-                viewModel,
-                _safeExecuteWrapper,
-                new(
-                    _appResourceService.GetResource<string>("Lang.Ok"),
-                    _commandFactory.CreateCommand(async c =>
-                    {
-                        result = new(viewModel.SelectedItem.Cast<T>(), viewModel.IsAfter);
-                        await _dialogService.CloseMessageBoxAsync(c);
-                    }),
-                    null,
-                    DialogButtonType.Primary
-                ),
-                _dialogService.CancelButton
+                _appResourceService.GetResource<string>("Lang.Ok"),
+                _commandFactory.CreateCommand(async c =>
+                {
+                    result = new(viewModel.SelectedItem.Cast<T>(), viewModel.IsAfter);
+                    await _dialogService.CloseMessageBoxAsync(c);
+                }),
+                null,
+                DialogButtonType.Primary
             ),
-            ct
+            _dialogService.CancelButton
         );
 
         return result;

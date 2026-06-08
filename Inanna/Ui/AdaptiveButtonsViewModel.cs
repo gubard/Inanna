@@ -8,9 +8,9 @@ public sealed class AdaptiveButtonsViewModel : ViewModelBase
 {
     public AdaptiveButtonsViewModel(
         IAvaloniaReadOnlyList<InannaCommand> commands,
-        ISafeExecuteWrapper safeExecuteWrapper
+        ViewModelServices services
     )
-        : base(safeExecuteWrapper)
+        : base(services)
     {
         Commands = commands;
     }

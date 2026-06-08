@@ -12,8 +12,8 @@ namespace Inanna.Ui;
 
 public sealed partial class LinearBarcodeViewModel : ViewModelBase
 {
-    public LinearBarcodeViewModel(ISafeExecuteWrapper safeExecuteWrapper)
-        : base(safeExecuteWrapper)
+    public LinearBarcodeViewModel(ViewModelServices services)
+        : base(services)
     {
         _barcode = new();
         _backgroundColor = Colors.White;

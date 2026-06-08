@@ -10,10 +10,10 @@ public sealed partial class ExceptionViewModel : ViewModelBase
 {
     public ExceptionViewModel(
         IClipboardService clipboardService,
-        ISafeExecuteWrapper safeExecuteWrapper,
+        ViewModelServices services,
         params Span<Exception> exceptions
     )
-        : base(safeExecuteWrapper)
+        : base(services)
     {
         _clipboardService = clipboardService;
         _exceptions = new(exceptions.ToArray());

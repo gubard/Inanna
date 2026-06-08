@@ -9,8 +9,8 @@ namespace Inanna.Ui;
 
 public sealed partial class StatusBarViewModel : ViewModelBase
 {
-    public StatusBarViewModel(ISafeExecuteWrapper safeExecuteWrapper)
-        : base(safeExecuteWrapper) { }
+    public StatusBarViewModel(ViewModelServices services)
+        : base(services) { }
 
     public IEnumerable<object> Statuses => _statuses;
 

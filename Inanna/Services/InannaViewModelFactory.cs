@@ -30,13 +30,13 @@ public sealed class InannaViewModelFactory : IInannaViewModelFactory
 
     public StatusBarViewModel CreateStatusBar()
     {
-        return new(_serviceProvider.GetService<ISafeExecuteWrapper>());
+        return new(_serviceProvider.GetService<ViewModelServices>());
     }
 
     public ServiceOfflineStatusViewModel CreateServiceOfflineStatus(IServiceState state)
     {
         return new(
-            _serviceProvider.GetService<ISafeExecuteWrapper>(),
+            _serviceProvider.GetService<ViewModelServices>(),
             state,
             _serviceProvider.GetService<InannaCommands>()
         );
@@ -44,12 +44,12 @@ public sealed class InannaViewModelFactory : IInannaViewModelFactory
 
     public StackViewModel CreateStack()
     {
-        return new(_serviceProvider.GetService<ISafeExecuteWrapper>());
+        return new(_serviceProvider.GetService<ViewModelServices>());
     }
 
     public LogsViewModel CreateLogs()
     {
-        return new(_serviceProvider.GetService<ISafeExecuteWrapper>());
+        return new(_serviceProvider.GetService<ViewModelServices>());
     }
 
     public LinearBarcodeGeneratorViewModel CreateLinearBarcodeGenerator()
@@ -57,20 +57,20 @@ public sealed class InannaViewModelFactory : IInannaViewModelFactory
         return new(
             _serviceProvider.GetService<ILinearBarcodeSerializerFactory>(),
             this,
-            _serviceProvider.GetService<ISafeExecuteWrapper>()
+            _serviceProvider.GetService<ViewModelServices>()
         );
     }
 
     public LinearBarcodeViewModel CreateLinearBarcode()
     {
-        return new(_serviceProvider.GetService<ISafeExecuteWrapper>());
+        return new(_serviceProvider.GetService<ViewModelServices>());
     }
 
     public ValidationErrorsViewModel CreateValidationErrors(params Span<ValidationError> errors)
     {
         return new(
             _serviceProvider.GetService<IClipboardService>(),
-            _serviceProvider.GetService<ISafeExecuteWrapper>(),
+            _serviceProvider.GetService<ViewModelServices>(),
             errors
         );
     }
@@ -79,7 +79,7 @@ public sealed class InannaViewModelFactory : IInannaViewModelFactory
     {
         return new(
             _serviceProvider.GetService<IClipboardService>(),
-            _serviceProvider.GetService<ISafeExecuteWrapper>(),
+            _serviceProvider.GetService<ViewModelServices>(),
             exceptions
         );
     }
@@ -88,12 +88,12 @@ public sealed class InannaViewModelFactory : IInannaViewModelFactory
         IAvaloniaReadOnlyList<InannaCommand> commands
     )
     {
-        return new(commands, _serviceProvider.GetService<ISafeExecuteWrapper>());
+        return new(commands, _serviceProvider.GetService<ViewModelServices>());
     }
 
     public ChangeOrderViewModel CreateChangeOrder(IEnumerable<IOrderedItem> items)
     {
-        return new(items, _serviceProvider.GetService<ISafeExecuteWrapper>());
+        return new(items, _serviceProvider.GetService<ViewModelServices>());
     }
 
     private readonly IServiceProvider _serviceProvider;

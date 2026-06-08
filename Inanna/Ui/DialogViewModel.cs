@@ -8,10 +8,10 @@ public sealed class DialogViewModel : ViewModelBase
     public DialogViewModel(
         object header,
         object content,
-        ISafeExecuteWrapper safeExecuteWrapper,
+        ViewModelServices services,
         params Span<DialogButton> buttons
     )
-        : base(safeExecuteWrapper)
+        : base(services)
     {
         Content = content;
         Header = header;

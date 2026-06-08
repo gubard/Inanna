@@ -6,11 +6,11 @@ namespace Inanna.Ui;
 public sealed class ServiceOfflineStatusViewModel : ViewModelBase
 {
     public ServiceOfflineStatusViewModel(
-        ISafeExecuteWrapper safeExecuteWrapper,
+        ViewModelServices services,
         IServiceState state,
         InannaCommands inannaCommands
     )
-        : base(safeExecuteWrapper)
+        : base(services)
     {
         State = state;
         InannaCommands = inannaCommands;

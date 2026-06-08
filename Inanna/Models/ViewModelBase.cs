@@ -1,12 +1,12 @@
 ﻿using System.Collections;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Avalonia.Controls;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Gaia.Helpers;
 using Gaia.Models;
 using Gaia.Services;
-using Inanna.Services;
 
 namespace Inanna.Models;
 
@@ -46,11 +46,11 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
         return errors;
     }
 
-    protected readonly ISafeExecuteWrapper SafeExecuteWrapper;
+    protected ViewModelServices Services;
 
-    protected ViewModelBase(ISafeExecuteWrapper safeExecuteWrapper)
+    protected ViewModelBase(ViewModelServices services)
     {
-        SafeExecuteWrapper = safeExecuteWrapper;
+        Services = services;
     }
 
     protected void Post(Action action)
@@ -72,7 +72,7 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
             return;
         }
 
-        SafeExecuteWrapper.Execute(action);
+        Services.SafeExecuteWrapper.Execute(action);
     }
 
     protected ConfiguredValueTaskAwaitable WrapCommandAsync(
@@ -84,7 +84,7 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
 
         return HasErrors
             ? TaskHelper.ConfiguredCompletedTask
-            : SafeExecuteWrapper.ExecuteAsync(func, ct);
+            : Services.SafeExecuteWrapper.ExecuteAsync(func, ct);
     }
 
     protected ConfiguredValueTaskAwaitable WrapCommandAsync(
@@ -97,7 +97,10 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
 
         return HasErrors && !isIgnoreErrors
             ? TaskHelper.ConfiguredCompletedTask
-            : SafeExecuteWrapper.ExecuteAsync(() => func.Invoke().ConfigureAwait(false), ct);
+            : Services.SafeExecuteWrapper.ExecuteAsync(
+                () => func.Invoke().ConfigureAwait(false),
+                ct
+            );
     }
 
     protected ConfiguredValueTaskAwaitable WrapCommandAsync<TValidationErrors>(
@@ -120,7 +123,10 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
 
         return HasErrors
             ? TaskHelper.ConfiguredCompletedTask
-            : SafeExecuteWrapper.ExecuteAsync(() => func.Invoke().ConfigureAwait(false), ct);
+            : Services.SafeExecuteWrapper.ExecuteAsync(
+                () => func.Invoke().ConfigureAwait(false),
+                ct
+            );
     }
 
     protected void WrapCommand<TValidationErrors>(Func<TValidationErrors> func)
@@ -133,7 +139,7 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
             return;
         }
 
-        SafeExecuteWrapper.Execute(func);
+        Services.SafeExecuteWrapper.Execute(func);
     }
 
     protected void SetValidation(string propertyName, Func<IEnumerable<ValidationError>> validation)
@@ -141,8 +147,110 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
         _errors[propertyName] = validation;
     }
 
+    protected ConfiguredValueTaskAwaitable<T?> ShowSelectItemAsync<T>(
+        T[] items,
+        CancellationToken ct
+    )
+    {
+        return ShowSelectItemCore(items, ct).ConfigureAwait(false);
+    }
+
+    protected ConfiguredValueTaskAwaitable<T[]> ShowSelectItemsAsync<T>(
+        T[] items,
+        CancellationToken ct
+    )
+    {
+        return ShowSelectItemsCore(items, ct).ConfigureAwait(false);
+    }
+
+    protected ConfiguredValueTaskAwaitable ShowErrorAsync(
+        ValidationError[] errors,
+        CancellationToken ct
+    )
+    {
+        return ShowErrorCore(errors, ct).ConfigureAwait(false);
+    }
+
+    protected ConfiguredValueTaskAwaitable ShowErrorAsync(
+        Exception[] exceptions,
+        CancellationToken ct
+    )
+    {
+        return ShowErrorCore(exceptions, ct).ConfigureAwait(false);
+    }
+
     private bool _isAnyExecute;
     private readonly Dictionary<string, Func<IEnumerable<ValidationError>>> _errors = new();
+
+    private async ValueTask ShowErrorCore(Exception[] exceptions, CancellationToken ct)
+    {
+        await Services.DialogService.ShowMessageBoxAsync(
+            Services.AppResourceService.GetResource<string>("Lang.Error"),
+            Services.ErrorDialogFactory.Create(exceptions),
+            ct,
+            Services.DialogService.OkButton
+        );
+    }
+
+    private async ValueTask ShowErrorCore(ValidationError[] errors, CancellationToken ct)
+    {
+        await Services.DialogService.ShowMessageBoxAsync(
+            Services.AppResourceService.GetResource<string>("Lang.Error"),
+            Services.ErrorDialogFactory.Create(errors),
+            ct,
+            Services.DialogService.OkButton
+        );
+    }
+
+    private async ValueTask<T?> ShowSelectItemCore<T>(T[] items, CancellationToken ct)
+    {
+        var list = await Dispatcher.UIThread.InvokeAsync(() =>
+            new ListBox
+            {
+                [ItemsControl.ItemsSourceProperty] = items,
+                [ListBox.SelectionModeProperty] = SelectionMode.Single,
+            }
+        );
+
+        await Services.DialogService.ShowMessageBoxAsync(
+            Services.AppResourceService.GetResource<string>("Lang.Select"),
+            list,
+            ct,
+            Services.DialogService.CreateButton(
+                Services.AppResourceService.GetResource<string>("Lang.Ok"),
+                async c => await Services.DialogService.CloseMessageBoxAsync(c),
+                DialogButtonType.Primary
+            )
+        );
+
+        return await Dispatcher.UIThread.InvokeAsync(() => (T?)list.SelectedItem);
+    }
+
+    private async ValueTask<T[]> ShowSelectItemsCore<T>(T[] items, CancellationToken ct)
+    {
+        var list = await Dispatcher.UIThread.InvokeAsync(() =>
+            new ListBox
+            {
+                [ItemsControl.ItemsSourceProperty] = items,
+                [ListBox.SelectionModeProperty] = SelectionMode.Multiple,
+            }
+        );
+
+        await Services.DialogService.ShowMessageBoxAsync(
+            Services.AppResourceService.GetResource<string>("Lang.Select"),
+            list,
+            ct,
+            Services.DialogService.CreateButton(
+                Services.AppResourceService.GetResource<string>("Lang.Ok"),
+                async c => await Services.DialogService.CloseMessageBoxAsync(c),
+                DialogButtonType.Primary
+            )
+        );
+
+        return await Dispatcher.UIThread.InvokeAsync(() =>
+            list.SelectedItems?.OfType<T>().ToArray() ?? []
+        );
+    }
 
     private async ValueTask WrapCommandCore<TValidationErrors>(
         Func<ConfiguredValueTaskAwaitable<TValidationErrors>> func,
@@ -159,7 +267,7 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
         }
 
         var c = isBackground ? CancellationToken.None : ct;
-        var task = SafeExecuteWrapper.ExecuteAsync(func, c);
+        var task = Services.SafeExecuteWrapper.ExecuteAsync(func, c);
 
         if (isBackground)
         {

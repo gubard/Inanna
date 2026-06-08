@@ -70,9 +70,13 @@ public sealed class SafeExecuteWrapper : ISafeExecuteWrapper
                     .GetService<IDialogService>()
                     .ShowMessageBoxAsync(
                         _serviceProvider
+                            .GetService<IAppResourceService>()
+                            .GetResource<string>("Lang.Error"),
+                        _serviceProvider
                             .GetService<IErrorDialogFactory>()
                             .Create(result.ValidationErrors.ToArray()),
-                        CancellationToken.None
+                        CancellationToken.None,
+                        _serviceProvider.GetService<IDialogService>().OkButton
                     );
             }
         }
@@ -87,8 +91,12 @@ public sealed class SafeExecuteWrapper : ISafeExecuteWrapper
             _serviceProvider
                 .GetService<IDialogService>()
                 .ShowMessageBoxAsync(
+                    _serviceProvider
+                        .GetService<IAppResourceService>()
+                        .GetResource<string>("Lang.Error"),
                     _serviceProvider.GetService<IErrorDialogFactory>().Create([e]),
-                    CancellationToken.None
+                    CancellationToken.None,
+                    _serviceProvider.GetService<IDialogService>().OkButton
                 );
         }
         finally
@@ -117,8 +125,12 @@ public sealed class SafeExecuteWrapper : ISafeExecuteWrapper
             _serviceProvider
                 .GetService<IDialogService>()
                 .ShowMessageBoxAsync(
+                    _serviceProvider
+                        .GetService<IAppResourceService>()
+                        .GetResource<string>("Lang.Error"),
                     _serviceProvider.GetService<IErrorDialogFactory>().Create([e]),
-                    CancellationToken.None
+                    CancellationToken.None,
+                    _serviceProvider.GetService<IDialogService>().OkButton
                 );
         }
         finally
@@ -148,11 +160,16 @@ public sealed class SafeExecuteWrapper : ISafeExecuteWrapper
         catch (Exception e)
         {
             _serviceProvider.GetService<ILogger>().CommandException(e);
+
             await _serviceProvider
                 .GetService<IDialogService>()
                 .ShowMessageBoxAsync(
+                    _serviceProvider
+                        .GetService<IAppResourceService>()
+                        .GetResource<string>("Lang.Error"),
                     _serviceProvider.GetService<IErrorDialogFactory>().Create([e]),
-                    ct
+                    CancellationToken.None,
+                    _serviceProvider.GetService<IDialogService>().OkButton
                 );
         }
         finally
@@ -182,9 +199,13 @@ public sealed class SafeExecuteWrapper : ISafeExecuteWrapper
                     .GetService<IDialogService>()
                     .ShowMessageBoxAsync(
                         _serviceProvider
+                            .GetService<IAppResourceService>()
+                            .GetResource<string>("Lang.Error"),
+                        _serviceProvider
                             .GetService<IErrorDialogFactory>()
                             .Create(result.ValidationErrors.ToArray()),
-                        ct
+                        CancellationToken.None,
+                        _serviceProvider.GetService<IDialogService>().OkButton
                     );
             }
         }
@@ -198,8 +219,12 @@ public sealed class SafeExecuteWrapper : ISafeExecuteWrapper
             await _serviceProvider
                 .GetService<IDialogService>()
                 .ShowMessageBoxAsync(
+                    _serviceProvider
+                        .GetService<IAppResourceService>()
+                        .GetResource<string>("Lang.Error"),
                     _serviceProvider.GetService<IErrorDialogFactory>().Create([e]),
-                    ct
+                    CancellationToken.None,
+                    _serviceProvider.GetService<IDialogService>().OkButton
                 );
         }
         finally

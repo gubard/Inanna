@@ -10,9 +10,9 @@ public abstract class ParametersViewModelBase : ViewModelBase
     protected ParametersViewModelBase(
         ValidationMode validationMode,
         bool isShowEdit,
-        ISafeExecuteWrapper safeExecuteWrapper
+        ViewModelServices services
     )
-        : base(safeExecuteWrapper)
+        : base(services)
     {
         ValidationMode = validationMode;
         IsShowEdit = isShowEdit;
