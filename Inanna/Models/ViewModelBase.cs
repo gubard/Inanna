@@ -2,11 +2,13 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Avalonia.Controls;
+using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Gaia.Helpers;
 using Gaia.Models;
 using Gaia.Services;
+using Inanna.Helpers;
 
 namespace Inanna.Models;
 
@@ -179,8 +181,118 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
         return ShowErrorCore(exceptions, ct).ConfigureAwait(false);
     }
 
+    protected ConfiguredValueTaskAwaitable<IReadOnlyList<IStorageFile>> OpenFilePickerAsync(
+        FilePickerOpenOptions options,
+        CancellationToken ct
+    )
+    {
+        return OpenFilesPickerCore(options, ct).ConfigureAwait(false);
+    }
+
+    protected ConfiguredValueTaskAwaitable<IStorageFile?> OpenFilePickerAsync(CancellationToken ct)
+    {
+        return OpenFilePickerCore(
+                new()
+                {
+                    AllowMultiple = false,
+                    Title = Services.AppResourceService.GetResource<string>("Lang.SelectFile"),
+                },
+                ct
+            )
+            .ConfigureAwait(false);
+    }
+
+    protected ConfiguredValueTaskAwaitable<IStorageFolder?> OpenFolderPickerAsync(
+        CancellationToken ct
+    )
+    {
+        return OpenFolderPickerCore(
+                new()
+                {
+                    AllowMultiple = false,
+                    Title = Services.AppResourceService.GetResource<string>("Lang.SelectFolder"),
+                },
+                ct
+            )
+            .ConfigureAwait(false);
+    }
+
+    protected ConfiguredValueTaskAwaitable<IReadOnlyList<IStorageFile>> OpenFilesPickerAsync(
+        CancellationToken ct
+    )
+    {
+        return OpenFilesPickerCore(
+                new()
+                {
+                    AllowMultiple = true,
+                    Title = Services.AppResourceService.GetResource<string>("Lang.SelectFiles"),
+                },
+                ct
+            )
+            .ConfigureAwait(false);
+    }
+
     private bool _isAnyExecute;
     private readonly Dictionary<string, Func<IEnumerable<ValidationError>>> _errors = new();
+
+    private async ValueTask<IStorageFolder?> OpenFolderPickerCore(
+        FolderPickerOpenOptions options,
+        CancellationToken ct
+    )
+    {
+        var topLevel = Services.App.GetTopLevel();
+
+        if (topLevel is null)
+        {
+            return null;
+        }
+
+        var folders = await topLevel.StorageProvider.OpenFolderPickerAsync(options);
+
+        if (folders.Count == 0)
+        {
+            return null;
+        }
+
+        return folders[0];
+    }
+
+    private async ValueTask<IStorageFile?> OpenFilePickerCore(
+        FilePickerOpenOptions options,
+        CancellationToken ct
+    )
+    {
+        var topLevel = Services.App.GetTopLevel();
+
+        if (topLevel is null)
+        {
+            return null;
+        }
+
+        var files = await topLevel.StorageProvider.OpenFilePickerAsync(options);
+
+        if (files.Count == 0)
+        {
+            return null;
+        }
+
+        return files[0];
+    }
+
+    private async ValueTask<IReadOnlyList<IStorageFile>> OpenFilesPickerCore(
+        FilePickerOpenOptions options,
+        CancellationToken ct
+    )
+    {
+        var topLevel = Services.App.GetTopLevel();
+
+        if (topLevel is null)
+        {
+            return [];
+        }
+
+        return await topLevel.StorageProvider.OpenFilePickerAsync(options);
+    }
 
     private async ValueTask ShowErrorCore(Exception[] exceptions, CancellationToken ct)
     {

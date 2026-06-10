@@ -1,3 +1,4 @@
+using Avalonia;
 using Inanna.Services;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -9,6 +10,7 @@ public sealed class ViewModelServices
     public IDialogService DialogService => _dialogService.Value;
     public IAppResourceService AppResourceService => _appResourceService.Value;
     public IErrorDialogFactory ErrorDialogFactory => _errorDialogFactory.Value;
+    public Application App => _app.Value;
 
     public ViewModelServices(IServiceProvider serviceProvider)
     {
@@ -16,10 +18,12 @@ public sealed class ViewModelServices
         _dialogService = new(serviceProvider.GetRequiredService<IDialogService>);
         _appResourceService = new(serviceProvider.GetRequiredService<IAppResourceService>);
         _errorDialogFactory = new(serviceProvider.GetRequiredService<IErrorDialogFactory>);
+        _app = new(serviceProvider.GetRequiredService<Application>);
     }
 
     private readonly Lazy<ISafeExecuteWrapper> _safeExecuteWrapper;
     private readonly Lazy<IDialogService> _dialogService;
     private readonly Lazy<IAppResourceService> _appResourceService;
     private readonly Lazy<IErrorDialogFactory> _errorDialogFactory;
+    private readonly Lazy<Application> _app;
 }
