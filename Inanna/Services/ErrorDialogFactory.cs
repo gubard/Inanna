@@ -1,7 +1,5 @@
 ﻿using Gaia.Models;
 using Gaia.Services;
-using Inanna.Helpers;
-using Inanna.Ui;
 
 namespace Inanna.Services;
 

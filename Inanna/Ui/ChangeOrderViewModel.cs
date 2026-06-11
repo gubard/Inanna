@@ -1,7 +1,6 @@
 ﻿using Avalonia.Collections;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Inanna.Models;
-using Inanna.Services;
 
 namespace Inanna.Ui;
 

@@ -1,5 +1,4 @@
 using Inanna.Models;
-using Inanna.Services;
 
 namespace Inanna.Ui;
 

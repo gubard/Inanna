@@ -6,7 +6,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using Gaia.Helpers;
 using Inanna.Helpers;
 using Inanna.Models;
-using Inanna.Services;
 
 namespace Inanna.Ui;
 
