@@ -217,6 +217,15 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
             .ConfigureAwait(false);
     }
 
+    protected ConfiguredValueTaskAwaitable<IStorageFile?> SaveFilePickerAsync(CancellationToken ct)
+    {
+        return SaveFilePickerCore(
+                new() { Title = Services.AppResourceService.GetResource<string>("Lang.SaveFile") },
+                ct
+            )
+            .ConfigureAwait(false);
+    }
+
     protected ConfiguredValueTaskAwaitable<IReadOnlyList<IStorageFile>> OpenFilesPickerAsync(
         CancellationToken ct
     )
@@ -234,6 +243,21 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
 
     private bool _isAnyExecute;
     private readonly Dictionary<string, Func<IEnumerable<ValidationError>>> _errors = new();
+
+    private async ValueTask<IStorageFile?> SaveFilePickerCore(
+        FilePickerSaveOptions options,
+        CancellationToken ct
+    )
+    {
+        var topLevel = Services.App.GetTopLevel();
+
+        if (topLevel is null)
+        {
+            return null;
+        }
+
+        return await topLevel.StorageProvider.SaveFilePickerAsync(options);
+    }
 
     private async ValueTask<IStorageFolder?> OpenFolderPickerCore(
         FolderPickerOpenOptions options,
