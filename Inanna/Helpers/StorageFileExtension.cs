@@ -12,4 +12,9 @@ public static class StorageFileExtension
 
         return memoryStream.ToArray();
     }
+
+    public static FileInfo ToFile(this IStorageFile file)
+    {
+        return new FileInfo(file.Path.LocalPath);
+    }
 }
