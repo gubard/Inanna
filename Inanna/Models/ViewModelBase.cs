@@ -217,10 +217,17 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
             .ConfigureAwait(false);
     }
 
-    protected ConfiguredValueTaskAwaitable<IStorageFile?> SaveFilePickerAsync(CancellationToken ct)
+    protected ConfiguredValueTaskAwaitable<IStorageFile?> SaveFilePickerAsync(
+        string defaultExtension,
+        CancellationToken ct
+    )
     {
         return SaveFilePickerCore(
-                new() { Title = Services.AppResourceService.GetResource<string>("Lang.SaveFile") },
+                new()
+                {
+                    Title = Services.AppResourceService.GetResource<string>("Lang.SaveFile"),
+                    DefaultExtension = defaultExtension,
+                },
                 ct
             )
             .ConfigureAwait(false);
