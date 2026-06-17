@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -352,6 +353,7 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
             {
                 [ItemsControl.ItemsSourceProperty] = items,
                 [ListBox.SelectionModeProperty] = SelectionMode.Single,
+                [SelectingItemsControl.SelectedItemProperty] = items[0],
             }
         );
 
