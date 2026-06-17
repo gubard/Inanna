@@ -22,7 +22,10 @@ public sealed partial class ProgressService : ObservableObject, IProgressService
         _items.Add(item);
         item.PropertyChanged += OnCurrentValueChanged;
         UpdateValues();
-        Status = _items.Select(x => x.Status).Where(x => !x.IsNullOrWhiteSpace()).JoinString(";");
+        Status = _items
+            .Select(x => x.Status)
+            .Where(x => !x.IsNullOrWhiteSpace())
+            .JoinString(Environment.NewLine);
     }
 
     [ObservableProperty]
@@ -49,7 +52,7 @@ public sealed partial class ProgressService : ObservableObject, IProgressService
                 Status = _items
                     .Select(x => x.Status)
                     .Where(x => !x.IsNullOrWhiteSpace())
-                    .JoinString(";");
+                    .JoinString(Environment.NewLine);
                 break;
         }
     }
