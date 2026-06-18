@@ -348,27 +348,33 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
 
     private async ValueTask<T?> ShowSelectItemCore<T>(T[] items, CancellationToken ct)
     {
+        var selectedItem = default(T);
+
         var list = await Dispatcher.UIThread.InvokeAsync(() =>
-            new ListBox
+        {
+            var l = new ListBox
             {
                 [ItemsControl.ItemsSourceProperty] = items,
                 [ListBox.SelectionModeProperty] = SelectionMode.Single,
-                [SelectingItemsControl.SelectedItemProperty] = items[0],
-            }
-        );
+            };
+
+            l.SelectionChanged += async (_, e) =>
+            {
+                selectedItem = e.AddedItems.OfType<T>().First();
+                await Services.DialogService.CloseMessageBoxAsync(CancellationToken.None);
+            };
+
+            return l;
+        });
 
         await Services.DialogService.ShowMessageBoxAsync(
             Services.AppResourceService.GetResource<string>("Lang.Select"),
             list,
             ct,
-            Services.DialogService.CreateButton(
-                Services.AppResourceService.GetResource<string>("Lang.Ok"),
-                async c => await Services.DialogService.CloseMessageBoxAsync(c),
-                DialogButtonType.Primary
-            )
+            Services.DialogService.CancelButton
         );
 
-        return await Dispatcher.UIThread.InvokeAsync(() => (T?)list.SelectedItem);
+        return selectedItem;
     }
 
     private async ValueTask<T[]> ShowSelectItemsCore<T>(T[] items, CancellationToken ct)
