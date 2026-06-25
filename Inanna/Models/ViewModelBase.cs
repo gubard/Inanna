@@ -181,14 +181,6 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
         return ShowErrorCore(exceptions, ct).ConfigureAwait(false);
     }
 
-    protected ConfiguredValueTaskAwaitable<IReadOnlyList<IStorageFile>> OpenFilePickerAsync(
-        FilePickerOpenOptions options,
-        CancellationToken ct
-    )
-    {
-        return OpenFilesPickerCore(options, ct).ConfigureAwait(false);
-    }
-
     protected ConfiguredValueTaskAwaitable<IStorageFile?> OpenFilePickerAsync(CancellationToken ct)
     {
         return OpenFilePickerCore(
@@ -222,14 +214,16 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
         CancellationToken ct
     )
     {
-        return SaveFilePickerCore(
-                new()
-                {
-                    Title = Services.AppResourceService.GetResource<string>("Lang.SaveFile"),
-                    DefaultExtension = defaultExtension,
-                },
-                ct
-            )
+        return SaveFilePickerCore(null, defaultExtension, ct).ConfigureAwait(false);
+    }
+
+    protected ConfiguredValueTaskAwaitable<IStorageFile?> SaveFilePickerAsync(
+        Uri suggestedStartLocation,
+        string defaultExtension,
+        CancellationToken ct
+    )
+    {
+        return SaveFilePickerCore(suggestedStartLocation, defaultExtension, ct)
             .ConfigureAwait(false);
     }
 
@@ -237,22 +231,23 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
         CancellationToken ct
     )
     {
-        return OpenFilesPickerCore(
-                new()
-                {
-                    AllowMultiple = true,
-                    Title = Services.AppResourceService.GetResource<string>("Lang.SelectFiles"),
-                },
-                ct
-            )
-            .ConfigureAwait(false);
+        return OpenFilesPickerCore(null, ct).ConfigureAwait(false);
+    }
+
+    protected ConfiguredValueTaskAwaitable<IReadOnlyList<IStorageFile>> OpenFilesPickerAsync(
+        Uri suggestedStartLocation,
+        CancellationToken ct
+    )
+    {
+        return OpenFilesPickerCore(suggestedStartLocation, ct).ConfigureAwait(false);
     }
 
     private bool _isAnyExecute;
     private readonly Dictionary<string, Func<IEnumerable<ValidationError>>> _errors = new();
 
     private async ValueTask<IStorageFile?> SaveFilePickerCore(
-        FilePickerSaveOptions options,
+        Uri? suggestedStartLocation,
+        string defaultExtension,
         CancellationToken ct
     )
     {
@@ -263,7 +258,18 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
             return null;
         }
 
-        return await topLevel.StorageProvider.SaveFilePickerAsync(options);
+        return await topLevel.StorageProvider.SaveFilePickerAsync(
+            new()
+            {
+                Title = Services.AppResourceService.GetResource<string>("Lang.SaveFile"),
+                DefaultExtension = defaultExtension,
+                SuggestedStartLocation = suggestedStartLocation is null
+                    ? null
+                    : await topLevel.StorageProvider.TryGetFolderFromPathAsync(
+                        suggestedStartLocation
+                    ),
+            }
+        );
     }
 
     private async ValueTask<IStorageFolder?> OpenFolderPickerCore(
@@ -311,7 +317,7 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
     }
 
     private async ValueTask<IReadOnlyList<IStorageFile>> OpenFilesPickerCore(
-        FilePickerOpenOptions options,
+        Uri? suggestedStartLocation,
         CancellationToken ct
     )
     {
@@ -322,7 +328,18 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
             return [];
         }
 
-        return await topLevel.StorageProvider.OpenFilePickerAsync(options);
+        return await topLevel.StorageProvider.OpenFilePickerAsync(
+            new()
+            {
+                AllowMultiple = true,
+                Title = Services.AppResourceService.GetResource<string>("Lang.SelectFiles"),
+                SuggestedStartLocation = suggestedStartLocation is null
+                    ? null
+                    : await topLevel.StorageProvider.TryGetFolderFromPathAsync(
+                        suggestedStartLocation
+                    ),
+            }
+        );
     }
 
     private async ValueTask ShowErrorCore(Exception[] exceptions, CancellationToken ct)

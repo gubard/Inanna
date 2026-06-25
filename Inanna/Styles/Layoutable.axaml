@@ -29,6 +29,11 @@
         <Setter Property="VerticalAlignment" Value="Top" />
     </Style>
 
+    <Style Selector=":is(Layoutable).align-center-bottom">
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Bottom" />
+    </Style>
+
     <Style Selector=":is(Layoutable).align-right-top">
         <Setter Property="HorizontalAlignment" Value="Right" />
         <Setter Property="VerticalAlignment" Value="Top" />
