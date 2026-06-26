@@ -60,6 +60,8 @@
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="IsReadOnly" Value="True" />
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="Padding" Value="0" />
     </Style>
 
     <Style Selector="TextBox.plain-text:pointerover /template/ Border#PART_BorderElement">
