@@ -40,6 +40,11 @@
     <Style Selector="TextBox.clear-all Button.show-clear-all-button">
         <Setter Property="IsVisible" Value="True" />
     </Style>
+    
+    <Style Selector="TextBox.content-align-center">
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+    </Style>
 
     <Style Selector="TextBox.select-all Button.show-select-all-button">
         <Setter Property="IsVisible" Value="True" />
