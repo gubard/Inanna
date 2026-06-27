@@ -12,11 +12,11 @@
     <PackageReference Include="Avalonia" Version="12.0.5" />
     <PackageReference Include="Avalonia.Controls.DataGrid" Version="12.0.1" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+    <PackageReference Include="IconPacks.Avalonia.MaterialDesign" Version="2.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Gaia\Gaia\Gaia.csproj" />
-    <ProjectReference Include="..\..\IconPacks.Avalonia.Aot\src\IconPacks.Avalonia.MaterialDesign\IconPacks.Avalonia.MaterialDesign.csproj" />
     <ProjectReference Include="..\..\Nestor\Nestor.Db\Nestor.Db.csproj" />
     <ProjectReference
       Include="..\Inanna.SourceGenerator\Inanna.SourceGenerator.csproj"
