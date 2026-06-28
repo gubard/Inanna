@@ -9,7 +9,7 @@
              x:Class="Inanna.Ui.LogsView"
              x:DataType="ui:LogsViewModel">
     <ScrollViewer Classes="vertical-scroll">
-        <ItemsControl ItemsSource="{Binding Logs}">
+        <ItemsControl Classes="virtualizing-vertical-stack" ItemsSource="{Binding Logs}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Border Classes="item status"

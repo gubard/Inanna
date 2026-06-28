@@ -23,4 +23,12 @@
             </ItemsPanelTemplate>
         </Setter>
     </Style>
+    
+    <Style Selector="ItemsControl.virtualizing-vertical-stack">
+        <Setter Property="ItemsPanel">
+            <ItemsPanelTemplate>
+                <VirtualizingStackPanel Orientation="Vertical" />
+            </ItemsPanelTemplate>
+        </Setter>
+    </Style>
 </Styles>
