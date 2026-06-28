@@ -8,36 +8,38 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Inanna.Ui.LogsView"
              x:DataType="ui:LogsViewModel">
-    <ItemsControl ItemsSource="{Binding Logs}">
-        <ItemsControl.ItemTemplate>
-            <DataTemplate>
-                <Border Classes="item status"
-                        Classes.trace="{Binding Level, Converter={x:Static is:IsValueConverter.Instance}, ConverterParameter={x:Static hm:LogLevel.Trace}}"
-                        Classes.debug="{Binding Level, Converter={x:Static is:IsValueConverter.Instance}, ConverterParameter={x:Static hm:LogLevel.Debug}}"
-                        Classes.information="{Binding Level, Converter={x:Static is:IsValueConverter.Instance}, ConverterParameter={x:Static hm:LogLevel.Information}}"
-                        Classes.warning="{Binding Level, Converter={x:Static is:IsValueConverter.Instance}, ConverterParameter={x:Static hm:LogLevel.Warning}}"
-                        Classes.error="{Binding Level, Converter={x:Static is:IsValueConverter.Instance}, ConverterParameter={x:Static hm:LogLevel.Error}}"
-                        Classes.critical="{Binding Level, Converter={x:Static is:IsValueConverter.Instance}, ConverterParameter={x:Static hm:LogLevel.Critical}}">
-                    <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*">
-                        <TextBlock Classes="align-center m-2"
-                                   Text="{Binding DateTime.LocalDateTime.Date, StringFormat={}{0:dd.MM.yyyy}}" />
-                        <TextBlock Grid.Row="1"
-                                   Classes="align-center m-2"
-                                   Text="{Binding DateTime.LocalDateTime.TimeOfDay, StringFormat={}{0:hh\\:mm}}" />
+    <ScrollViewer Classes="vertical-scroll">
+        <ItemsControl ItemsSource="{Binding Logs}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Border Classes="item status"
+                            Classes.trace="{Binding Level, Converter={x:Static is:IsValueConverter.Instance}, ConverterParameter={x:Static hm:LogLevel.Trace}}"
+                            Classes.debug="{Binding Level, Converter={x:Static is:IsValueConverter.Instance}, ConverterParameter={x:Static hm:LogLevel.Debug}}"
+                            Classes.information="{Binding Level, Converter={x:Static is:IsValueConverter.Instance}, ConverterParameter={x:Static hm:LogLevel.Information}}"
+                            Classes.warning="{Binding Level, Converter={x:Static is:IsValueConverter.Instance}, ConverterParameter={x:Static hm:LogLevel.Warning}}"
+                            Classes.error="{Binding Level, Converter={x:Static is:IsValueConverter.Instance}, ConverterParameter={x:Static hm:LogLevel.Error}}"
+                            Classes.critical="{Binding Level, Converter={x:Static is:IsValueConverter.Instance}, ConverterParameter={x:Static hm:LogLevel.Critical}}">
+                        <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*">
+                            <TextBlock Classes="align-center m-2"
+                                       Text="{Binding DateTime.LocalDateTime.Date, StringFormat={}{0:dd.MM.yyyy}}" />
+                            <TextBlock Grid.Row="1"
+                                       Classes="align-center m-2"
+                                       Text="{Binding DateTime.LocalDateTime.TimeOfDay, StringFormat={}{0:hh\\:mm}}" />
 
-                        <StackPanel Grid.Column="1" Grid.RowSpan="2" Classes="align-left-center">
-                            <TextBox Classes="text-wrap align-left-center m-2 plain-text"
-                                       Text="{Binding Text}"
-                                       IsVisible="{Binding Exception, Converter={x:Static is:IsValueConverter.Instance}, ConverterParameter={x:Null}}" />
-                            <Expander IsExpanded="False"
-                                      Header="{Binding Text}"
-                                      IsVisible="{Binding Exception, Converter={x:Static is:IsNotValueConverter.Instance}, ConverterParameter={x:Null}}">
-                                <TextBox Classes="text-wrap m-5 plain-text" Text="{Binding Exception}" />
-                            </Expander>
-                        </StackPanel>
-                    </Grid>
-                </Border>
-            </DataTemplate>
-        </ItemsControl.ItemTemplate>
-    </ItemsControl>
+                            <StackPanel Grid.Column="1" Grid.RowSpan="2" Classes="align-left-center">
+                                <TextBox Classes="text-wrap align-left-center m-2 plain-text"
+                                         Text="{Binding Text}"
+                                         IsVisible="{Binding Exception, Converter={x:Static is:IsValueConverter.Instance}, ConverterParameter={x:Null}}" />
+                                <Expander IsExpanded="False"
+                                          Header="{Binding Text}"
+                                          IsVisible="{Binding Exception, Converter={x:Static is:IsNotValueConverter.Instance}, ConverterParameter={x:Null}}">
+                                    <TextBox Classes="text-wrap m-5 plain-text" Text="{Binding Exception}" />
+                                </Expander>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </ScrollViewer>
 </UserControl>
