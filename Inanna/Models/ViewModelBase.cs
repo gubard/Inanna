@@ -328,18 +328,22 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
             return [];
         }
 
-        return await topLevel.StorageProvider.OpenFilePickerAsync(
-            new()
-            {
-                AllowMultiple = true,
-                Title = Services.AppResourceService.GetResource<string>("Lang.SelectFiles"),
-                SuggestedStartLocation = suggestedStartLocation is null
-                    ? null
-                    : await topLevel.StorageProvider.TryGetFolderFromPathAsync(
-                        suggestedStartLocation
-                    ),
-            }
-        );
+        var ssl = suggestedStartLocation is null
+            ? null
+            : await topLevel
+                .StorageProvider.TryGetFolderFromPathAsync(suggestedStartLocation)
+                .ConfigureAwait(false);
+
+        return await topLevel
+            .StorageProvider.OpenFilePickerAsync(
+                new()
+                {
+                    AllowMultiple = true,
+                    Title = Services.AppResourceService.GetResource<string>("Lang.SelectFiles"),
+                    SuggestedStartLocation = ssl,
+                }
+            )
+            .ConfigureAwait(false);
     }
 
     private async ValueTask ShowErrorCore(Exception[] exceptions, CancellationToken ct)
