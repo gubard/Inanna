@@ -10,4 +10,7 @@ public static partial class InannaLog
 
     [LoggerMessage(EventId = 2, Level = LogLevel.Error, Message = "Command errors: {Errors}")]
     public static partial void CommandErrors(this ILogger logger, List<ValidationError> errors);
+
+    [LoggerMessage(EventId = 3, Level = LogLevel.Error, Message = "Folder from path error")]
+    public static partial void GetFolderFromPathError(this ILogger logger, Exception exception);
 }

@@ -9,6 +9,7 @@ using Gaia.Helpers;
 using Gaia.Models;
 using Gaia.Services;
 using Inanna.Helpers;
+using Microsoft.Extensions.Logging;
 
 namespace Inanna.Models;
 
@@ -258,16 +259,33 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
             return null;
         }
 
+        IStorageFolder? ssl = null;
+
+        if (suggestedStartLocation is not null)
+        {
+            try
+            {
+                ssl = await topLevel
+                    .StorageProvider.TryGetFolderFromPathAsync(suggestedStartLocation)
+                    .WaitAsync(TimeSpan.FromSeconds(3), ct)
+                    .ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                Services.Logger.GetFolderFromPathError(ex);
+
+                ssl = await topLevel
+                    .StorageProvider.TryGetWellKnownFolderAsync(WellKnownFolder.Desktop)
+                    .ConfigureAwait(false);
+            }
+        }
+
         return await topLevel.StorageProvider.SaveFilePickerAsync(
             new()
             {
                 Title = Services.AppResourceService.GetResource<string>("Lang.SaveFile"),
                 DefaultExtension = defaultExtension,
-                SuggestedStartLocation = suggestedStartLocation is null
-                    ? null
-                    : await topLevel.StorageProvider.TryGetFolderFromPathAsync(
-                        suggestedStartLocation
-                    ),
+                SuggestedStartLocation = ssl,
             }
         );
     }
@@ -328,11 +346,26 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
             return [];
         }
 
-        var ssl = suggestedStartLocation is null
-            ? null
-            : await topLevel
-                .StorageProvider.TryGetFolderFromPathAsync(suggestedStartLocation)
-                .ConfigureAwait(false);
+        IStorageFolder? ssl = null;
+
+        if (suggestedStartLocation is not null)
+        {
+            try
+            {
+                ssl = await topLevel
+                    .StorageProvider.TryGetFolderFromPathAsync(suggestedStartLocation)
+                    .WaitAsync(TimeSpan.FromSeconds(3), ct)
+                    .ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                Services.Logger.GetFolderFromPathError(ex);
+
+                ssl = await topLevel
+                    .StorageProvider.TryGetWellKnownFolderAsync(WellKnownFolder.Desktop)
+                    .ConfigureAwait(false);
+            }
+        }
 
         return await topLevel
             .StorageProvider.OpenFilePickerAsync(
