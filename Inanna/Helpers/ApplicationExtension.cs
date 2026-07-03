@@ -1,6 +1,8 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Platform.Storage;
+using Avalonia.Threading;
 
 namespace Inanna.Helpers;
 
@@ -15,16 +17,30 @@ public static class ApplicationExtension
 
     public static TopLevel? GetTopLevel(this Application app)
     {
+        return Dispatcher.UIThread.Invoke(() => GetTopLevelCore(app));
+    }
+
+    private static TopLevel? GetTopLevelCore(this Application app)
+    {
         if (app.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            return desktop.Windows.FirstOrDefault(x => x.IsFocused) ?? desktop.MainWindow;
+            var window = desktop.Windows.FirstOrDefault(x => x.IsFocused) ?? desktop.MainWindow;
+
+            return window;
         }
 
         if (app.ApplicationLifetime is ISingleViewApplicationLifetime viewApp)
         {
-            return TopLevel.GetTopLevel(viewApp.MainView);
+            var view = TopLevel.GetTopLevel(viewApp.MainView);
+
+            return view;
         }
 
         return null;
+    }
+
+    public static IStorageProvider? GetStorageProvider(this Application app)
+    {
+        return Dispatcher.UIThread.Invoke(() => GetTopLevelCore(app)?.StorageProvider);
     }
 }

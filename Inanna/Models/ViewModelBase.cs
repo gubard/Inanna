@@ -339,36 +339,22 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
         CancellationToken ct
     )
     {
-        var topLevel = Services.App.GetTopLevel();
+        var storageProvider = Services.App.GetStorageProvider();
 
-        if (topLevel is null)
+        if (storageProvider is null)
         {
             return [];
         }
 
-        IStorageFolder? ssl = null;
+        var ssl = suggestedStartLocation is not null
+            ? await storageProvider
+                .TryGetFolderFromPathAsync(suggestedStartLocation)
+                .WaitAsync(TimeSpan.FromSeconds(3), ct)
+                .ConfigureAwait(false)
+            : null;
 
-        if (suggestedStartLocation is not null)
-        {
-            try
-            {
-                ssl = await topLevel
-                    .StorageProvider.TryGetFolderFromPathAsync(suggestedStartLocation)
-                    .WaitAsync(TimeSpan.FromSeconds(3), ct)
-                    .ConfigureAwait(false);
-            }
-            catch (Exception ex)
-            {
-                Services.Logger.GetFolderFromPathError(ex);
-
-                ssl = await topLevel
-                    .StorageProvider.TryGetWellKnownFolderAsync(WellKnownFolder.Desktop)
-                    .ConfigureAwait(false);
-            }
-        }
-
-        return await topLevel
-            .StorageProvider.OpenFilePickerAsync(
+        return await storageProvider
+            .OpenFilePickerAsync(
                 new()
                 {
                     AllowMultiple = true,
@@ -376,6 +362,7 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
                     SuggestedStartLocation = ssl,
                 }
             )
+            .WaitAsync(TimeSpan.FromSeconds(3), ct)
             .ConfigureAwait(false);
     }
 
