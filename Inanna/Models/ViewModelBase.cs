@@ -9,7 +9,6 @@ using Gaia.Helpers;
 using Gaia.Models;
 using Gaia.Services;
 using Inanna.Helpers;
-using Microsoft.Extensions.Logging;
 
 namespace Inanna.Models;
 
