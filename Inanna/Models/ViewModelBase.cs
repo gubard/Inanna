@@ -251,35 +251,21 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
         CancellationToken ct
     )
     {
-        var topLevel = Services.App.GetTopLevel();
+        var storageProvider = Services.App.GetStorageProvider();
 
-        if (topLevel is null)
+        if (storageProvider is null)
         {
             return null;
         }
 
-        IStorageFolder? ssl = null;
+        var ssl = suggestedStartLocation is not null
+            ? await storageProvider
+                .TryGetFolderFromPathAsync(suggestedStartLocation)
+                .WaitAsync(TimeSpan.FromSeconds(3), ct)
+                .ConfigureAwait(false)
+            : null;
 
-        if (suggestedStartLocation is not null)
-        {
-            try
-            {
-                ssl = await topLevel
-                    .StorageProvider.TryGetFolderFromPathAsync(suggestedStartLocation)
-                    .WaitAsync(TimeSpan.FromSeconds(3), ct)
-                    .ConfigureAwait(false);
-            }
-            catch (Exception ex)
-            {
-                Services.Logger.GetFolderFromPathError(ex);
-
-                ssl = await topLevel
-                    .StorageProvider.TryGetWellKnownFolderAsync(WellKnownFolder.Desktop)
-                    .ConfigureAwait(false);
-            }
-        }
-
-        return await topLevel.StorageProvider.SaveFilePickerAsync(
+        return await storageProvider.SaveFilePickerAsync(
             new()
             {
                 Title = Services.AppResourceService.GetResource<string>("Lang.SaveFile"),
@@ -361,7 +347,6 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
                     SuggestedStartLocation = ssl,
                 }
             )
-            .WaitAsync(TimeSpan.FromSeconds(3), ct)
             .ConfigureAwait(false);
     }
 
