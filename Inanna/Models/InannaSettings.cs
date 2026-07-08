@@ -2,10 +2,19 @@ using Gaia.Services;
 
 namespace Inanna.Models;
 
-public sealed class InannaSettings : ObjectStorageValue<InannaSettings>
+public sealed record InannaSettings : ObjectStorageValue<InannaSettings>, IStaticFactory<InannaSettings>
 {
-    public ThemeVariantType Theme { get; set; }
-    public Lang Lang { get; set; }
+    public required ThemeVariantType Theme { get; init; }
+    public required Lang Lang { get; init; }
+    
+    public static InannaSettings Create()
+    {
+        return new()
+        {
+Lang = Lang.Ukrainian,
+Theme = ThemeVariantType.Dark,
+        };
+    }
 }
 
 public enum ThemeVariantType

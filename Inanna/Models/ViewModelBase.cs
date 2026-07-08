@@ -54,13 +54,18 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
     {
         Services = services;
     }
+    
+    protected void InvokeUi(Action action)
+    {
+        Dispatcher.UIThread.Invoke(action);
+    }
 
-    protected void Post(Action action)
+    protected void PostUi(Action action)
     {
         Dispatcher.UIThread.Post(action);
     }
 
-    protected void PostBackground(Action action)
+    protected void PostUiBackground(Action action)
     {
         Dispatcher.UIThread.Post(action, DispatcherPriority.Background);
     }
