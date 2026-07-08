@@ -17,7 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Gaia\Gaia\Gaia.csproj" />
-    <ProjectReference Include="..\..\Nestor\Nestor.Db\Nestor.Db.csproj" />
+    <ProjectReference Include="..\..\Nestor\Nestor.Db.Sqlite\Nestor.Db.Sqlite.csproj" />
     <ProjectReference
       Include="..\Inanna.SourceGenerator\Inanna.SourceGenerator.csproj"
       ReferenceOutputAssembly="false"
