@@ -54,7 +54,7 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
     {
         Services = services;
     }
-    
+
     protected void InvokeUi(Action action)
     {
         Dispatcher.UIThread.Invoke(action);
@@ -155,11 +155,25 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
     }
 
     protected ConfiguredValueTaskAwaitable<T?> ShowSelectItemAsync<T>(
+        string header,
         T[] items,
         CancellationToken ct
     )
     {
-        return ShowSelectItemCore(items, ct).ConfigureAwait(false);
+        return ShowSelectItemCore(header, items, ct).ConfigureAwait(false);
+    }
+
+    protected ConfiguredValueTaskAwaitable<T?> ShowSelectItemAsync<T>(
+        T[] items,
+        CancellationToken ct
+    )
+    {
+        return ShowSelectItemCore(
+                Services.AppResourceService.GetResource<string>("Lang.Select"),
+                items,
+                ct
+            )
+            .ConfigureAwait(false);
     }
 
     protected ConfiguredValueTaskAwaitable<T[]> ShowSelectItemsAsync<T>(
@@ -375,7 +389,11 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
         );
     }
 
-    private async ValueTask<T?> ShowSelectItemCore<T>(T[] items, CancellationToken ct)
+    private async ValueTask<T?> ShowSelectItemCore<T>(
+        string header,
+        T[] items,
+        CancellationToken ct
+    )
     {
         var selectedItem = default(T);
 
@@ -397,7 +415,7 @@ public abstract class ViewModelBase : ObservableObject, INotifyDataErrorInfo
         });
 
         await Services.DialogService.ShowMessageBoxAsync(
-            Services.AppResourceService.GetResource<string>("Lang.Select"),
+            header,
             list,
             ct,
             Services.DialogService.CancelButton
