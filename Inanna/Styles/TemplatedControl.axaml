@@ -5,6 +5,10 @@
         <Setter Property="MinWidth" Value="200" />
     </Style>
 
+    <Style Selector=":is(TemplatedControl).cr-5">
+        <Setter Property="CornerRadius" Value="5" />
+    </Style>
+
     <Style Selector=":is(TemplatedControl).h1">
         <Setter Property="FontSize" Value="36.4" />
     </Style>
