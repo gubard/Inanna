@@ -24,6 +24,14 @@
         </Setter>
     </Style>
 
+    <Style Selector="TextBox.disabled">
+        <Setter Property="Foreground" Value="{DynamicResource ButtonForegroundDisabled}" />
+    </Style>
+
+    <Style Selector="TextBox.small">
+        <Setter Property="FontSize" Value="11.2" />
+    </Style>
+
     <Style Selector="TextBox Button.show-select-all-button">
         <Setter Property="IsVisible" Value="False" />
     </Style>
@@ -43,7 +51,7 @@
     <Style Selector="TextBox.clear-all Button.show-clear-all-button">
         <Setter Property="IsVisible" Value="True" />
     </Style>
-    
+
     <Style Selector="TextBox.content-align-center">
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
