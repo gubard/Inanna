@@ -46,4 +46,5 @@
     <StyleInclude Source="TopLevel.axaml" />
     <StyleInclude Source="Border.axaml" />
     <StyleInclude Source="Decorator.axaml" />
+    <StyleInclude Source="TableViewCell.axaml" />
 </Styles>
