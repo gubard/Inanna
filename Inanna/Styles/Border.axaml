@@ -1,9 +1,9 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Style Selector="Border.card">
-        <Setter Property="MaxWidth" Value="300" />
         <Setter Property="CornerRadius" Value="5" />
         <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="BorderBrush" Value="{DynamicResource ExpanderHeaderBorderBrush}"/>
     </Style>
 
     <Style Selector="Border.cr-5">
