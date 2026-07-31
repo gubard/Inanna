@@ -2,45 +2,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:f="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent">
     <Style Selector="f|SymbolIcon">
-        <Setter Property="Margin" Value="2" />
-        <Setter Property="VerticalAlignment" Value="Center" />
-        <Setter Property="HorizontalAlignment" Value="Center" />
-        <Setter Property="Width" Value="14" />
-        <Setter Property="Height" Value="14" />
-    </Style>
-
-    <Style Selector="f|SymbolIcon.h1">
-        <Setter Property="Width" Value="36.4" />
-        <Setter Property="Height" Value="36.4" />
-    </Style>
-
-    <Style Selector="f|SymbolIcon.h2">
-        <Setter Property="Width" Value="28" />
-        <Setter Property="Height" Value="28" />
-    </Style>
-
-    <Style Selector="f|SymbolIcon.h3">
-        <Setter Property="Width" Value="22.4" />
-        <Setter Property="Height" Value="22.4" />
-    </Style>
-
-    <Style Selector="f|SymbolIcon.h4">
-        <Setter Property="Width" Value="19.6" />
-        <Setter Property="Height" Value="19.6" />
-    </Style>
-
-    <Style Selector="f|SymbolIcon.h5">
-        <Setter Property="Width" Value="16.8" />
-        <Setter Property="Height" Value="16.8" />
-    </Style>
-
-    <Style Selector="f|SymbolIcon.h6">
-        <Setter Property="Width" Value="14" />
-        <Setter Property="Height" Value="14" />
-    </Style>
-
-    <Style Selector="f|SymbolIcon.small">
-        <Setter Property="Width" Value="11.2" />
-        <Setter Property="Height" Value="11.2" />
+        <Setter Property="FontSize" Value="14"/>
     </Style>
 </Styles>
