@@ -9,16 +9,16 @@ public interface IAppResourceService
 
 public sealed class AppResourceService : IAppResourceService
 {
-    private readonly Application _application;
+    private readonly Application _app;
 
-    public AppResourceService(Application application)
+    public AppResourceService(Application app)
     {
-        _application = application;
+        _app = app;
     }
 
     public T GetResource<T>(string key)
     {
-        if (!_application.TryGetResource(key, null, out var value))
+        if (!_app.TryGetResource(key, _app.ActualThemeVariant, out var value))
         {
             throw new NullReferenceException($"Resource {key} not found");
         }
