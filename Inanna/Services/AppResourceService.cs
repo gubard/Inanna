@@ -1,4 +1,5 @@
 using Avalonia;
+using Avalonia.Threading;
 
 namespace Inanna.Services;
 
@@ -18,7 +19,9 @@ public sealed class AppResourceService : IAppResourceService
 
     public T GetResource<T>(string key)
     {
-        if (!_app.TryGetResource(key, _app.ActualThemeVariant, out var value))
+        var actualThemeVariant = Dispatcher.UIThread.Invoke(() => _app.ActualThemeVariant);
+
+        if (!_app.TryGetResource(key, actualThemeVariant, out var value))
         {
             throw new NullReferenceException($"Resource {key} not found");
         }
