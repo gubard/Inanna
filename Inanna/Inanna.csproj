@@ -8,10 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="12.1.0" />
-    <PackageReference Include="Avalonia.Controls.DataGrid" Version="12.1.0" />
+    <PackageReference Include="Avalonia" Version="12.1.1" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
-    <PackageReference Include="IconPacks.Avalonia.MaterialDesign" Version="2.0.0" />
+    <PackageReference Include="FluentIcons.Avalonia.Fluent" Version="2.1.333" />
   </ItemGroup>
 
   <ItemGroup>

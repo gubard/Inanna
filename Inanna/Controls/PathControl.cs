@@ -4,14 +4,15 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
-using IconPacks.Avalonia.MaterialDesign;
+using FluentIcons.Avalonia.Fluent;
+using FluentIcons.Common;
 
 namespace Inanna.Controls;
 
 public sealed class PathControl : TemplatedControl
 {
     private static readonly FuncTemplate<Control?> DefaultSeparator = new(() =>
-        new PackIconMaterialDesign { Kind = PackIconMaterialDesignKind.ChevronRight }
+        new SymbolIcon { Symbol = Symbol.ChevronRight }
     );
 
     public static readonly StyledProperty<ITemplate<Control?>> SeparatorProperty =

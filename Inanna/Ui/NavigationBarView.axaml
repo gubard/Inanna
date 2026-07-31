@@ -3,15 +3,16 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ui="clr-namespace:Inanna.Ui"
+             xmlns:f="clr-namespace:FluentIcons.Avalonia.Fluent.Markup;assembly=FluentIcons.Avalonia.Fluent"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Inanna.Ui.NavigationBarView"
              x:DataType="ui:NavigationBarViewModel"
              IsVisible="{Binding IsHeaderVisible}">
     <Grid ColumnDefinitions="Auto,*">
         <StackPanel Grid.Column="0" Classes="horizontal">
-            <Button Content="="
+            <Button Content="{f:SymbolIcon Symbol=PanelLeft}"
                     Command="{Binding Commands.ShowPaneCommand}" />
-            <Button Content="&lt;"
+            <Button Content="{f:SymbolIcon Symbol=ArrowHookUpLeft}"
                     Command="{Binding BackCommand}"
                     IsEnabled="{Binding IsCanBack}"
                     IsVisible="{OnPlatform Android=false, iOS=false, Default=true}" />

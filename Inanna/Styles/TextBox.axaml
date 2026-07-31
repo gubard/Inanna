@@ -2,7 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:h="clr-namespace:Inanna.Helpers"
         xmlns:s="clr-namespace:System;assembly=System.Runtime"
-        xmlns:ip="https://github.com/MahApps/IconPacks.Avalonia">
+        xmlns:m="clr-namespace:FluentIcons.Avalonia.Fluent.Markup;assembly=FluentIcons.Avalonia.Fluent">
     <Style Selector="TextBox">
         <Setter Property="Margin" Value="5" />
         <Setter Property="HorizontalContentAlignment" Value="Left" />
@@ -14,10 +14,10 @@
                     <Button Classes="mini show-password-button"
                             h:ButtonAssist.IsPasswordHandler="True" />
                     <Button Classes="mini show-select-all-button"
-                            Content="{ip:MaterialDesign SelectAll}"
+                            Content="{m:SymbolIcon Symbol=SelectAllOn}"
                             h:ButtonAssist.IsSelectAllHandler="True" />
                     <Button Classes="mini show-clear-all-button"
-                            Content="{ip:MaterialDesign Clear}"
+                            Content="{m:SymbolIcon Symbol=TextClearFormatting}"
                             h:ButtonAssist.IsClearAllHandler="True" />
                 </StackPanel>
             </Template>

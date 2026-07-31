@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:s="clr-namespace:System;assembly=System.Runtime"
              xmlns:ui="clr-namespace:Inanna.Ui"
-             xmlns:ip="https://github.com/MahApps/IconPacks.Avalonia"
+             xmlns:m="clr-namespace:FluentIcons.Avalonia.Fluent.Markup;assembly=FluentIcons.Avalonia.Fluent"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Inanna.Ui.ExceptionView"
              x:DataType="ui:ExceptionViewModel">
@@ -23,7 +23,7 @@
         </ItemsControl>
 
         <Button Classes="mini align-right-top p-5"
-                Content="{ip:MaterialDesign ContentCopy}"
+                Content="{m:SymbolIcon Symbol=Copy}"
                 Command="{Binding CopyCommand}" />
     </Panel>
 </UserControl>
