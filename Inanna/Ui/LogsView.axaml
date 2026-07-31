@@ -27,13 +27,13 @@
                                        Text="{Binding DateTime.LocalDateTime.TimeOfDay, StringFormat={}{0:hh\\:mm}}" />
 
                             <StackPanel Grid.Column="1" Grid.RowSpan="2" Classes="align-left-center">
-                                <TextBox Classes="text-wrap align-left-center m-2 plain-text"
-                                         Text="{Binding Text}"
-                                         IsVisible="{Binding Exception, Converter={x:Static is:IsValueConverter.Instance}, ConverterParameter={x:Null}}" />
+                                <SelectableTextBlock Classes="text-wrap align-left-center m-2"
+                                                     Text="{Binding Text}"
+                                                     IsVisible="{Binding Exception, Converter={x:Static is:IsValueConverter.Instance}, ConverterParameter={x:Null}}" />
                                 <Expander IsExpanded="False"
                                           Header="{Binding Text}"
                                           IsVisible="{Binding Exception, Converter={x:Static is:IsNotValueConverter.Instance}, ConverterParameter={x:Null}}">
-                                    <TextBox Classes="text-wrap m-5 plain-text" Text="{Binding Exception}" />
+                                    <SelectableTextBlock Classes="text-wrap m-5" Text="{Binding Exception}" />
                                 </Expander>
                             </StackPanel>
                         </Grid>

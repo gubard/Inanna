@@ -47,4 +47,6 @@
     <StyleInclude Source="Border.axaml" />
     <StyleInclude Source="Decorator.axaml" />
     <StyleInclude Source="TableViewCell.axaml" />
+    <StyleInclude Source="GroupBox.axaml" />
+    <StyleInclude Source="SelectableTextBlock.axaml" />
 </Styles>

@@ -3,6 +3,7 @@
     <Style Selector="ScrollViewer.vertical-scroll">
         <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
         <Setter Property="HorizontalScrollBarVisibility" Value="Disabled" />
+        <Setter Property="Padding" Value="0,0,16,0" />
     </Style>
 
     <Style Selector="ScrollViewer.horizontal-scroll">
@@ -13,5 +14,6 @@
     <Style Selector="ScrollViewer.scroll">
         <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
         <Setter Property="HorizontalScrollBarVisibility" Value="Auto" />
+        <Setter Property="Padding" Value="0,0,16,0" />
     </Style>
 </Styles>

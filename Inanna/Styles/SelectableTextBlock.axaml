@@ -1,38 +1,42 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Style Selector="TextBlock.text-wrap">
+    <Style Selector="SelectableTextBlock.text-wrap">
         <Setter Property="TextWrapping" Value="Wrap" />
     </Style>
 
-    <Style Selector="TextBlock.h1">
+    <Style Selector="SelectableTextBlock.h1">
         <Setter Property="FontSize" Value="36.4" />
     </Style>
 
-    <Style Selector="TextBlock.h2">
+    <Style Selector="SelectableTextBlock.h2">
         <Setter Property="FontSize" Value="28" />
     </Style>
 
-    <Style Selector="TextBlock.h3">
+    <Style Selector="SelectableTextBlock.h3">
         <Setter Property="FontSize" Value="22.4" />
     </Style>
 
-    <Style Selector="TextBlock.h4">
+    <Style Selector="SelectableTextBlock.h4">
         <Setter Property="FontSize" Value="19.6" />
     </Style>
 
-    <Style Selector="TextBlock.h5">
+    <Style Selector="SelectableTextBlock.h5">
         <Setter Property="FontSize" Value="16.8" />
     </Style>
 
-    <Style Selector="TextBlock.h6">
+    <Style Selector="SelectableTextBlock.h6">
         <Setter Property="FontSize" Value="14" />
     </Style>
 
-    <Style Selector="TextBlock.small">
+    <Style Selector="SelectableTextBlock.small">
         <Setter Property="FontSize" Value="11.2" />
     </Style>
 
-    <Style Selector="TextBlock.error">
+    <Style Selector="SelectableTextBlock.error">
         <Setter Property="Foreground" Value="{DynamicResource SystemErrorTextColor}" />
+    </Style>
+    
+    <Style Selector="SelectableTextBlock.disabled">
+        <Setter Property="Foreground" Value="{DynamicResource ButtonForegroundDisabled}" />
     </Style>
 </Styles>

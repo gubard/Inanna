@@ -70,31 +70,6 @@
         <Setter Property="AcceptsReturn" Value="True" />
     </Style>
 
-    <Style Selector="TextBox.plain-text">
-        <Setter Property="TextWrapping" Value="Wrap" />
-        <Setter Property="AcceptsReturn" Value="True" />
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="IsReadOnly" Value="True" />
-        <Setter Property="Margin" Value="0" />
-        <Setter Property="Padding" Value="0" />
-    </Style>
-
-    <Style Selector="TextBox.plain-text:pointerover /template/ Border#PART_BorderElement">
-        <Setter Property="BorderBrush" Value="{DynamicResource TextControlBorderBrushPointerOver}" />
-        <Setter Property="Background" Value="Transparent" />
-    </Style>
-
-    <Style Selector="TextBox.plain-text:focus /template/ Border#PART_BorderElement">
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="BorderThickness" Value="0" />
-    </Style>
-
-    <Style Selector="TextBox.plain-text:focus">
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="BorderThickness" Value="0" />
-    </Style>
-
     <Style Selector="TextBox.password">
         <Setter Property="PasswordChar" Value="*" />
     </Style>
@@ -105,17 +80,5 @@
 
     <Style Selector="TextBox:hide-password">
         <Setter Property="PasswordChar" Value="{x:Static s:Char.MinValue}" />
-    </Style>
-
-    <Style Selector="TextBox.plain-text Button.show-password-button">
-        <Setter Property="IsVisible" Value="False" />
-    </Style>
-
-    <Style Selector="TextBox.plain-text Button.show-clear-all-button">
-        <Setter Property="IsVisible" Value="False" />
-    </Style>
-
-    <Style Selector="TextBox.plain-text Button.show-select-all-button">
-        <Setter Property="IsVisible" Value="False" />
     </Style>
 </Styles>
