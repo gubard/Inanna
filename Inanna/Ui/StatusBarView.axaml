@@ -13,6 +13,6 @@
         <Button Grid.Column="1" 
                 Classes="mini align-center" 
                 Command="{Binding HideCommand}"
-                Content="{m:SymbolIcon Symbol=GameControllerButtonX}" />
+                Content="{m:SymbolIcon Symbol=Dismiss}" />
     </Grid>
 </UserControl>
