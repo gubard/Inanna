@@ -117,7 +117,7 @@ public abstract class ViewModelBase : PropertyValidator
     }
 
     protected ConfiguredValueTaskAwaitable<T?> ShowSelectItemAsync<T>(
-        string header,
+        object header,
         T[] items,
         CancellationToken ct
     )
@@ -349,7 +349,7 @@ public abstract class ViewModelBase : PropertyValidator
     }
 
     private async ValueTask<T?> ShowSelectItemCore<T>(
-        string header,
+        object header,
         T[] items,
         CancellationToken ct
     )
