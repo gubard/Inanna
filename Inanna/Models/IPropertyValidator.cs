@@ -74,6 +74,14 @@ public abstract class PropertyValidator : ObservableObject, IPropertyValidator
         return assignedPropertyValidator;
     }
 
+    protected void AddAssignedPropertyValidators<T>(T[] assignedPropertyValidators)
+        where T : IPropertyValidator
+    {
+        _assignedPropertyValidators.AddRange(
+            assignedPropertyValidators.OfType<IPropertyValidator>()
+        );
+    }
+
     protected void RemoveAssignedPropertyValidator(IPropertyValidator assignedPropertyValidator)
     {
         _assignedPropertyValidators.Remove(assignedPropertyValidator);
