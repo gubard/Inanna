@@ -10,9 +10,9 @@
              IsVisible="{Binding IsHeaderVisible}">
     <Grid ColumnDefinitions="Auto,*">
         <StackPanel Grid.Column="0" Classes="horizontal">
-            <Button Content="{f:SymbolIcon Symbol=PanelLeft}"
+            <Button Content="{f:SymbolIcon PanelLeft}"
                     Command="{Binding Commands.ShowPaneCommand}" />
-            <Button Content="{f:SymbolIcon Symbol=ArrowHookUpLeft}"
+            <Button Content="{f:SymbolIcon ArrowHookUpLeft}"
                     Command="{Binding BackCommand}"
                     IsEnabled="{Binding IsCanBack}"
                     IsVisible="{OnPlatform Android=false, iOS=false, Default=true}" />

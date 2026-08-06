@@ -1,5 +1,9 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Style Selector=":is(TemplatedControl).bt-2">
+        <Setter Property="BorderThickness" Value="2" />
+    </Style>
+
     <Style Selector=":is(TemplatedControl).control">
         <Setter Property="Padding" Value="5" />
         <Setter Property="MinWidth" Value="200" />

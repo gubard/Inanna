@@ -14,10 +14,10 @@
                     <Button Classes="mini show-password-button"
                             h:ButtonAssist.IsPasswordHandler="True" />
                     <Button Classes="mini show-select-all-button"
-                            Content="{m:SymbolIcon Symbol=SelectAllOn}"
+                            Content="{m:SymbolIcon SelectAllOn}"
                             h:ButtonAssist.IsSelectAllHandler="True" />
                     <Button Classes="mini show-clear-all-button"
-                            Content="{m:SymbolIcon Symbol=TextClearFormatting}"
+                            Content="{m:SymbolIcon TextClearFormatting}"
                             h:ButtonAssist.IsClearAllHandler="True" />
                 </StackPanel>
             </Template>

@@ -13,7 +13,7 @@
         </ScrollViewer>
 
         <Button Classes="mini align-right-top p-5"
-                Content="{m:SymbolIcon Symbol=Copy}"
+                Content="{m:SymbolIcon Copy}"
                 Command="{Binding CopyCommand}" />
     </Panel>
 </UserControl>

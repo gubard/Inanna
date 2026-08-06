@@ -32,7 +32,7 @@
 
     <Panel IsVisible="{Binding Commands.Count, Converter={x:Static s:IsNotValueConverter.Instance}, ConverterParameter={x:Static ih:Numbers.Int32_0}}">
         <Button Classes="adaptive-buttons" 
-                Content="{m:SymbolIcon Symbol=MoreHorizontal}">
+                Content="{m:SymbolIcon MoreHorizontal}">
             <Button.DataTemplates>
                 <DataTemplate x:DataType="sm:InannaCommand">
                     <ContentControl Content="{Binding Content}" />
