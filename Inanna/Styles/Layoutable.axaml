@@ -98,6 +98,18 @@
     <Style Selector=":is(Layoutable).w-5">
         <Setter Property="Width" Value="5" />
     </Style>
+    
+    <Style Selector=":is(Layoutable).w-100">
+        <Setter Property="Width" Value="100" />
+    </Style>
+    
+    <Style Selector=":is(Layoutable).minw-300">
+        <Setter Property="MinWidth" Value="300" />
+    </Style>
+    
+    <Style Selector=":is(Layoutable).minw-150">
+        <Setter Property="MinWidth" Value="150" />
+    </Style>
 
     <Style Selector=":is(Layoutable).h-100">
         <Setter Property="Height" Value="100" />
