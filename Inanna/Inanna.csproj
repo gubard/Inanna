@@ -10,7 +10,7 @@
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="12.1.1" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
-    <PackageReference Include="FluentIcons.Avalonia.Fluent" Version="2.1.333" />
+    <PackageReference Include="FluentIcons.Avalonia.Fluent" Version="2.1.335" />
   </ItemGroup>
 
   <ItemGroup>
