@@ -33,11 +33,18 @@ public abstract class ViewModelBase : PropertyValidator
         Dispatcher.UIThread.Post(action, DispatcherPriority.Background);
     }
 
-    protected void WrapCommand(Action action)
+    protected void WrapCommand(
+        Action action,
+        bool isIgnoreErrors = false,
+        bool isStartExecute = true
+    )
     {
-        StartExecute();
+        if (isStartExecute)
+        {
+            StartExecute();
+        }
 
-        if (HasErrors)
+        if (HasErrors && !isIgnoreErrors)
         {
             return;
         }
