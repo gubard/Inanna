@@ -46,19 +46,22 @@ public abstract class ViewModelBase : PropertyValidator
     }
 
     protected ConfiguredValueTaskAwaitable WrapCommandAsync(
-        Func<ConfiguredValueTaskAwaitable> func,
-        CancellationToken ct
+        Func<ValueTask> func,
+        CancellationToken ct,
+        bool isIgnoreErrors = false,
+        bool isStartExecute = true
     )
     {
-        StartExecute();
-
-        return HasErrors
-            ? TaskHelper.ConfiguredCompletedTask
-            : Services.SafeExecuteWrapper.ExecuteAsync(func, ct);
+        return WrapCommandAsync(
+            () => func.Invoke().ConfigureAwait(false),
+            ct,
+            isIgnoreErrors,
+            isStartExecute
+        );
     }
 
     protected ConfiguredValueTaskAwaitable WrapCommandAsync(
-        Func<ValueTask> func,
+        Func<ConfiguredValueTaskAwaitable> func,
         CancellationToken ct,
         bool isIgnoreErrors = false,
         bool isStartExecute = true
@@ -71,10 +74,7 @@ public abstract class ViewModelBase : PropertyValidator
 
         return HasErrors && !isIgnoreErrors
             ? TaskHelper.ConfiguredCompletedTask
-            : Services.SafeExecuteWrapper.ExecuteAsync(
-                () => func.Invoke().ConfigureAwait(false),
-                ct
-            );
+            : Services.SafeExecuteWrapper.ExecuteAsync(func, ct);
     }
 
     protected ConfiguredValueTaskAwaitable WrapCommandAsync<TValidationErrors>(

@@ -28,7 +28,9 @@ public abstract class PropertyValidator : ObservableObject, IPropertyValidator
                 return true;
             }
 
-            return _assignedPropertyValidators.Any(x => x.HasErrors);
+            var result = _assignedPropertyValidators.Any(x => x.HasErrors);
+
+            return result;
         }
     }
 
