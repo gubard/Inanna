@@ -12,7 +12,7 @@ public static class BitmapExtension
 
         bitmap.Save(
             stream,
-            new PngBitmapEncoderOptions { CompressionLevel = CompressionLevel.NoCompression }
+            new PngBitmapEncoderOptions { CompressionLevel = CompressionLevel.SmallestSize }
         );
 
         stream.Position = 0;
