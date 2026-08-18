@@ -1,73 +1,176 @@
 using System.IO.Compression;
+using System.Runtime.CompilerServices;
 using Avalonia;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 
 namespace Inanna.Helpers;
 
+public enum GrayscaleMode
+{
+    Luma, // Default (0.22 R + 0.72 G + 0.06 B)
+    Luminance, // Linearized sRGB weights (0.2126 R + 0.7152 G + 0.0722 B)
+    Lightness, // HSL: (Max + Min) / 2
+    Average, // HSI: (R + G + B) / 3
+    Value, // HSV: Max(R, G, B)
+}
+
 public static class BitmapExtension
 {
-    public static WriteableBitmap ToGrayscale(this Bitmap source)
+    public static WriteableBitmap ColorToGray(
+        this Bitmap source,
+        int radius = 300,
+        int samples = 4,
+        int iterations = 10,
+        float contrast = 0,
+        byte whitePoint = 200,
+        byte blackPoint = 30,
+        GrayscaleMode mode = GrayscaleMode.Luma
+    )
     {
         var pixelSize = source.PixelSize;
-        var dpi = source.Dpi;
-
-        var writable = new WriteableBitmap(
-            pixelSize,
-            dpi,
-            PixelFormat.Bgra8888,
-            AlphaFormat.Premul
-        );
-
         var width = pixelSize.Width;
         var height = pixelSize.Height;
         var stride = width * 4;
-        var pixelData = new byte[height * stride];
+        var totalBytes = height * stride;
+
+        var srcData = new byte[totalBytes];
 
         unsafe
         {
-            fixed (byte* pPixels = pixelData)
+            fixed (byte* pSrc = srcData)
             {
                 source.CopyPixels(
                     new PixelRect(0, 0, width, height),
-                    (nint)pPixels,
-                    pixelData.Length,
+                    (nint)pSrc,
+                    srcData.Length,
                     stride
                 );
             }
 
-            for (var i = 0; i < pixelData.Length; i += 4)
-            {
-                var b = pixelData[i];
-                var g = pixelData[i + 1];
-                var r = pixelData[i + 2];
+            var resultData = new byte[totalBytes];
+            var angleStep = (float)(2.0 * Math.PI / Math.Max(1, samples));
+            var contrastFactor = (1.0f + contrast) * (1.0f + contrast);
 
-                var gray = (byte)(0.299 * r + 0.587 * g + 0.114 * b);
-
-                pixelData[i] = gray;
-                pixelData[i + 1] = gray;
-                pixelData[i + 2] = gray;
-            }
-
-            using var fb = writable.Lock();
-            var dstPtr = (byte*)fb.Address;
-            var rowBytes = fb.RowBytes;
-
-            fixed (byte* srcPtr = pixelData)
-            {
-                for (var y = 0; y < height; y++)
+            Parallel.For(
+                0,
+                height,
+                y =>
                 {
-                    Buffer.MemoryCopy(
-                        srcPtr + (y * stride),
-                        dstPtr + (y * rowBytes),
-                        rowBytes,
-                        stride
-                    );
+                    var rowOffset = y * stride;
+
+                    for (var x = 0; x < width; x++)
+                    {
+                        var offset = rowOffset + x * 4;
+
+                        var b = srcData[offset];
+                        var g = srcData[offset + 1];
+                        var r = srcData[offset + 2];
+                        var a = srcData[offset + 3];
+                        var srcLuma = GetGrayscale(r, g, b, mode);
+                        var totalSampleLuma = 0f;
+                        var validSamples = 0;
+
+                        for (var s = 0; s < samples; s++)
+                        {
+                            var angle = s * angleStep;
+
+                            for (var it = 1; it <= iterations; it++)
+                            {
+                                var currentRadius = radius / (float)iterations * it;
+
+                                var sampleX = Math.Clamp(
+                                    (int)(x + Math.Cos(angle) * currentRadius),
+                                    0,
+                                    width - 1
+                                );
+                                var sampleY = Math.Clamp(
+                                    (int)(y + Math.Sin(angle) * currentRadius),
+                                    0,
+                                    height - 1
+                                );
+
+                                var sampleOffset = sampleY * stride + sampleX * 4;
+                                var sb = srcData[sampleOffset];
+                                var sg = srcData[sampleOffset + 1];
+                                var sr = srcData[sampleOffset + 2];
+                                totalSampleLuma += GetGrayscale(sr, sg, sb, mode);
+                                validSamples++;
+                            }
+                        }
+
+                        var localBgLuma =
+                            validSamples > 0 ? totalSampleLuma / validSamples : srcLuma;
+
+                        // 2. Локальна дельта контрасту
+                        var delta = srcLuma - localBgLuma;
+                        var baseGray = 128.0f + delta * 2.0f; // Підсилений коефіцієнт дельти (2.0 замість 1.8)
+
+                        // 3. Контрастність
+                        var gray = (baseGray - 128.0f) * contrastFactor + 128.0f;
+
+                        // 4. Очищення паперу (Levels / Thresholding для документів)
+                        if (gray >= whitePoint)
+                        {
+                            gray = 255.0f; // Папір робимо повністю білим
+                        }
+                        else if (gray <= blackPoint)
+                        {
+                            gray = 0.0f; // Текст/лінії робимо глибоко чорними
+                        }
+                        else
+                        {
+                            // Лінійна нормалізація діапазону [blackPoint .. whitePoint] у [0 .. 255]
+                            gray = (gray - blackPoint) / (whitePoint - blackPoint) * 255.0f;
+                        }
+
+                        var grayByte = (byte)Math.Clamp(gray, 0.0f, 255.0f);
+
+                        resultData[offset] = grayByte; // B
+                        resultData[offset + 1] = grayByte; // G
+                        resultData[offset + 2] = grayByte; // R
+                        resultData[offset + 3] = a; // A
+                    }
+                }
+            );
+
+            var resultBitmap = new WriteableBitmap(
+                pixelSize,
+                source.Dpi,
+                PixelFormat.Bgra8888,
+                AlphaFormat.Premul
+            );
+
+            using (var fb = resultBitmap.Lock())
+            {
+                var dstPtr = (byte*)fb.Address;
+                var rowBytes = fb.RowBytes;
+
+                fixed (byte* resPtr = resultData)
+                {
+                    for (var y = 0; y < height; y++)
+                    {
+                        Unsafe.CopyBlock(dstPtr + y * rowBytes, resPtr + y * stride, (uint)stride);
+                    }
                 }
             }
-        }
 
-        return writable;
+            return resultBitmap;
+        }
+    }
+
+    private static float GetGrayscale(byte r, byte g, byte b, GrayscaleMode mode)
+    {
+        return mode switch
+        {
+            GrayscaleMode.Luma => 0.299f * r + 0.587f * g + 0.114f * b,
+            GrayscaleMode.Luminance => 0.2126f * r + 0.7152f * g + 0.0722f * b,
+            GrayscaleMode.Lightness => (Math.Max(r, Math.Max(g, b)) + Math.Min(r, Math.Min(g, b)))
+                / 2f,
+            GrayscaleMode.Average => (r + g + b) / 3f,
+            GrayscaleMode.Value => Math.Max(r, Math.Max(g, b)),
+            _ => 0.22f * r + 0.72f * g + 0.06f * b,
+        };
     }
 
     public static Stream ToStreamNoCompression(this Bitmap bitmap)
