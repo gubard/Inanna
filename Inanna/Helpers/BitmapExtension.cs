@@ -6,7 +6,7 @@ namespace Inanna.Helpers;
 
 public static class BitmapExtension
 {
-    public static Stream ToStream(this Bitmap bitmap)
+    public static Stream ToStreamSmallestSize(this Bitmap bitmap)
     {
         var stream = new MemoryStream();
 
@@ -20,9 +20,9 @@ public static class BitmapExtension
         return stream;
     }
 
-    public static Bitmap DecodeToWidth(this Bitmap bitmap, int width)
+    public static Bitmap DecodeToWidthSmallestSize(this Bitmap bitmap, int width)
     {
-        using var stream = bitmap.ToStream();
+        using var stream = bitmap.ToStreamSmallestSize();
 
         return Bitmap.DecodeToWidth(stream, width);
     }
