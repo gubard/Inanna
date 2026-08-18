@@ -6,6 +6,27 @@ namespace Inanna.Helpers;
 
 public static class BitmapExtension
 {
+    public static Stream ToStreamNoCompression(this Bitmap bitmap)
+    {
+        var stream = new MemoryStream();
+
+        bitmap.Save(
+            stream,
+            new PngBitmapEncoderOptions { CompressionLevel = CompressionLevel.NoCompression }
+        );
+
+        stream.Position = 0;
+
+        return stream;
+    }
+
+    public static Bitmap DecodeToWidthNoCompression(this Bitmap bitmap, int width)
+    {
+        using var stream = bitmap.ToStreamNoCompression();
+
+        return Bitmap.DecodeToWidth(stream, width);
+    }
+
     public static Stream ToStreamSmallestSize(this Bitmap bitmap)
     {
         var stream = new MemoryStream();
