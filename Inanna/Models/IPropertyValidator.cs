@@ -23,7 +23,7 @@ public abstract class PropertyValidator : ObservableObject, IPropertyValidator
                 return false;
             }
 
-            if (_errors.Count != 0 && _errors.Any(x => x.Value.Invoke().Any()))
+            if (_errors.Count != 0 && _errors.Any(x => !x.Value.Invoke().IsEmpty))
             {
                 return true;
             }
@@ -65,7 +65,7 @@ public abstract class PropertyValidator : ObservableObject, IPropertyValidator
 
         var errors = validation.Invoke();
 
-        return errors;
+        return errors.ToArray();
     }
 
     protected T AddAssignedPropertyValidator<T>(T assignedPropertyValidator)
@@ -89,12 +89,12 @@ public abstract class PropertyValidator : ObservableObject, IPropertyValidator
         _assignedPropertyValidators.Remove(assignedPropertyValidator);
     }
 
-    protected void SetValidation(string propertyName, Func<IEnumerable<ValidationError>> validation)
+    protected void SetValidation(string propertyName, Func<Memory<ValidationError>> validation)
     {
         _errors[propertyName] = validation;
     }
 
     private bool _isAnyExecute;
-    private readonly Dictionary<string, Func<IEnumerable<ValidationError>>> _errors = new();
+    private readonly Dictionary<string, Func<Memory<ValidationError>>> _errors = new();
     private readonly List<IPropertyValidator> _assignedPropertyValidators = new();
 }
