@@ -1,6 +1,7 @@
 using System.Collections;
 using System.ComponentModel;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Gaia.Helpers;
 using Gaia.Models;
 
 namespace Inanna.Models;
@@ -8,6 +9,7 @@ namespace Inanna.Models;
 public interface IPropertyValidator : INotifyDataErrorInfo
 {
     void StartExecute();
+    IEnumerable<object> Errors { get; }
 }
 
 public abstract class PropertyValidator : ObservableObject, IPropertyValidator
@@ -31,6 +33,19 @@ public abstract class PropertyValidator : ObservableObject, IPropertyValidator
             var result = _assignedPropertyValidators.Any(x => x.HasErrors);
 
             return result;
+        }
+    }
+
+    public IEnumerable<object> Errors
+    {
+        get
+        {
+            if (!_isAnyExecute)
+            {
+                return [];
+            }
+
+            return    _errors.Select(x => x.Value.Invoke().Select(y=>(object)y)).Combine().Combine(_assignedPropertyValidators.Select(x=>x.Errors.ToArray().AsMemory())).ToArray();
         }
     }
 

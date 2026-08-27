@@ -18,6 +18,11 @@ public abstract class ViewModelBase : PropertyValidator
         Services = services;
     }
 
+    protected string GetLang(string key)
+    {
+        return Services.AppResourceService.GetResource<string>($"Lang.{key}");
+    }
+
     protected void InvokeUi(Action action)
     {
         Dispatcher.UIThread.Invoke(action);
