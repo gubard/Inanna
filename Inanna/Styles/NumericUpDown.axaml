@@ -3,8 +3,10 @@
     <Style Selector="NumericUpDown.int-format">
         <Setter Property="FormatString" Value="F0" />
     </Style>
-    
+
     <Style Selector="NumericUpDown">
         <Setter Property="Margin" Value="5" />
+        <Setter Property="AllowSpin" Value="False" />
+        <Setter Property="ShowButtonSpinner" Value="False" />
     </Style>
 </Styles>
