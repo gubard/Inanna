@@ -16,25 +16,7 @@ public abstract class PropertyValidator : ObservableObject, IPropertyValidator
 {
     public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
 
-    public bool HasErrors
-    {
-        get
-        {
-            if (!_isAnyExecute)
-            {
-                return false;
-            }
-
-            if (_errors.Count != 0 && _errors.Any(x => !x.Value.Invoke().IsEmpty))
-            {
-                return true;
-            }
-
-            var result = _assignedPropertyValidators.Any(x => x.HasErrors);
-
-            return result;
-        }
-    }
+    public bool HasErrors => Errors.Any();
 
     public IEnumerable<object> Errors
     {
@@ -45,7 +27,10 @@ public abstract class PropertyValidator : ObservableObject, IPropertyValidator
                 return [];
             }
 
-            return    _errors.Select(x => x.Value.Invoke().Select(y=>(object)y)).Combine().Combine(_assignedPropertyValidators.Select(x=>x.Errors.ToArray().AsMemory())).ToArray();
+            return _errors
+                .Select(x => x.Value.Invoke().Select(y => (object)y))
+                .Combine(_assignedPropertyValidators.Select(x => x.Errors.ToArray().AsMemory()))
+                .ToArray();
         }
     }
 
@@ -62,10 +47,16 @@ public abstract class PropertyValidator : ObservableObject, IPropertyValidator
         {
             assignedPropertyValidator.StartExecute();
         }
+
+        OnPropertyChanged(nameof(HasErrors));
+        OnPropertyChanged(nameof(Errors));
     }
 
     public IEnumerable GetErrors(string? propertyName)
     {
+        OnPropertyChanged(nameof(HasErrors));
+        OnPropertyChanged(nameof(Errors));
+
         if (_isAnyExecute is false || propertyName is null)
         {
             return Enumerable.Empty<ValidationError>();
