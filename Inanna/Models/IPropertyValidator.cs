@@ -27,8 +27,9 @@ public abstract class PropertyValidator : ObservableObject, IPropertyValidator
                 return [];
             }
 
-            return _errors
-                .Select(x => x.Value.Invoke().Select(y => (object)y))
+            return GetGeneralValidation()
+                .Select(x => (object)x)
+                .Combine(_errors.Select(x => x.Value.Invoke().Select(y => (object)y)))
                 .Combine(_assignedPropertyValidators.Select(x => x.Errors.ToArray().AsMemory()))
                 .ToArray();
         }
@@ -98,6 +99,11 @@ public abstract class PropertyValidator : ObservableObject, IPropertyValidator
     protected void SetValidation(string propertyName, Func<Memory<ValidationError>> validation)
     {
         _errors[propertyName] = validation;
+    }
+
+    protected virtual Memory<ValidationError> GetGeneralValidation()
+    {
+        return Memory<ValidationError>.Empty;
     }
 
     private bool _isAnyExecute;
