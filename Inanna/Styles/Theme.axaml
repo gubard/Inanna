@@ -19,6 +19,7 @@
                 <MergeResourceInclude Source="EnumsSelectorControl.axaml" />
                 <MergeResourceInclude Source="BusyAreaControl.axaml" />
                 <MergeResourceInclude Source="Resources.axaml" />
+                <MergeResourceInclude Source="InannaCalendarDatePicker.axaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Styles.Resources>
