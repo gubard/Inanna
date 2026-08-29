@@ -13,4 +13,7 @@ public static partial class InannaLog
 
     [LoggerMessage(EventId = 3, Level = LogLevel.Error, Message = "Folder from path error")]
     public static partial void GetFolderFromPathError(this ILogger logger, Exception exception);
+
+    [LoggerMessage(EventId = 4, Level = LogLevel.Error, Message = "App resource {Key} not found")]
+    public static partial void NotResourceKey(this ILogger logger, string key);
 }
