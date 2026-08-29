@@ -28,6 +28,11 @@ public abstract class ViewModelBase : PropertyValidator
         Dispatcher.UIThread.Invoke(action);
     }
 
+    protected void InvokeUiBackground(Action action)
+    {
+        Dispatcher.UIThread.Invoke(action, DispatcherPriority.Background);
+    }
+
     protected void PostUi(Action action)
     {
         Dispatcher.UIThread.Post(action);
@@ -368,22 +373,25 @@ public abstract class ViewModelBase : PropertyValidator
     {
         var selectedItem = default(T);
 
-        var list = await Dispatcher.UIThread.InvokeAsync(() =>
-        {
-            var l = new ListBox
+        var list = await Dispatcher.UIThread.InvokeAsync(
+            () =>
             {
-                [ItemsControl.ItemsSourceProperty] = items,
-                [ListBox.SelectionModeProperty] = SelectionMode.Single,
-            };
+                var l = new ListBox
+                {
+                    [ItemsControl.ItemsSourceProperty] = items,
+                    [ListBox.SelectionModeProperty] = SelectionMode.Single,
+                };
 
-            l.SelectionChanged += async (_, e) =>
-            {
-                selectedItem = e.AddedItems.OfType<T>().First();
-                await Services.DialogService.CloseMessageBoxAsync(CancellationToken.None);
-            };
+                l.SelectionChanged += async (_, e) =>
+                {
+                    selectedItem = e.AddedItems.OfType<T>().First();
+                    await Services.DialogService.CloseMessageBoxAsync(CancellationToken.None);
+                };
 
-            return l;
-        });
+                return l;
+            },
+            DispatcherPriority.Background
+        );
 
         await Services.DialogService.ShowMessageBoxAsync(
             header,
@@ -416,8 +424,9 @@ public abstract class ViewModelBase : PropertyValidator
             )
         );
 
-        return await Dispatcher.UIThread.InvokeAsync(() =>
-            list.SelectedItems?.OfType<T>().ToArray() ?? []
+        return await Dispatcher.UIThread.InvokeAsync(
+            () => list.SelectedItems?.OfType<T>().ToArray() ?? [],
+            DispatcherPriority.Background
         );
     }
 

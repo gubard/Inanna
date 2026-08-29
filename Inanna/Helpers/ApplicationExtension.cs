@@ -17,7 +17,7 @@ public static class ApplicationExtension
 
     public static TopLevel? GetTopLevel(this Application app)
     {
-        return Dispatcher.UIThread.Invoke(() => app.GetTopLevelCore());
+        return Dispatcher.UIThread.Invoke(app.GetTopLevelCore, DispatcherPriority.Background);
     }
 
     private static TopLevel? GetTopLevelCore(this Application app)
@@ -41,6 +41,9 @@ public static class ApplicationExtension
 
     public static IStorageProvider? GetStorageProvider(this Application app)
     {
-        return Dispatcher.UIThread.Invoke(() => app.GetTopLevelCore()?.StorageProvider);
+        return Dispatcher.UIThread.Invoke(
+            () => app.GetTopLevelCore()?.StorageProvider,
+            DispatcherPriority.Background
+        );
     }
 }

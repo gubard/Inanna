@@ -14,18 +14,24 @@ public sealed partial class AppState : ObservableObject
 
     public void SetServiceMode(string serviceName, ServiceMode mode)
     {
-        Dispatcher.UIThread.Invoke(() => _serviceStates[serviceName].Mode = mode);
+        Dispatcher.UIThread.Invoke(
+            () => _serviceStates[serviceName].Mode = mode,
+            DispatcherPriority.Background
+        );
     }
 
     public void ResetServiceModes()
     {
-        Dispatcher.UIThread.Invoke(() =>
-        {
-            foreach (var serviceState in _serviceStates)
+        Dispatcher.UIThread.Invoke(
+            () =>
             {
-                serviceState.Value.Mode = ServiceMode.Online;
-            }
-        });
+                foreach (var serviceState in _serviceStates)
+                {
+                    serviceState.Value.Mode = ServiceMode.Online;
+                }
+            },
+            DispatcherPriority.Background
+        );
     }
 
     public void AddService(IServiceState serviceState)

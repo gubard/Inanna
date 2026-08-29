@@ -12,7 +12,7 @@ public static class StringExtension
 
     public static TextBlock DispatchToDialogHeader(this string str)
     {
-        return Dispatcher.UIThread.Invoke(str.ToDialogHeader);
+        return Dispatcher.UIThread.Invoke(str.ToDialogHeader, DispatcherPriority.Background);
     }
 
     public static TextBlock ToNotification(this string str)
@@ -22,6 +22,6 @@ public static class StringExtension
 
     public static TextBlock DispatchToNotification(this string str)
     {
-        return Dispatcher.UIThread.Invoke(str.ToNotification);
+        return Dispatcher.UIThread.Invoke(str.ToNotification, DispatcherPriority.Background);
     }
 }

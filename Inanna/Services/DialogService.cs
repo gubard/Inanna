@@ -97,9 +97,18 @@ public sealed class DialogService : IDialogService
         params DialogButton[] buttons
     )
     {
-        if (!Dispatcher.UIThread.Invoke(() => DialogControl.IsShowDialog(_dialogId)))
+        if (
+            !Dispatcher.UIThread.Invoke(
+                () => DialogControl.IsShowDialog(_dialogId),
+                DispatcherPriority.Background
+            )
+        )
         {
-            Dispatcher.UIThread.Invoke(() => DialogControl.ShowDialog(_dialogId, _stackViewModel));
+            Dispatcher.UIThread.Invoke(
+                () => DialogControl.ShowDialog(_dialogId, _stackViewModel),
+                DispatcherPriority.Background,
+                ct
+            );
         }
 
         if (_stackViewModel.CurrentView is ISave saveUi)
@@ -107,8 +116,13 @@ public sealed class DialogService : IDialogService
             await saveUi.SaveAsync(ct);
         }
 
-        Dispatcher.UIThread.Invoke(() =>
-            _stackViewModel.PushViewUi(new DialogViewModel(header, content, _services, buttons))
+        Dispatcher.UIThread.Invoke(
+            () =>
+                _stackViewModel.PushViewUi(
+                    new DialogViewModel(header, content, _services, buttons)
+                ),
+            DispatcherPriority.Background,
+            ct
         );
 
         var taskCompletionSource = new TaskCompletionSource();
@@ -124,12 +138,24 @@ public sealed class DialogService : IDialogService
             await saveUi.SaveAsync(ct);
         }
 
-        Dispatcher.UIThread.Invoke(() => _stackViewModel.RemoveLastViewUi());
-        Dispatcher.UIThread.Invoke(() => _stackViewModel.SetCurrentViewUi());
+        Dispatcher.UIThread.Invoke(
+            () => _stackViewModel.RemoveLastViewUi(),
+            DispatcherPriority.Background,
+            ct
+        );
+        Dispatcher.UIThread.Invoke(
+            () => _stackViewModel.SetCurrentViewUi(),
+            DispatcherPriority.Background,
+            ct
+        );
 
         if (_stackViewModel.CurrentView is null)
         {
-            Dispatcher.UIThread.Invoke(() => DialogControl.CloseDialog(_dialogId));
+            Dispatcher.UIThread.Invoke(
+                () => DialogControl.CloseDialog(_dialogId),
+                DispatcherPriority.Background,
+                ct
+            );
         }
 
         if (_taskStack.Count != 0)
