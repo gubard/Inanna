@@ -17,6 +17,20 @@ public enum GrayscaleMode
 
 public static class BitmapExtension
 {
+    public static Bitmap CopyBitmap(this Bitmap source)
+    {
+        using var stream = new MemoryStream();
+
+        source.Save(
+            stream,
+            new PngBitmapEncoderOptions { CompressionLevel = CompressionLevel.NoCompression }
+        );
+
+        stream.Position = 0;
+
+        return new Bitmap(stream);
+    }
+
     public static WriteableBitmap ColorToGray(
         this Bitmap source,
         int radius = 300,
