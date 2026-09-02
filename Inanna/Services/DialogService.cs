@@ -30,7 +30,6 @@ public sealed class DialogService : IDialogService
 {
     public DialogService(
         string dialogId,
-        IAppResourceService appResourceService,
         ICommandFactory commandFactory,
         IInannaViewModelFactory factory,
         ViewModelServices services
@@ -43,14 +42,14 @@ public sealed class DialogService : IDialogService
         _taskStack = new();
 
         CancelButton = new(
-            appResourceService.GetResource<string>("Lang.Cancel"),
+            _services.AppResourceService.GetResource<string>("Lang.Cancel"),
             commandFactory.CreateCommand(async ct => await CloseMessageBoxAsync(ct)),
             null,
             DialogButtonType.Normal
         );
 
         OkButton = new(
-            appResourceService.GetResource<string>("Lang.Ok"),
+            _services.AppResourceService.GetResource<string>("Lang.Ok"),
             commandFactory.CreateCommand(async ct => await CloseMessageBoxAsync(ct)),
             null,
             DialogButtonType.Primary

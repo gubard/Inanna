@@ -28,9 +28,9 @@ public abstract class PropertyValidator : ObservableObject, IPropertyValidator
             }
 
             return GetGeneralValidation()
-                .Select(x => (object)x)
-                .Combine(_errors.Select(x => x.Value.Invoke().Select(y => (object)y)))
-                .Combine(_assignedPropertyValidators.Select(x => x.Errors.ToArray().AsMemory()))
+                .SelectAsSpan(x => (object)x)
+                .Concat(_errors.Select(x => x.Value.Invoke().SelectAsSpan(y => (object)y)))
+                .Concat(_assignedPropertyValidators.Select(x => x.Errors.ToArray().AsMemory()))
                 .ToArray();
         }
     }
