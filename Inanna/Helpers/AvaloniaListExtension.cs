@@ -27,7 +27,12 @@ public static class AvaloniaListExtension
             list.AddRange(items.Where(x => !list.Contains(x)));
         }
 
-        public void UpdateOrder(T[] items)
+        public void UpdateOrder(Memory<T> items)
+        {
+            list.UpdateOrder(items.Span);
+        }
+
+        public void UpdateOrder(Span<T> items)
         {
             if (items.Length == 0)
             {
@@ -38,7 +43,7 @@ public static class AvaloniaListExtension
 
             if (list.Count == 0)
             {
-                list.AddRange(items);
+                list.AddRange(items.ToArray());
 
                 return;
             }
