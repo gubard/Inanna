@@ -15,6 +15,6 @@ public static class StorageFileExtension
 
     public static FileInfo ToFile(this IStorageFile file)
     {
-        return new FileInfo(file.Path.LocalPath);
+        return new(file.Path.LocalPath);
     }
 }

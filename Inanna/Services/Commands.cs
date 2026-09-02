@@ -23,7 +23,7 @@ public abstract class Commands
         bool canCancel = true
     )
     {
-        return new Lazy<ICommand>(() =>
+        return new(() =>
             ServiceProvider
                 .GetService<ICommandFactory>()
                 .CreateCommand(func, isBackground, canCancel)
@@ -36,7 +36,7 @@ public abstract class Commands
         bool canCancel = true
     )
     {
-        return new Lazy<ICommand>(() =>
+        return new(() =>
             ServiceProvider
                 .GetService<ICommandFactory>()
                 .CreateCommand(func, isBackground, canCancel)
@@ -49,7 +49,7 @@ public abstract class Commands
         bool canCancel = true
     )
     {
-        return new Lazy<ICommand>(() =>
+        return new(() =>
             ServiceProvider
                 .GetService<ICommandFactory>()
                 .CreateCommand(func, isBackground, canCancel)
@@ -62,7 +62,7 @@ public abstract class Commands
         bool canCancel = true
     )
     {
-        return new Lazy<ICommand>(() =>
+        return new(() =>
             ServiceProvider
                 .GetService<ICommandFactory>()
                 .CreateCommand(func, isBackground, canCancel)
@@ -76,7 +76,7 @@ public abstract class Commands
     )
         where TValidationErrors : IValidationErrors
     {
-        return new Lazy<ICommand>(() =>
+        return new(() =>
             ServiceProvider
                 .GetService<ICommandFactory>()
                 .CreateCommand(func, isBackground, canCancel)
@@ -90,7 +90,7 @@ public abstract class Commands
     )
         where TValidationErrors : IValidationErrors
     {
-        return new Lazy<ICommand>(() =>
+        return new(() =>
             ServiceProvider
                 .GetService<ICommandFactory>()
                 .CreateCommand(func, isBackground, canCancel)
@@ -104,7 +104,7 @@ public abstract class Commands
     )
         where TValidationErrors : IValidationErrors
     {
-        return new Lazy<ICommand>(() =>
+        return new(() =>
             ServiceProvider
                 .GetService<ICommandFactory>()
                 .CreateCommand(func, isBackground, canCancel)
@@ -118,7 +118,7 @@ public abstract class Commands
     )
         where TValidationErrors : IValidationErrors
     {
-        return new Lazy<ICommand>(() =>
+        return new(() =>
             ServiceProvider
                 .GetService<ICommandFactory>()
                 .CreateCommand(func, isBackground, canCancel)

@@ -40,12 +40,7 @@ public static class BitmapExtension
         {
             fixed (byte* pSrc = srcData)
             {
-                source.CopyPixels(
-                    new PixelRect(0, 0, width, height),
-                    (nint)pSrc,
-                    srcData.Length,
-                    stride
-                );
+                source.CopyPixels(new(0, 0, width, height), (nint)pSrc, srcData.Length, stride);
             }
 
             var resultData = new byte[totalBytes];
@@ -242,8 +237,8 @@ public static class BitmapExtension
             // Draw the original bitmap into the context
             context.DrawImage(
                 source,
-                new Rect(0, 0, source.Size.Width, source.Size.Height),
-                new Rect(0, 0, source.Size.Width, source.Size.Height)
+                new(0, 0, source.Size.Width, source.Size.Height),
+                new(0, 0, source.Size.Width, source.Size.Height)
             );
         }
 
