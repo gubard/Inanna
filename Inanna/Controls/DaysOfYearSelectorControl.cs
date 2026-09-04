@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls.Primitives;
+using Gaia.Helpers;
 using Gaia.Models;
 using Inanna.Helpers;
 
@@ -29,11 +30,11 @@ public sealed class DaysOfYearSelectorControl : TemplatedControl
     public DaysOfYearSelectorControl()
     {
         var items = new Dictionary<Month, IntegersSelectorControl>();
-        var months = Enum.GetValues<Month>();
+        var months = EnumHelper<Month>.Values;
 
         for (var index = 0; index < months.Length; index++)
         {
-            var month = months[index];
+            var month = months.Span[index];
             var list = new AvaloniaList<int>();
 
             list.CollectionChanged += (_, e) =>
