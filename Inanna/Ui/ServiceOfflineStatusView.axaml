@@ -2,14 +2,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:is="clr-namespace:Inanna.Services;assembly=Inanna"
              xmlns:ui="clr-namespace:Inanna.Ui"
+             xmlns:converters="clr-namespace:Inanna.Converters"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Inanna.Ui.ServiceOfflineStatusView"
              x:DataType="ui:ServiceOfflineStatusViewModel">
     <StackPanel Classes="horizontal">
         <TextBlock Classes="small align-center"
-                   Text="{Binding State.ServiceName, Converter={x:Static is:StringLocalizationConverter.Instance}}" />
+                   Text="{Binding State.ServiceName, Converter={x:Static converters:StringLocalizationConverter.Instance}}" />
         <Button Classes="small" Content="{DynamicResource Lang.Offline}"
                 Command="{Binding InannaCommands.SwitchServiceModeCommand}"
                 CommandParameter="{Binding State}" />

@@ -2,7 +2,7 @@
 using Avalonia.Data.Converters;
 using Gaia.Helpers;
 
-namespace Inanna.Services;
+namespace Inanna.Converters;
 
 public sealed class DateOnlyToDateTimeConverter : IValueConverter
 {

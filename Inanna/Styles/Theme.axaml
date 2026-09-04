@@ -5,8 +5,6 @@
             <ResourceDictionary.MergedDictionaries>
                 <MergeResourceInclude Source="ViewSelectorControl.axaml" />
                 <MergeResourceInclude Source="ViewSelectorItemControl.axaml" />
-                <MergeResourceInclude Source="EnumSelectorControl.axaml" />
-                <MergeResourceInclude Source="EnumSelectorItemControl.axaml" />
                 <MergeResourceInclude Source="DialogControl.axaml" />
                 <MergeResourceInclude Source="NotificationPanel.axaml" />
                 <MergeResourceInclude Source="NotificationControl.axaml" />
@@ -16,7 +14,6 @@
                 <MergeResourceInclude Source="DaysOfYearSelectorControl.axaml" />
                 <MergeResourceInclude Source="IntegerSelectorItemControl.axaml" />
                 <MergeResourceInclude Source="IntegersSelectorControl.axaml" />
-                <MergeResourceInclude Source="EnumsSelectorControl.axaml" />
                 <MergeResourceInclude Source="BusyAreaControl.axaml" />
                 <MergeResourceInclude Source="Resources.axaml" />
                 <MergeResourceInclude Source="InannaCalendarDatePicker.axaml" />

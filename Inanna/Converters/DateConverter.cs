@@ -2,7 +2,7 @@ using System.Globalization;
 using Avalonia.Data.Converters;
 using Gaia.Helpers;
 
-namespace Inanna.Services;
+namespace Inanna.Converters;
 
 public record struct DateOptions
 {

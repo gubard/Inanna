@@ -3,8 +3,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ui="clr-namespace:Inanna.Ui"
-             xmlns:is="clr-namespace:Inanna.Services"
              xmlns:hm="clr-namespace:Microsoft.Extensions.Logging;assembly=Microsoft.Extensions.Logging.Abstractions"
+             xmlns:converters="clr-namespace:Inanna.Converters"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Inanna.Ui.LogsView"
              x:DataType="ui:LogsViewModel">
@@ -13,12 +13,12 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Border Classes="item status"
-                            Classes.trace="{Binding Level, Converter={x:Static is:IsValueConverter.Instance}, ConverterParameter={x:Static hm:LogLevel.Trace}}"
-                            Classes.debug="{Binding Level, Converter={x:Static is:IsValueConverter.Instance}, ConverterParameter={x:Static hm:LogLevel.Debug}}"
-                            Classes.information="{Binding Level, Converter={x:Static is:IsValueConverter.Instance}, ConverterParameter={x:Static hm:LogLevel.Information}}"
-                            Classes.warning="{Binding Level, Converter={x:Static is:IsValueConverter.Instance}, ConverterParameter={x:Static hm:LogLevel.Warning}}"
-                            Classes.error="{Binding Level, Converter={x:Static is:IsValueConverter.Instance}, ConverterParameter={x:Static hm:LogLevel.Error}}"
-                            Classes.critical="{Binding Level, Converter={x:Static is:IsValueConverter.Instance}, ConverterParameter={x:Static hm:LogLevel.Critical}}">
+                            Classes.trace="{Binding Level, Converter={x:Static converters:IsValueConverter.Instance}, ConverterParameter={x:Static hm:LogLevel.Trace}}"
+                            Classes.debug="{Binding Level, Converter={x:Static converters:IsValueConverter.Instance}, ConverterParameter={x:Static hm:LogLevel.Debug}}"
+                            Classes.information="{Binding Level, Converter={x:Static converters:IsValueConverter.Instance}, ConverterParameter={x:Static hm:LogLevel.Information}}"
+                            Classes.warning="{Binding Level, Converter={x:Static converters:IsValueConverter.Instance}, ConverterParameter={x:Static hm:LogLevel.Warning}}"
+                            Classes.error="{Binding Level, Converter={x:Static converters:IsValueConverter.Instance}, ConverterParameter={x:Static hm:LogLevel.Error}}"
+                            Classes.critical="{Binding Level, Converter={x:Static converters:IsValueConverter.Instance}, ConverterParameter={x:Static hm:LogLevel.Critical}}">
                         <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*">
                             <TextBlock Classes="align-center m-2"
                                        Text="{Binding DateTime.LocalDateTime.Date, StringFormat={}{0:dd.MM.yyyy}}" />
@@ -29,10 +29,10 @@
                             <StackPanel Grid.Column="1" Grid.RowSpan="2" Classes="align-left-center">
                                 <SelectableTextBlock Classes="text-wrap align-left-center m-2"
                                                      Text="{Binding Text}"
-                                                     IsVisible="{Binding Exception, Converter={x:Static is:IsValueConverter.Instance}, ConverterParameter={x:Null}}" />
+                                                     IsVisible="{Binding Exception, Converter={x:Static converters:IsValueConverter.Instance}, ConverterParameter={x:Null}}" />
                                 <Expander IsExpanded="False"
                                           Header="{Binding Text}"
-                                          IsVisible="{Binding Exception, Converter={x:Static is:IsNotValueConverter.Instance}, ConverterParameter={x:Null}}">
+                                          IsVisible="{Binding Exception, Converter={x:Static converters:IsNotValueConverter.Instance}, ConverterParameter={x:Null}}">
                                     <SelectableTextBlock Classes="text-wrap m-5" Text="{Binding Exception}" />
                                 </Expander>
                             </StackPanel>

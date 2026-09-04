@@ -4,9 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ui="clr-namespace:Inanna.Ui"
              xmlns:sm="clr-namespace:Inanna.Models"
-             xmlns:s="clr-namespace:Inanna.Services"
              xmlns:ih="clr-namespace:Inanna.Helpers"
              xmlns:m="clr-namespace:FluentIcons.Avalonia.Fluent.Markup;assembly=FluentIcons.Avalonia.Fluent"
+             xmlns:converters="clr-namespace:Inanna.Converters"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Inanna.Ui.AdaptiveButtonsView"
              x:DataType="ui:AdaptiveButtonsViewModel">
@@ -30,7 +30,7 @@
         </Style>
     </UserControl.Styles>
 
-    <Panel IsVisible="{Binding Commands.Count, Converter={x:Static s:IsNotValueConverter.Instance}, ConverterParameter={x:Static ih:Numbers.Int32_0}}">
+    <Panel IsVisible="{Binding Commands.Count, Converter={x:Static converters:IsNotValueConverter.Instance}, ConverterParameter={x:Static ih:Numbers.Int32_0}}">
         <Button Classes="adaptive-buttons" 
                 Content="{m:SymbolIcon MoreHorizontal}">
             <Button.DataTemplates>

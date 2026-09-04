@@ -1,20 +1,20 @@
-using System.Globalization;
+﻿using System.Globalization;
 using Avalonia.Data.Converters;
 
-namespace Inanna.Services;
+namespace Inanna.Converters;
 
-public sealed class BoolReverseConverter : IValueConverter
+public sealed class DateTimeOffsetToDateTimeConverter : IValueConverter
 {
-    public static readonly BoolReverseConverter Instance = new();
+    public static readonly DateTimeOffsetToDateTimeConverter Instance = new();
 
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (value is not bool b)
+        if (value is not DateTimeOffset dateTimeOffset)
         {
             return value;
         }
 
-        return !b;
+        return dateTimeOffset.DateTime;
     }
 
     public object? ConvertBack(
@@ -24,11 +24,11 @@ public sealed class BoolReverseConverter : IValueConverter
         CultureInfo culture
     )
     {
-        if (value is not bool b)
+        if (value is not DateTime dateTime)
         {
             return value;
         }
 
-        return !b;
+        return new DateTimeOffset(dateTime);
     }
 }

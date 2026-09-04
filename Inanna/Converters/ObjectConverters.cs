@@ -2,7 +2,7 @@ using System.Collections;
 using System.Globalization;
 using Avalonia.Data.Converters;
 
-namespace Inanna.Services;
+namespace Inanna.Converters;
 
 public sealed class AnyOfConverter : IValueConverter
 {

@@ -1,7 +1,12 @@
 <Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:c="clr-namespace:Inanna.Converters">
     <Style Selector="ComboBox">
         <Setter Property="Margin" Value="5" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
+    </Style>
+
+    <Style Selector="ComboBox.enum">
+        <Setter Property="ItemsSource" Value="{Binding $self.SelectedItem, Converter={x:Static c:EnumValueToValuesConverter.Instance}}" />
     </Style>
 </Styles>

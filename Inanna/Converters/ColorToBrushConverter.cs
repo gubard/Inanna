@@ -2,7 +2,7 @@
 using Avalonia.Data.Converters;
 using Avalonia.Media;
 
-namespace Inanna.Services;
+namespace Inanna.Converters;
 
 public sealed class ColorToBrushConverter : IValueConverter
 {

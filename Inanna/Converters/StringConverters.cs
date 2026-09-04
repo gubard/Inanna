@@ -4,7 +4,7 @@ using Avalonia.Data.Converters;
 using Gaia.Helpers;
 using Inanna.Helpers;
 
-namespace Inanna.Services;
+namespace Inanna.Converters;
 
 public sealed class StringLocalizationConverter : IValueConverter
 {

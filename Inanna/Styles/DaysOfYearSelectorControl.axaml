@@ -4,7 +4,7 @@
                     xmlns:g="clr-namespace:System.Collections.Generic;assembly=System.Runtime"
                     xmlns:m="clr-namespace:Gaia.Models;assembly=Gaia"
                     xmlns:h="clr-namespace:Inanna.Helpers"
-                    xmlns:s="clr-namespace:Inanna.Services">
+                    xmlns:converters="clr-namespace:Inanna.Converters">
     <ControlTheme x:Key="DaysOfYearSelectorControlStyle" TargetType="c:DaysOfYearSelectorControl">
         <Setter Property="Template">
             <ControlTemplate>
@@ -18,9 +18,9 @@
                                 </DataTemplate.DataType>
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock
-                                        Text="{Binding Key, Converter={x:Static s:EnumToFullStringConverter.Instance}}" />
+                                        Text="{Binding Key, Converter={x:Static converters:EnumToFullStringConverter.Instance}}" />
                                     <TextBlock Text="{Binding Value.SelectedIntegers.Count, StringFormat='({0})'}"
-                                               IsVisible="{Binding Value.SelectedIntegers.Count, Converter={x:Static s:IsNotValueConverter.Instance}, ConverterParameter={x:Static h:Numbers.Int32_0}}" />
+                                               IsVisible="{Binding Value.SelectedIntegers.Count, Converter={x:Static converters:IsNotValueConverter.Instance}, ConverterParameter={x:Static h:Numbers.Int32_0}}" />
                                 </StackPanel>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
