@@ -23,6 +23,11 @@ public abstract class ViewModelBase : PropertyValidator
         return Services.AppResourceService.GetResource<string>($"Lang.{key}");
     }
 
+    protected T InvokeUi<T>(Func<T> action)
+    {
+        return Dispatcher.UIThread.Invoke(action);
+    }
+
     protected void InvokeUi(Action action)
     {
         Dispatcher.UIThread.Invoke(action);

@@ -8,17 +8,17 @@ namespace Inanna.Helpers;
 public static class InputElementAssist
 {
     public static readonly AttachedProperty<bool> IsDragCredentialNotifyHandler =
-        AvaloniaProperty.RegisterAttached<InputElement, bool>(
+        AvaloniaProperty.RegisterAttached<Control, bool>(
             nameof(IsDragCredentialNotifyHandler),
             typeof(InputElementAssist)
         );
 
-    public static void SetIsDragHandle(InputElement element, bool value)
+    public static void SetIsDragHandle(Control element, bool value)
     {
         element.SetValue(IsDragCredentialNotifyHandler, value);
     }
 
-    public static bool GetIsDragHandle(InputElement element)
+    public static bool GetIsDragHandle(Control element)
     {
         return element.GetValue(IsDragCredentialNotifyHandler);
     }

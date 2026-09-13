@@ -46,10 +46,10 @@ public sealed class UiDatabaseFactory : IAdoDatabaseFactory
     {
         if (_appState.User is null)
         {
-            return new($"{_storageService.GetAppDictionary()}/{_name}.sqlitedb");
+            return new($"{_storageService.GetAppDirectory()}/{_name}.sqlitedb");
         }
 
-        return new($"{_storageService.GetAppDictionary()}/{_appState.User.Id}.{_name}.sqlitedb");
+        return new($"{_storageService.GetAppDirectory()}/{_appState.User.Id}.{_name}.sqlitedb");
     }
 
     private async ValueTask InitDbContextAsync(FileInfo file, CancellationToken ct)
