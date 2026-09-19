@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ui="clr-namespace:Inanna.Ui"
              xmlns:m="clr-namespace:Inanna.Models"
+             xmlns:ic="clr-namespace:Inanna.Converters"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Inanna.Ui.ChangeOrderView"
              x:DataType="ui:ChangeOrderViewModel">
@@ -11,7 +12,7 @@
         <ToggleSwitch IsChecked="{Binding IsAfter}"
                       OnContent="{DynamicResource Lang.After}"
                       OffContent="{DynamicResource Lang.Before}" />
-        <ListBox Classes="change-order" ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem}">
+        <ListBox Classes="change-order" ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem, Converter={x:Static ic:EnumLocalizationConverter.Instance}}">
             <ListBox.Styles>
                 <Style x:DataType="m:IOrderedItem" Selector="ListBoxItem">
                     <Setter Property="IsEnabled" Value="{Binding !IsChangingOrder}" />
