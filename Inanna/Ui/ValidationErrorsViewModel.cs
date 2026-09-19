@@ -12,18 +12,18 @@ public sealed partial class ValidationErrorsViewModel : ViewModelBase
     public ValidationErrorsViewModel(
         IClipboardService clipboardService,
         ViewModelServices services,
-        params Span<ValidationError> errors
+        params Span<ValidationError> validationErrors
     )
         : base(services)
     {
         _clipboardService = clipboardService;
-        _errors = new(errors.ToArray());
+        _validationErrors = new(validationErrors.ToArray());
     }
 
-    public IEnumerable<ValidationError> Errors => _errors;
+    public IEnumerable<ValidationError> ValidationErrors => _validationErrors;
 
     private readonly IClipboardService _clipboardService;
-    private readonly AvaloniaList<ValidationError> _errors;
+    private readonly AvaloniaList<ValidationError> _validationErrors;
 
     [RelayCommand]
     private async Task CopyAsync(CancellationToken ct)
@@ -31,7 +31,7 @@ public sealed partial class ValidationErrorsViewModel : ViewModelBase
         await WrapCommandAsync(
             () =>
                 _clipboardService.SetTextAsync(
-                    _errors
+                    _validationErrors
                         .Select(x => x.ToString())
                         .WhereNotNull()
                         .JoinString(Environment.NewLine),

@@ -5,7 +5,7 @@ namespace Inanna.Helpers;
 
 public sealed class EnumValuesExtension : MarkupExtension
 {
-    public Type EnumType { get; set; }
+    public Type? EnumType { get; set; }
 
     public EnumValuesExtension() { }
 

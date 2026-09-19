@@ -9,7 +9,7 @@
              x:DataType="ui:ValidationErrorsViewModel">
     <Panel>
         <ScrollViewer Classes="vertical">
-            <ItemsControl ItemsSource="{Binding Errors}" />
+            <ItemsControl ItemsSource="{Binding ValidationErrors}" />
         </ScrollViewer>
 
         <Button Classes="mini align-right-top p-5"
