@@ -1,10 +1,20 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:s="clr-namespace:System;assembly=System.Runtime"
+        xmlns:ic="clr-namespace:Inanna.Converters">
     <Style Selector="ListBox">
         <Setter Property="Background" Value="Transparent" />
     </Style>
     
     <Style Selector="ListBox.multiple">
         <Setter Property="SelectionMode" Value="Multiple" />
+    </Style>
+    
+    <Style Selector="ListBox.enum">
+        <Setter Property="ItemTemplate" >
+            <DataTemplate x:DataType="s:Enum">
+                <TextBlock Text="{Binding Converter={x:Static ic:EnumLocalizationConverter.Instance}}"/>
+            </DataTemplate>
+        </Setter>
     </Style>
 </Styles>

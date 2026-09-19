@@ -17,10 +17,10 @@
         </StackPanel>
 
         <TextBlock Classes="field" Text="{DynamicResource Lang.Type}" />
-        <ListBox Classes="horizontal-wrap"
+        <ListBox Classes="horizontal-wrap enum"
                  SelectionMode="Single"
                  ItemsSource="{Binding Barcodes}"
-                 SelectedItem="{Binding SelectedBarcode, Converter={x:Static ic:EnumLocalizationConverter.Instance}}" />
+                 SelectedItem="{Binding SelectedBarcode}" />
 
         <Button Command="{Binding GenerateBarcodeCommand}" Content="{DynamicResource Lang.Generate}" />
 
