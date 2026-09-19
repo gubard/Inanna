@@ -1,4 +1,3 @@
-using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Inanna.Models;
@@ -10,15 +9,15 @@ public sealed partial class NavigationBarViewModel : ViewModelBase
 {
     public NavigationBarViewModel(
         INavigator navigator,
-        IAppResourceService appResourceService,
         ViewModelServices services,
-        InannaCommands сommands
+        InannaCommands commands,
+        object defaultHeader
     )
         : base(services)
     {
         _navigator = navigator;
-        _appResourceService = appResourceService;
-        Commands = сommands;
+        Commands = commands;
+        Header = defaultHeader;
 
         _navigator.ViewChanged += (_, _) =>
         {
@@ -36,15 +35,10 @@ public sealed partial class NavigationBarViewModel : ViewModelBase
         _navigator.CurrentView switch
         {
             IHeader header => header.Header,
-            _ => new TextBlock
-            {
-                Text = _appResourceService.GetResource<string>("Lang.AppName"),
-                Classes = { "align-left-center", "h3" },
-            },
+            _ => field,
         };
 
     private readonly INavigator _navigator;
-    private readonly IAppResourceService _appResourceService;
 
     [ObservableProperty]
     private bool _showPane;
