@@ -44,7 +44,7 @@ public static class ControlExtension
                 var dpi = new Vector(96, 96);
                 using var rtb = new RenderTargetBitmap(pixelSize, dpi);
                 rtb.Render(control);
-                rtb.Save(output);
+                rtb.Save(output, PngBitmapEncoderOptions.Default);
                 control.Width = oldSize.Width;
                 control.Height = oldSize.Height;
             },
