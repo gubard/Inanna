@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Inanna.Models;
 using Inanna.Services;
@@ -44,6 +45,9 @@ public sealed partial class NavigationBarViewModel : ViewModelBase
 
     private readonly INavigator _navigator;
     private readonly IAppResourceService _appResourceService;
+
+    [ObservableProperty]
+    private bool _showPane;
 
     [RelayCommand]
     private async Task BackAsync(CancellationToken ct)

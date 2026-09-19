@@ -10,12 +10,13 @@
              IsVisible="{Binding IsHeaderVisible}">
     <Grid ColumnDefinitions="Auto,*">
         <StackPanel Grid.Column="0" Classes="horizontal">
-            <Button Content="{f:SymbolIcon PanelLeft}"
+            <Button IsVisible="{Binding ShowPane}"
+                    Content="{f:SymbolIcon PanelLeft}"
                     Command="{Binding Commands.ShowPaneCommand}" />
-            <Button Content="{f:SymbolIcon ArrowHookUpLeft}"
+            <Button IsVisible="{Binding ShowPane}" 
+                    Content="{f:SymbolIcon ArrowHookUpLeft}"
                     Command="{Binding BackCommand}"
-                    IsEnabled="{Binding IsCanBack}"
-                    IsVisible="{OnPlatform Android=false, iOS=false, Default=true}" />
+                    IsEnabled="{Binding IsCanBack}" />
         </StackPanel>
 
         <ContentControl Grid.Column="1" Content="{Binding Header}" />
