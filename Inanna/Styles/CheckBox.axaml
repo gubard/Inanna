@@ -1,6 +1,16 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:s="clr-namespace:System;assembly=System.Runtime"
+        xmlns:ic="clr-namespace:Inanna.Converters">
     <Style Selector="CheckBox">
         <Setter Property="Margin" Value="5" />
+    </Style>
+    
+    <Style Selector="CheckBox.enum">
+        <Setter Property="ContentTemplate" >
+            <DataTemplate x:DataType="s:Enum">
+                <TextBlock Text="{Binding Converter={x:Static ic:EnumLocalizationConverter.Instance}}"/>
+            </DataTemplate>
+        </Setter>
     </Style>
 </Styles>
