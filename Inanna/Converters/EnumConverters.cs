@@ -111,9 +111,15 @@ public sealed class EnumLocalizationConverter : IValueConverter
             return value;
         }
 
-        var resource = _app.GetResourceOrNull($"Lang.{e.GetType().Name}.{e}");
+        var key = $"Lang.{e.GetType().Name}.{e}";
+        var resource = _app.GetResourceOrNull(key);
 
-        return resource ?? value;
+        if (resource is null)
+        {
+            return value;
+        }
+
+        return resource;
     }
 
     public object? ConvertBack(
