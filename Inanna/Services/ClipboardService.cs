@@ -14,9 +14,9 @@ public interface IClipboardService
 
 public sealed class AvaloniaClipboardService : IClipboardService
 {
-    public AvaloniaClipboardService(Application application)
+    public AvaloniaClipboardService(Application app)
     {
-        _application = application;
+        _app = app;
     }
 
     public ConfiguredValueTaskAwaitable SetTextAsync(string? text, CancellationToken ct)
@@ -24,11 +24,11 @@ public sealed class AvaloniaClipboardService : IClipboardService
         return SetTextCore(text, ct).ConfigureAwait(false);
     }
 
-    private readonly Application _application;
+    private readonly Application _app;
 
     private async ValueTask SetTextCore(string? text, CancellationToken ct)
     {
-        var topLevel = _application.GetTopLevel().ThrowIfNull();
+        var topLevel = _app.GetTopLevel().ThrowIfNull();
         ct.ThrowIfCancellationRequested();
 
         await Dispatcher.UIThread.InvokeAsync(async () =>
