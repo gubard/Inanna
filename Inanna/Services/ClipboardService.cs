@@ -1,6 +1,7 @@
 using System.Runtime.CompilerServices;
 using Avalonia;
 using Avalonia.Input.Platform;
+using Avalonia.Threading;
 using Gaia.Helpers;
 using Inanna.Helpers;
 
@@ -29,6 +30,9 @@ public sealed class AvaloniaClipboardService : IClipboardService
     {
         var topLevel = _application.GetTopLevel().ThrowIfNull();
         ct.ThrowIfCancellationRequested();
-        await topLevel.Clipboard.ThrowIfNull().SetTextAsync(text);
+
+        await Dispatcher.UIThread.InvokeAsync(async () =>
+            await topLevel.Clipboard.ThrowIfNull().SetTextAsync(text)
+        );
     }
 }
