@@ -234,7 +234,15 @@ public abstract class ViewModelBase : PropertyValidator
         CancellationToken ct
     )
     {
-        return OpenFilesPickerCore(null, ct).ConfigureAwait(false);
+        return OpenFilesPickerCore(null, null, ct).ConfigureAwait(false);
+    }
+
+    protected ConfiguredValueTaskAwaitable<IReadOnlyList<IStorageFile>> OpenFilesPickerAsync(
+        IReadOnlyList<FilePickerFileType> filter,
+        CancellationToken ct
+    )
+    {
+        return OpenFilesPickerCore(null, filter, ct).ConfigureAwait(false);
     }
 
     protected ConfiguredValueTaskAwaitable<IReadOnlyList<IStorageFile>> OpenFilesPickerAsync(
@@ -242,7 +250,16 @@ public abstract class ViewModelBase : PropertyValidator
         CancellationToken ct
     )
     {
-        return OpenFilesPickerCore(suggestedStartLocation, ct).ConfigureAwait(false);
+        return OpenFilesPickerCore(suggestedStartLocation, null, ct).ConfigureAwait(false);
+    }
+
+    protected ConfiguredValueTaskAwaitable<IReadOnlyList<IStorageFile>> OpenFilesPickerAsync(
+        Uri suggestedStartLocation,
+        IReadOnlyList<FilePickerFileType> filter,
+        CancellationToken ct
+    )
+    {
+        return OpenFilesPickerCore(suggestedStartLocation, filter, ct).ConfigureAwait(false);
     }
 
     private async ValueTask<IStorageFile?> SaveFilePickerCore(
@@ -321,6 +338,7 @@ public abstract class ViewModelBase : PropertyValidator
 
     private async ValueTask<IReadOnlyList<IStorageFile>> OpenFilesPickerCore(
         Uri? suggestedStartLocation,
+        IReadOnlyList<FilePickerFileType>? filter,
         CancellationToken ct
     )
     {
@@ -345,6 +363,7 @@ public abstract class ViewModelBase : PropertyValidator
                     AllowMultiple = true,
                     Title = Services.AppResourceService.GetResource<string>("Lang.SelectFiles"),
                     SuggestedStartLocation = ssl,
+                    FileTypeFilter = filter,
                 }
             )
             .ConfigureAwait(false);
