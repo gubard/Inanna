@@ -353,7 +353,7 @@ public abstract class ViewModelBase : PropertyValidator
     private async ValueTask ShowErrorCore(Exception[] exceptions, CancellationToken ct)
     {
         await Services.DialogService.ShowMessageBoxAsync(
-            Services.AppResourceService.GetResource<string>("Lang.Error"),
+            GetLang("Lang.Error").DispatchToDialogHeader(),
             Services.ErrorDialogFactory.Create(exceptions),
             ct,
             Services.DialogService.OkButton
@@ -363,7 +363,7 @@ public abstract class ViewModelBase : PropertyValidator
     private async ValueTask ShowErrorCore(ValidationError[] errors, CancellationToken ct)
     {
         await Services.DialogService.ShowMessageBoxAsync(
-            Services.AppResourceService.GetResource<string>("Lang.Error"),
+            GetLang("Lang.Error").DispatchToDialogHeader(),
             Services.ErrorDialogFactory.Create(errors),
             ct,
             Services.DialogService.OkButton
@@ -419,7 +419,7 @@ public abstract class ViewModelBase : PropertyValidator
         );
 
         await Services.DialogService.ShowMessageBoxAsync(
-            Services.AppResourceService.GetResource<string>("Lang.Select"),
+            GetLang("Lang.Select").DispatchToDialogHeader(),
             list,
             ct,
             Services.DialogService.CreateButton(

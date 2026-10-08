@@ -71,7 +71,8 @@ public sealed class SafeExecuteWrapper : ISafeExecuteWrapper
                     .ShowMessageBoxAsync(
                         _serviceProvider
                             .GetService<IAppResourceService>()
-                            .GetResource<string>("Lang.Error"),
+                            .GetResource<string>("Lang.Error")
+                            .DispatchToDialogHeader(),
                         _serviceProvider
                             .GetService<IErrorDialogFactory>()
                             .Create(result.ValidationErrors.ToArray()),
@@ -93,7 +94,8 @@ public sealed class SafeExecuteWrapper : ISafeExecuteWrapper
                 .ShowMessageBoxAsync(
                     _serviceProvider
                         .GetService<IAppResourceService>()
-                        .GetResource<string>("Lang.Error"),
+                        .GetResource<string>("Lang.Error")
+                        .DispatchToDialogHeader(),
                     _serviceProvider.GetService<IErrorDialogFactory>().Create([e]),
                     CancellationToken.None,
                     _serviceProvider.GetService<IDialogService>().OkButton
@@ -127,7 +129,8 @@ public sealed class SafeExecuteWrapper : ISafeExecuteWrapper
                 .ShowMessageBoxAsync(
                     _serviceProvider
                         .GetService<IAppResourceService>()
-                        .GetResource<string>("Lang.Error"),
+                        .GetResource<string>("Lang.Error")
+                        .DispatchToDialogHeader(),
                     _serviceProvider.GetService<IErrorDialogFactory>().Create([e]),
                     CancellationToken.None,
                     _serviceProvider.GetService<IDialogService>().OkButton
@@ -166,7 +169,8 @@ public sealed class SafeExecuteWrapper : ISafeExecuteWrapper
                 .ShowMessageBoxAsync(
                     _serviceProvider
                         .GetService<IAppResourceService>()
-                        .GetResource<string>("Lang.Error"),
+                        .GetResource<string>("Lang.Error")
+                        .DispatchToDialogHeader(),
                     _serviceProvider.GetService<IErrorDialogFactory>().Create([e]),
                     CancellationToken.None,
                     _serviceProvider.GetService<IDialogService>().OkButton
@@ -200,7 +204,8 @@ public sealed class SafeExecuteWrapper : ISafeExecuteWrapper
                     .ShowMessageBoxAsync(
                         _serviceProvider
                             .GetService<IAppResourceService>()
-                            .GetResource<string>("Lang.Error"),
+                            .GetResource<string>("Lang.Error")
+                            .DispatchToDialogHeader(),
                         _serviceProvider
                             .GetService<IErrorDialogFactory>()
                             .Create(result.ValidationErrors.ToArray()),
@@ -221,7 +226,8 @@ public sealed class SafeExecuteWrapper : ISafeExecuteWrapper
                 .ShowMessageBoxAsync(
                     _serviceProvider
                         .GetService<IAppResourceService>()
-                        .GetResource<string>("Lang.Error"),
+                        .GetResource<string>("Lang.Error")
+                        .DispatchToDialogHeader(),
                     _serviceProvider.GetService<IErrorDialogFactory>().Create([e]),
                     CancellationToken.None,
                     _serviceProvider.GetService<IDialogService>().OkButton
