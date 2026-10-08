@@ -12,7 +12,7 @@ public enum GrayscaleMode
     Luminance, // Linearized sRGB weights (0.2126 R + 0.7152 G + 0.0722 B)
     Lightness, // HSL: (Max + Min) / 2
     Average, // HSI: (R + G + B) / 3
-    Value, // HSV: Max(R, G, B)
+    MaxValue, // HSV: Max(R, G, B)
 }
 
 public static class BitmapExtension
@@ -177,7 +177,7 @@ public static class BitmapExtension
             GrayscaleMode.Lightness => (Math.Max(r, Math.Max(g, b)) + Math.Min(r, Math.Min(g, b)))
                 / 2f,
             GrayscaleMode.Average => (r + g + b) / 3f,
-            GrayscaleMode.Value => Math.Max(r, Math.Max(g, b)),
+            GrayscaleMode.MaxValue => Math.Max(r, Math.Max(g, b)),
             _ => 0.22f * r + 0.72f * g + 0.06f * b,
         };
     }
