@@ -13,13 +13,15 @@ public sealed class UiDatabaseFactory : IAdoDatabaseFactory
         AppState appState,
         IStorageService storageService,
         IMigrator migrator,
-        string name
+        string name,
+        IFileAdoDatabaseFactory fileAdoDatabaseFactory
     )
     {
         _appState = appState;
         _storageService = storageService;
         _migrator = migrator;
         _name = name;
+        _fileAdoDatabaseFactory = fileAdoDatabaseFactory;
         _cache = new();
     }
 
@@ -33,6 +35,7 @@ public sealed class UiDatabaseFactory : IAdoDatabaseFactory
     private readonly Dictionary<string, IDatabase<DbCommand>> _cache;
     private readonly IMigrator _migrator;
     private readonly string _name;
+    private readonly IFileAdoDatabaseFactory _fileAdoDatabaseFactory;
 
     private async ValueTask<IDatabase<DbCommand>> CreateCore(CancellationToken ct)
     {
@@ -59,7 +62,7 @@ public sealed class UiDatabaseFactory : IAdoDatabaseFactory
             return;
         }
 
-        var database = new AdoDatabase(new FileSqliteDbConnectionFactory(file));
+        var database = _fileAdoDatabaseFactory.Create(file);
         await _migrator.MigrateAsync(database, ct);
         _cache.Add(file.FullName, database);
     }
