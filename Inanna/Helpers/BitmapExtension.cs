@@ -17,6 +17,42 @@ public enum GrayscaleMode
 
 public static class BitmapExtension
 {
+    public static WriteableBitmap CropBitmap(
+        this Bitmap source,
+        int cropLeft,
+        int cropTop,
+        int cropRight,
+        int cropBottom
+    )
+    {
+        var width = (int)source.Size.Width - cropRight - cropLeft;
+        var height = (int)source.Size.Height - cropBottom - cropTop;
+        var size = new PixelSize(width, height);
+
+        return source.CropBitmap(new PixelRect(new PixelPoint(cropLeft, cropTop), size));
+    }
+
+    public static WriteableBitmap CropBitmap(this Bitmap source, PixelRect rect)
+    {
+        var destination = new WriteableBitmap(
+            rect.Size,
+            new Vector(96, 96),
+            PixelFormat.Rgba8888,
+            AlphaFormat.Premul
+        );
+
+        using var lockedFrame = destination.Lock();
+
+        source.CopyPixels(
+            rect,
+            lockedFrame.Address,
+            lockedFrame.RowBytes * rect.Height,
+            lockedFrame.RowBytes
+        );
+
+        return destination;
+    }
+
     public static Bitmap CopyBitmap(this Bitmap source)
     {
         using var stream = new MemoryStream();
