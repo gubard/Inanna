@@ -68,6 +68,11 @@
         <Setter Property="VerticalAlignment" Value="Bottom" />
     </Style>
 
+    <Style Selector=":is(Layoutable).align-left-top">
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="VerticalAlignment" Value="Top" />
+    </Style>
+
     <Style Selector=":is(Layoutable).align-right">
         <Setter Property="HorizontalAlignment" Value="Right" />
     </Style>
@@ -134,6 +139,10 @@
 
     <Style Selector=":is(Layoutable).h-800">
         <Setter Property="Height" Value="800" />
+    </Style>
+    
+    <Style Selector=":is(Layoutable).mh-800">
+        <Setter Property="MaxHeight" Value="800" />
     </Style>
 
     <Style Selector=":is(Layoutable).s-20">
