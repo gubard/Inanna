@@ -61,6 +61,11 @@ public abstract class ViewModelBase : PropertyValidator
 
         if (HasErrors && !isIgnoreErrors)
         {
+            Services.NotificationService.ShowNotification(
+                GetLang("PropertyValidationErrors").DispatchToNotification(),
+                NotificationType.Warning
+            );
+
             return;
         }
 
@@ -94,9 +99,17 @@ public abstract class ViewModelBase : PropertyValidator
             StartExecute();
         }
 
-        return HasErrors && !isIgnoreErrors
-            ? TaskHelper.ConfiguredCompletedTask
-            : Services.SafeExecuteWrapper.ExecuteAsync(func, ct);
+        if (HasErrors && !isIgnoreErrors)
+        {
+            Services.NotificationService.ShowNotification(
+                GetLang("PropertyValidationErrors").DispatchToNotification(),
+                NotificationType.Warning
+            );
+
+            return TaskHelper.ConfiguredCompletedTask;
+        }
+
+        return Services.SafeExecuteWrapper.ExecuteAsync(func, ct);
     }
 
     protected ConfiguredValueTaskAwaitable WrapCommandAsync<TValidationErrors>(
@@ -117,12 +130,20 @@ public abstract class ViewModelBase : PropertyValidator
     {
         StartExecute();
 
-        return HasErrors
-            ? TaskHelper.ConfiguredCompletedTask
-            : Services.SafeExecuteWrapper.ExecuteAsync(
-                () => func.Invoke().ConfigureAwait(false),
-                ct
+        if (HasErrors)
+        {
+            Services.NotificationService.ShowNotification(
+                GetLang("PropertyValidationErrors").DispatchToNotification(),
+                NotificationType.Warning
             );
+
+            return TaskHelper.ConfiguredCompletedTask;
+        }
+
+        return Services.SafeExecuteWrapper.ExecuteAsync(
+            () => func.Invoke().ConfigureAwait(false),
+            ct
+        );
     }
 
     protected void WrapCommand<TValidationErrors>(Func<TValidationErrors> func)
@@ -132,6 +153,11 @@ public abstract class ViewModelBase : PropertyValidator
 
         if (HasErrors)
         {
+            Services.NotificationService.ShowNotification(
+                GetLang("PropertyValidationErrors").DispatchToNotification(),
+                NotificationType.Warning
+            );
+
             return;
         }
 
@@ -465,6 +491,11 @@ public abstract class ViewModelBase : PropertyValidator
 
         if (HasErrors)
         {
+            Services.NotificationService.ShowNotification(
+                GetLang("PropertyValidationErrors").DispatchToNotification(),
+                NotificationType.Warning
+            );
+
             return;
         }
 

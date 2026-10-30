@@ -7,6 +7,7 @@ namespace Inanna.Models;
 
 public sealed class ViewModelServices
 {
+    public INotificationService NotificationService => _notificationService.Value;
     public ISafeExecuteWrapper SafeExecuteWrapper => _safeExecuteWrapper.Value;
     public IDialogService DialogService => _dialogService.Value;
     public IAppResourceService AppResourceService => _appResourceService.Value;
@@ -16,6 +17,7 @@ public sealed class ViewModelServices
 
     public ViewModelServices(IServiceProvider serviceProvider)
     {
+        _notificationService = new(serviceProvider.GetRequiredService<INotificationService>);
         _safeExecuteWrapper = new(serviceProvider.GetRequiredService<ISafeExecuteWrapper>);
         _dialogService = new(serviceProvider.GetRequiredService<IDialogService>);
         _appResourceService = new(serviceProvider.GetRequiredService<IAppResourceService>);
@@ -24,6 +26,7 @@ public sealed class ViewModelServices
         _logger = new(serviceProvider.GetRequiredService<ILogger>);
     }
 
+    private readonly Lazy<INotificationService> _notificationService;
     private readonly Lazy<ISafeExecuteWrapper> _safeExecuteWrapper;
     private readonly Lazy<IDialogService> _dialogService;
     private readonly Lazy<IAppResourceService> _appResourceService;
