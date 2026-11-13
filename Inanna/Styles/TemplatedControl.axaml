@@ -1,59 +1,61 @@
-<Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Style Selector=":is(TemplatedControl).error">
-        <Setter Property="Foreground" Value="{DynamicResource SystemControlErrorTextForegroundBrush}" />
-    </Style>
+<Styles
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+>
+  <Style Selector=":is(TemplatedControl).error">
+    <Setter Property="Foreground" Value="{DynamicResource SystemControlErrorTextForegroundBrush}" />
+  </Style>
 
-    <Style Selector=":is(TemplatedControl).bt-2">
-        <Setter Property="BorderThickness" Value="2" />
-    </Style>
+  <Style Selector=":is(TemplatedControl).bt-2">
+    <Setter Property="BorderThickness" Value="2" />
+  </Style>
 
-    <Style Selector=":is(TemplatedControl).control">
-        <Setter Property="Padding" Value="5" />
-        <Setter Property="MinWidth" Value="200" />
-    </Style>
+  <Style Selector=":is(TemplatedControl).control">
+    <Setter Property="Padding" Value="5" />
+    <Setter Property="MinWidth" Value="200" />
+  </Style>
 
-    <Style Selector=":is(TemplatedControl).cr-5">
-        <Setter Property="CornerRadius" Value="5" />
-    </Style>
+  <Style Selector=":is(TemplatedControl).cr-5">
+    <Setter Property="CornerRadius" Value="5" />
+  </Style>
 
-    <Style Selector=":is(TemplatedControl).h1">
-        <Setter Property="FontSize" Value="36.4" />
-    </Style>
+  <Style Selector=":is(TemplatedControl).h1">
+    <Setter Property="FontSize" Value="36.4" />
+  </Style>
 
-    <Style Selector=":is(TemplatedControl).h2">
-        <Setter Property="FontSize" Value="28" />
-    </Style>
+  <Style Selector=":is(TemplatedControl).h2">
+    <Setter Property="FontSize" Value="28" />
+  </Style>
 
-    <Style Selector=":is(TemplatedControl).h3">
-        <Setter Property="FontSize" Value="22.4" />
-    </Style>
+  <Style Selector=":is(TemplatedControl).h3">
+    <Setter Property="FontSize" Value="22.4" />
+  </Style>
 
-    <Style Selector=":is(TemplatedControl).h4">
-        <Setter Property="FontSize" Value="19.6" />
-    </Style>
+  <Style Selector=":is(TemplatedControl).h4">
+    <Setter Property="FontSize" Value="19.6" />
+  </Style>
 
-    <Style Selector=":is(TemplatedControl).h5">
-        <Setter Property="FontSize" Value="16.8" />
-    </Style>
+  <Style Selector=":is(TemplatedControl).h5">
+    <Setter Property="FontSize" Value="16.8" />
+  </Style>
 
-    <Style Selector=":is(TemplatedControl).h6">
-        <Setter Property="FontSize" Value="14" />
-    </Style>
+  <Style Selector=":is(TemplatedControl).h6">
+    <Setter Property="FontSize" Value="14" />
+  </Style>
 
-    <Style Selector=":is(TemplatedControl).small">
-        <Setter Property="FontSize" Value="11.2" />
-    </Style>
+  <Style Selector=":is(TemplatedControl).small">
+    <Setter Property="FontSize" Value="11.2" />
+  </Style>
 
-    <Style Selector=":is(TemplatedControl).p-0">
-        <Setter Property="Padding" Value="0" />
-    </Style>
+  <Style Selector=":is(TemplatedControl).p-0">
+    <Setter Property="Padding" Value="0" />
+  </Style>
 
-    <Style Selector=":is(TemplatedControl).p-5">
-        <Setter Property="Padding" Value="5" />
-    </Style>
+  <Style Selector=":is(TemplatedControl).p-5">
+    <Setter Property="Padding" Value="5" />
+  </Style>
 
-    <Style Selector=":is(TemplatedControl).p-4">
-        <Setter Property="Padding" Value="4" />
-    </Style>
+  <Style Selector=":is(TemplatedControl).p-4">
+    <Setter Property="Padding" Value="4" />
+  </Style>
 </Styles>

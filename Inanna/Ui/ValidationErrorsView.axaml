@@ -1,19 +1,25 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:ui="clr-namespace:Inanna.Ui"
-             xmlns:m="clr-namespace:FluentIcons.Avalonia.Fluent.Markup;assembly=FluentIcons.Avalonia.Fluent"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Inanna.Ui.ValidationErrorsView"
-             x:DataType="ui:ValidationErrorsViewModel">
-    <Panel>
-        <ScrollViewer Classes="vertical">
-            <ItemsControl ItemsSource="{Binding ValidationErrors}" />
-        </ScrollViewer>
+﻿<UserControl
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:ui="clr-namespace:Inanna.Ui"
+  xmlns:m="clr-namespace:FluentIcons.Avalonia.Fluent.Markup;assembly=FluentIcons.Avalonia.Fluent"
+  mc:Ignorable="d"
+  d:DesignWidth="800"
+  d:DesignHeight="450"
+  x:Class="Inanna.Ui.ValidationErrorsView"
+  x:DataType="ui:ValidationErrorsViewModel"
+>
+  <Panel>
+    <ScrollViewer Classes="vertical">
+      <ItemsControl ItemsSource="{Binding ValidationErrors}" />
+    </ScrollViewer>
 
-        <Button Classes="mini align-right-top p-5"
-                Content="{m:SymbolIcon Copy}"
-                Command="{Binding CopyCommand}" />
-    </Panel>
+    <Button
+      Classes="mini align-right-top p-5"
+      Content="{m:SymbolIcon Copy}"
+      Command="{Binding CopyCommand}"
+    />
+  </Panel>
 </UserControl>

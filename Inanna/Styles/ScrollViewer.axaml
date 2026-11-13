@@ -1,24 +1,26 @@
-<Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">    
-    <Style Selector="ScrollViewer">
-        <Setter Property="AllowAutoHide" Value="False" />
-    </Style>
+<Styles
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+>
+  <Style Selector="ScrollViewer">
+    <Setter Property="AllowAutoHide" Value="False" />
+  </Style>
 
-    <Style Selector="ScrollViewer.vertical-scroll">
-        <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
-        <Setter Property="HorizontalScrollBarVisibility" Value="Disabled" />
-        <Setter Property="Padding" Value="0,0,16,0" />
-    </Style>
+  <Style Selector="ScrollViewer.vertical-scroll">
+    <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
+    <Setter Property="HorizontalScrollBarVisibility" Value="Disabled" />
+    <Setter Property="Padding" Value="0,0,16,0" />
+  </Style>
 
-    <Style Selector="ScrollViewer.horizontal-scroll">
-        <Setter Property="VerticalScrollBarVisibility" Value="Disabled" />
-        <Setter Property="HorizontalScrollBarVisibility" Value="Auto" />
-        <Setter Property="Padding" Value="0,0,0,16" />
-    </Style>
-    
-    <Style Selector="ScrollViewer.scroll">
-        <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
-        <Setter Property="HorizontalScrollBarVisibility" Value="Auto" />
-        <Setter Property="Padding" Value="0,0,16,16" />
-    </Style>
+  <Style Selector="ScrollViewer.horizontal-scroll">
+    <Setter Property="VerticalScrollBarVisibility" Value="Disabled" />
+    <Setter Property="HorizontalScrollBarVisibility" Value="Auto" />
+    <Setter Property="Padding" Value="0,0,0,16" />
+  </Style>
+
+  <Style Selector="ScrollViewer.scroll">
+    <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
+    <Setter Property="HorizontalScrollBarVisibility" Value="Auto" />
+    <Setter Property="Padding" Value="0,0,16,16" />
+  </Style>
 </Styles>

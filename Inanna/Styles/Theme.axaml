@@ -1,50 +1,52 @@
-<Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Styles.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <MergeResourceInclude Source="ViewSelectorControl.axaml" />
-                <MergeResourceInclude Source="ViewSelectorItemControl.axaml" />
-                <MergeResourceInclude Source="DialogControl.axaml" />
-                <MergeResourceInclude Source="NotificationPanel.axaml" />
-                <MergeResourceInclude Source="NotificationControl.axaml" />
-                <MergeResourceInclude Source="PathControl.axaml" />
-                <MergeResourceInclude Source="GroupBoxControl.axaml" />
-                <MergeResourceInclude Source="Colors.axaml" />
-                <MergeResourceInclude Source="DaysOfYearSelectorControl.axaml" />
-                <MergeResourceInclude Source="IntegerSelectorItemControl.axaml" />
-                <MergeResourceInclude Source="IntegersSelectorControl.axaml" />
-                <MergeResourceInclude Source="BusyAreaControl.axaml" />
-                <MergeResourceInclude Source="Resources.axaml" />
-                <MergeResourceInclude Source="InannaCalendarDatePicker.axaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Styles.Resources>
+<Styles
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+>
+  <Styles.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <MergeResourceInclude Source="ViewSelectorControl.axaml" />
+        <MergeResourceInclude Source="ViewSelectorItemControl.axaml" />
+        <MergeResourceInclude Source="DialogControl.axaml" />
+        <MergeResourceInclude Source="NotificationPanel.axaml" />
+        <MergeResourceInclude Source="NotificationControl.axaml" />
+        <MergeResourceInclude Source="PathControl.axaml" />
+        <MergeResourceInclude Source="GroupBoxControl.axaml" />
+        <MergeResourceInclude Source="Colors.axaml" />
+        <MergeResourceInclude Source="DaysOfYearSelectorControl.axaml" />
+        <MergeResourceInclude Source="IntegerSelectorItemControl.axaml" />
+        <MergeResourceInclude Source="IntegersSelectorControl.axaml" />
+        <MergeResourceInclude Source="BusyAreaControl.axaml" />
+        <MergeResourceInclude Source="Resources.axaml" />
+        <MergeResourceInclude Source="InannaCalendarDatePicker.axaml" />
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </Styles.Resources>
 
-    <StyleInclude Source="CheckBox.axaml" />
-    <StyleInclude Source="Expander.axaml" />
-    <StyleInclude Source="ToggleButton.axaml" />
-    <StyleInclude Source="ListBoxItem.axaml" />
-    <StyleInclude Source="ListBox.axaml" />
-    <StyleInclude Source="ContentControl.axaml" />
-    <StyleInclude Source="NumericUpDown.axaml" />
-    <StyleInclude Source="Rectangle.axaml" />
-    <StyleInclude Source="TextBlock.axaml" />
-    <StyleInclude Source="CalendarDatePicker.axaml" />
-    <StyleInclude Source="ComboBox.axaml" />
-    <StyleInclude Source="Layoutable.axaml" />
-    <StyleInclude Source="Button.axaml" />
-    <StyleInclude Source="StackPanel.axaml" />
-    <StyleInclude Source="TemplatedControl.axaml" />
-    <StyleInclude Source="ItemsControl.axaml" />
-    <StyleInclude Source="TextBox.axaml" />
-    <StyleInclude Source="ScrollViewer.axaml" />
-    <StyleInclude Source="Visual.axaml" />
-    <StyleInclude Source="SymbolIcon.axaml" />
-    <StyleInclude Source="TopLevel.axaml" />
-    <StyleInclude Source="Border.axaml" />
-    <StyleInclude Source="Decorator.axaml" />
-    <StyleInclude Source="TableViewCell.axaml" />
-    <StyleInclude Source="GroupBox.axaml" />
-    <StyleInclude Source="SelectableTextBlock.axaml" />
+  <StyleInclude Source="CheckBox.axaml" />
+  <StyleInclude Source="Expander.axaml" />
+  <StyleInclude Source="ToggleButton.axaml" />
+  <StyleInclude Source="ListBoxItem.axaml" />
+  <StyleInclude Source="ListBox.axaml" />
+  <StyleInclude Source="ContentControl.axaml" />
+  <StyleInclude Source="NumericUpDown.axaml" />
+  <StyleInclude Source="Rectangle.axaml" />
+  <StyleInclude Source="TextBlock.axaml" />
+  <StyleInclude Source="CalendarDatePicker.axaml" />
+  <StyleInclude Source="ComboBox.axaml" />
+  <StyleInclude Source="Layoutable.axaml" />
+  <StyleInclude Source="Button.axaml" />
+  <StyleInclude Source="StackPanel.axaml" />
+  <StyleInclude Source="TemplatedControl.axaml" />
+  <StyleInclude Source="ItemsControl.axaml" />
+  <StyleInclude Source="TextBox.axaml" />
+  <StyleInclude Source="ScrollViewer.axaml" />
+  <StyleInclude Source="Visual.axaml" />
+  <StyleInclude Source="SymbolIcon.axaml" />
+  <StyleInclude Source="TopLevel.axaml" />
+  <StyleInclude Source="Border.axaml" />
+  <StyleInclude Source="Decorator.axaml" />
+  <StyleInclude Source="TableViewCell.axaml" />
+  <StyleInclude Source="GroupBox.axaml" />
+  <StyleInclude Source="SelectableTextBlock.axaml" />
 </Styles>

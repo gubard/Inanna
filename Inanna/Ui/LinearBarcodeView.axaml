@@ -1,42 +1,54 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:ui="clr-namespace:Inanna.Ui"
-             xmlns:converters="clr-namespace:Inanna.Converters"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Inanna.Ui.LinearBarcodeView"
-             x:DataType="ui:LinearBarcodeViewModel"
-             Background="{Binding BackgroundColor, Converter={x:Static converters:ColorToBrushConverter.Instance}}"
-             Classes="align-center">
-    <Grid RowDefinitions="Auto,*,Auto">
-        <TextBlock Classes="align-center small"
-                   Foreground="{Binding BarColor, Converter={x:Static converters:ColorToBrushConverter.Instance}}"
-                   IsVisible="{Binding TopText, Converter={x:Static converters:IsNotNullOrWhiteSpaceConverter.Instance}}"
-                   Text="{Binding TopText}" />
+<UserControl
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:ui="clr-namespace:Inanna.Ui"
+  xmlns:converters="clr-namespace:Inanna.Converters"
+  mc:Ignorable="d"
+  d:DesignWidth="800"
+  d:DesignHeight="450"
+  x:Class="Inanna.Ui.LinearBarcodeView"
+  x:DataType="ui:LinearBarcodeViewModel"
+  Background="{Binding BackgroundColor, Converter={x:Static converters:ColorToBrushConverter.Instance}}"
+  Classes="align-center"
+>
+  <Grid RowDefinitions="Auto,*,Auto">
+    <TextBlock
+      Classes="align-center small"
+      Foreground="{Binding BarColor, Converter={x:Static converters:ColorToBrushConverter.Instance}}"
+      IsVisible="{Binding TopText, Converter={x:Static converters:IsNotNullOrWhiteSpaceConverter.Instance}}"
+      Text="{Binding TopText}"
+    />
 
-        <ItemsControl Grid.Row="1" Classes="horizontal-stack" ItemsSource="{Binding Barcode}">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Panel>
-                        <Rectangle Classes="m-0"
-                                   IsVisible="{Binding}"
-                                   Fill="{Binding $parent[ui:LinearBarcodeView].ViewModel.BarColor, Converter={x:Static converters:ColorToBrushConverter.Instance}}"
-                                   Width="{Binding $parent[ui:LinearBarcodeView].ViewModel.BarWidth}"
-                                   Height="{Binding $parent[ui:LinearBarcodeView].ViewModel.BarHeight}" />
-                        <Rectangle Classes="m-0"
-                                   IsVisible="{Binding Converter={x:Static converters:BoolReverseConverter.Instance}}"
-                                   Width="{Binding $parent[ui:LinearBarcodeView].ViewModel.BarWidth}"
-                                   Height="{Binding $parent[ui:LinearBarcodeView].ViewModel.BarHeight}" />
-                    </Panel>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+    <ItemsControl Grid.Row="1" Classes="horizontal-stack" ItemsSource="{Binding Barcode}">
+      <ItemsControl.ItemTemplate>
+        <DataTemplate>
+          <Panel>
+            <Rectangle
+              Classes="m-0"
+              IsVisible="{Binding}"
+              Fill="{Binding $parent[ui:LinearBarcodeView].ViewModel.BarColor, Converter={x:Static converters:ColorToBrushConverter.Instance}}"
+              Width="{Binding $parent[ui:LinearBarcodeView].ViewModel.BarWidth}"
+              Height="{Binding $parent[ui:LinearBarcodeView].ViewModel.BarHeight}"
+            />
+            <Rectangle
+              Classes="m-0"
+              IsVisible="{Binding Converter={x:Static converters:BoolReverseConverter.Instance}}"
+              Width="{Binding $parent[ui:LinearBarcodeView].ViewModel.BarWidth}"
+              Height="{Binding $parent[ui:LinearBarcodeView].ViewModel.BarHeight}"
+            />
+          </Panel>
+        </DataTemplate>
+      </ItemsControl.ItemTemplate>
+    </ItemsControl>
 
-        <TextBlock Grid.Row="2"
-                   Classes="align-center small"
-                   Foreground="{Binding BarColor, Converter={x:Static converters:ColorToBrushConverter.Instance}}"
-                   IsVisible="{Binding BottomText, Converter={x:Static converters:IsNotNullOrWhiteSpaceConverter.Instance}}"
-                   Text="{Binding BottomText}" />
-    </Grid>
+    <TextBlock
+      Grid.Row="2"
+      Classes="align-center small"
+      Foreground="{Binding BarColor, Converter={x:Static converters:ColorToBrushConverter.Instance}}"
+      IsVisible="{Binding BottomText, Converter={x:Static converters:IsNotNullOrWhiteSpaceConverter.Instance}}"
+      Text="{Binding BottomText}"
+    />
+  </Grid>
 </UserControl>

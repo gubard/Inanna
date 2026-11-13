@@ -1,18 +1,24 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:ui="clr-namespace:Inanna.Ui"
-             xmlns:m="clr-namespace:FluentIcons.Avalonia.Fluent.Markup;assembly=FluentIcons.Avalonia.Fluent"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Inanna.Ui.StatusBarView"
-             x:DataType="ui:StatusBarViewModel"
-             IsVisible="{Binding IsVisible}">
-    <Grid ColumnDefinitions="*,Auto">
-        <ItemsControl ItemsSource="{Binding Statuses}" Classes="horizontal-wrap" />
-        <Button Grid.Column="1" 
-                Classes="mini align-center" 
-                Command="{Binding HideCommand}"
-                Content="{m:SymbolIcon Dismiss}" />
-    </Grid>
+<UserControl
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:ui="clr-namespace:Inanna.Ui"
+  xmlns:m="clr-namespace:FluentIcons.Avalonia.Fluent.Markup;assembly=FluentIcons.Avalonia.Fluent"
+  mc:Ignorable="d"
+  d:DesignWidth="800"
+  d:DesignHeight="450"
+  x:Class="Inanna.Ui.StatusBarView"
+  x:DataType="ui:StatusBarViewModel"
+  IsVisible="{Binding IsVisible}"
+>
+  <Grid ColumnDefinitions="*,Auto">
+    <ItemsControl ItemsSource="{Binding Statuses}" Classes="horizontal-wrap" />
+    <Button
+      Grid.Column="1"
+      Classes="mini align-center"
+      Command="{Binding HideCommand}"
+      Content="{m:SymbolIcon Dismiss}"
+    />
+  </Grid>
 </UserControl>

@@ -1,84 +1,89 @@
-<Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:h="clr-namespace:Inanna.Helpers"
-        xmlns:s="clr-namespace:System;assembly=System.Runtime"
-        xmlns:m="clr-namespace:FluentIcons.Avalonia.Fluent.Markup;assembly=FluentIcons.Avalonia.Fluent">
-    <Style Selector="TextBox">
-        <Setter Property="Margin" Value="5" />
-        <Setter Property="HorizontalContentAlignment" Value="Left" />
-        <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="MinHeight" Value="38" />
-        <Setter Property="InnerRightContent">
-            <Template>
-                <StackPanel Orientation="Horizontal">
-                    <Button Classes="mini show-password-button"
-                            h:ButtonAssist.IsPasswordHandler="True" />
-                    <Button Classes="mini show-select-all-button"
-                            Content="{m:SymbolIcon SelectAllOn}"
-                            h:ButtonAssist.IsSelectAllHandler="True" />
-                    <Button Classes="mini show-clear-all-button"
-                            Content="{m:SymbolIcon TextClearFormatting}"
-                            h:ButtonAssist.IsClearAllHandler="True" />
-                </StackPanel>
-            </Template>
-        </Setter>
-    </Style>
+<Styles
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:h="clr-namespace:Inanna.Helpers"
+  xmlns:s="clr-namespace:System;assembly=System.Runtime"
+  xmlns:m="clr-namespace:FluentIcons.Avalonia.Fluent.Markup;assembly=FluentIcons.Avalonia.Fluent"
+>
+  <Style Selector="TextBox">
+    <Setter Property="Margin" Value="5" />
+    <Setter Property="HorizontalContentAlignment" Value="Left" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="MinHeight" Value="38" />
+    <Setter Property="InnerRightContent">
+      <Template>
+        <StackPanel Orientation="Horizontal">
+          <Button Classes="mini show-password-button" h:ButtonAssist.IsPasswordHandler="True" />
+          <Button
+            Classes="mini show-select-all-button"
+            Content="{m:SymbolIcon SelectAllOn}"
+            h:ButtonAssist.IsSelectAllHandler="True"
+          />
+          <Button
+            Classes="mini show-clear-all-button"
+            Content="{m:SymbolIcon TextClearFormatting}"
+            h:ButtonAssist.IsClearAllHandler="True"
+          />
+        </StackPanel>
+      </Template>
+    </Setter>
+  </Style>
 
-    <Style Selector="TextBox.disabled">
-        <Setter Property="Foreground" Value="{DynamicResource ButtonForegroundDisabled}" />
-    </Style>
+  <Style Selector="TextBox.disabled">
+    <Setter Property="Foreground" Value="{DynamicResource ButtonForegroundDisabled}" />
+  </Style>
 
-    <Style Selector="TextBox.small">
-        <Setter Property="FontSize" Value="11.2" />
-    </Style>
+  <Style Selector="TextBox.small">
+    <Setter Property="FontSize" Value="11.2" />
+  </Style>
 
-    <Style Selector="TextBox Button.show-select-all-button">
-        <Setter Property="IsVisible" Value="False" />
-    </Style>
+  <Style Selector="TextBox Button.show-select-all-button">
+    <Setter Property="IsVisible" Value="False" />
+  </Style>
 
-    <Style Selector="TextBox Button.show-password-button">
-        <Setter Property="IsVisible" Value="False" />
-    </Style>
+  <Style Selector="TextBox Button.show-password-button">
+    <Setter Property="IsVisible" Value="False" />
+  </Style>
 
-    <Style Selector="TextBox Button.show-clear-all-button">
-        <Setter Property="IsVisible" Value="False" />
-    </Style>
+  <Style Selector="TextBox Button.show-clear-all-button">
+    <Setter Property="IsVisible" Value="False" />
+  </Style>
 
-    <Style Selector="TextBox.password Button.show-password-button">
-        <Setter Property="IsVisible" Value="True" />
-    </Style>
+  <Style Selector="TextBox.password Button.show-password-button">
+    <Setter Property="IsVisible" Value="True" />
+  </Style>
 
-    <Style Selector="TextBox.clear-all Button.show-clear-all-button">
-        <Setter Property="IsVisible" Value="True" />
-    </Style>
+  <Style Selector="TextBox.clear-all Button.show-clear-all-button">
+    <Setter Property="IsVisible" Value="True" />
+  </Style>
 
-    <Style Selector="TextBox.content-align-center">
-        <Setter Property="HorizontalContentAlignment" Value="Center" />
-        <Setter Property="VerticalContentAlignment" Value="Center" />
-    </Style>
+  <Style Selector="TextBox.content-align-center">
+    <Setter Property="HorizontalContentAlignment" Value="Center" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+  </Style>
 
-    <Style Selector="TextBox.select-all Button.show-select-all-button">
-        <Setter Property="IsVisible" Value="True" />
-    </Style>
+  <Style Selector="TextBox.select-all Button.show-select-all-button">
+    <Setter Property="IsVisible" Value="True" />
+  </Style>
 
-    <Style Selector="TextBox.is-readonly">
-        <Setter Property="IsReadOnly" Value="True" />
-    </Style>
+  <Style Selector="TextBox.is-readonly">
+    <Setter Property="IsReadOnly" Value="True" />
+  </Style>
 
-    <Style Selector="TextBox.text-aria">
-        <Setter Property="TextWrapping" Value="Wrap" />
-        <Setter Property="AcceptsReturn" Value="True" />
-    </Style>
+  <Style Selector="TextBox.text-aria">
+    <Setter Property="TextWrapping" Value="Wrap" />
+    <Setter Property="AcceptsReturn" Value="True" />
+  </Style>
 
-    <Style Selector="TextBox.password">
-        <Setter Property="PasswordChar" Value="*" />
-    </Style>
+  <Style Selector="TextBox.password">
+    <Setter Property="PasswordChar" Value="*" />
+  </Style>
 
-    <Style Selector="TextBox:show-password">
-        <Setter Property="PasswordChar" Value="*" />
-    </Style>
+  <Style Selector="TextBox:show-password">
+    <Setter Property="PasswordChar" Value="*" />
+  </Style>
 
-    <Style Selector="TextBox:hide-password">
-        <Setter Property="PasswordChar" Value="{x:Static s:Char.MinValue}" />
-    </Style>
+  <Style Selector="TextBox:hide-password">
+    <Setter Property="PasswordChar" Value="{x:Static s:Char.MinValue}" />
+  </Style>
 </Styles>

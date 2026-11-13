@@ -1,167 +1,169 @@
-<Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:s="clr-namespace:System;assembly=System.Runtime">
-    <Style Selector=":is(Layoutable).field">
-        <Setter Property="Margin" Value="10,5,5,5" />
-    </Style>
-    
-    <Style Selector=":is(Layoutable).align-vertical-center">
-        <Setter Property="VerticalAlignment" Value="Center" />
-    </Style>
+<Styles
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:s="clr-namespace:System;assembly=System.Runtime"
+>
+  <Style Selector=":is(Layoutable).field">
+    <Setter Property="Margin" Value="10,5,5,5" />
+  </Style>
 
-    <Style Selector=":is(Layoutable).align-vertical-center-horizontal-stretch">
-        <Setter Property="VerticalAlignment" Value="Center" />
-        <Setter Property="HorizontalAlignment" Value="Stretch" />
-    </Style>
+  <Style Selector=":is(Layoutable).align-vertical-center">
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
 
-    <Style Selector=":is(Layoutable).align-left">
-        <Setter Property="HorizontalAlignment" Value="Left" />
-    </Style>
+  <Style Selector=":is(Layoutable).align-vertical-center-horizontal-stretch">
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="HorizontalAlignment" Value="Stretch" />
+  </Style>
 
-    <Style Selector=":is(Layoutable).align-center">
-        <Setter Property="HorizontalAlignment" Value="Center" />
-        <Setter Property="VerticalAlignment" Value="Center" />
-    </Style>
+  <Style Selector=":is(Layoutable).align-left">
+    <Setter Property="HorizontalAlignment" Value="Left" />
+  </Style>
 
-    <Style Selector=":is(Layoutable).align-left-center">
-        <Setter Property="HorizontalAlignment" Value="Left" />
-        <Setter Property="VerticalAlignment" Value="Center" />
-    </Style>
+  <Style Selector=":is(Layoutable).align-center">
+    <Setter Property="HorizontalAlignment" Value="Center" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
 
-    <Style Selector=":is(Layoutable).align-stretch">
-        <Setter Property="HorizontalAlignment" Value="Stretch" />
-        <Setter Property="VerticalAlignment" Value="Stretch" />
-    </Style>
+  <Style Selector=":is(Layoutable).align-left-center">
+    <Setter Property="HorizontalAlignment" Value="Left" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
 
-    <Style Selector=":is(Layoutable).align-center-top">
-        <Setter Property="HorizontalAlignment" Value="Center" />
-        <Setter Property="VerticalAlignment" Value="Top" />
-    </Style>
+  <Style Selector=":is(Layoutable).align-stretch">
+    <Setter Property="HorizontalAlignment" Value="Stretch" />
+    <Setter Property="VerticalAlignment" Value="Stretch" />
+  </Style>
 
-    <Style Selector=":is(Layoutable).align-center-bottom">
-        <Setter Property="HorizontalAlignment" Value="Center" />
-        <Setter Property="VerticalAlignment" Value="Bottom" />
-    </Style>
+  <Style Selector=":is(Layoutable).align-center-top">
+    <Setter Property="HorizontalAlignment" Value="Center" />
+    <Setter Property="VerticalAlignment" Value="Top" />
+  </Style>
 
-    <Style Selector=":is(Layoutable).align-right-top">
-        <Setter Property="HorizontalAlignment" Value="Right" />
-        <Setter Property="VerticalAlignment" Value="Top" />
-    </Style>
+  <Style Selector=":is(Layoutable).align-center-bottom">
+    <Setter Property="HorizontalAlignment" Value="Center" />
+    <Setter Property="VerticalAlignment" Value="Bottom" />
+  </Style>
 
-    <Style Selector=":is(Layoutable).align-stretch-top">
-        <Setter Property="HorizontalAlignment" Value="Stretch" />
-        <Setter Property="VerticalAlignment" Value="Top" />
-    </Style>
+  <Style Selector=":is(Layoutable).align-right-top">
+    <Setter Property="HorizontalAlignment" Value="Right" />
+    <Setter Property="VerticalAlignment" Value="Top" />
+  </Style>
 
-    <Style Selector=":is(Layoutable).align-right-top">
-        <Setter Property="HorizontalAlignment" Value="Right" />
-        <Setter Property="VerticalAlignment" Value="Top" />
-    </Style>
+  <Style Selector=":is(Layoutable).align-stretch-top">
+    <Setter Property="HorizontalAlignment" Value="Stretch" />
+    <Setter Property="VerticalAlignment" Value="Top" />
+  </Style>
 
-    <Style Selector=":is(Layoutable).align-right-bottom">
-        <Setter Property="HorizontalAlignment" Value="Right" />
-        <Setter Property="VerticalAlignment" Value="Bottom" />
-    </Style>
+  <Style Selector=":is(Layoutable).align-right-top">
+    <Setter Property="HorizontalAlignment" Value="Right" />
+    <Setter Property="VerticalAlignment" Value="Top" />
+  </Style>
 
-    <Style Selector=":is(Layoutable).align-left-bottom">
-        <Setter Property="HorizontalAlignment" Value="Left" />
-        <Setter Property="VerticalAlignment" Value="Bottom" />
-    </Style>
+  <Style Selector=":is(Layoutable).align-right-bottom">
+    <Setter Property="HorizontalAlignment" Value="Right" />
+    <Setter Property="VerticalAlignment" Value="Bottom" />
+  </Style>
 
-    <Style Selector=":is(Layoutable).align-left-top">
-        <Setter Property="HorizontalAlignment" Value="Left" />
-        <Setter Property="VerticalAlignment" Value="Top" />
-    </Style>
+  <Style Selector=":is(Layoutable).align-left-bottom">
+    <Setter Property="HorizontalAlignment" Value="Left" />
+    <Setter Property="VerticalAlignment" Value="Bottom" />
+  </Style>
 
-    <Style Selector=":is(Layoutable).align-right">
-        <Setter Property="HorizontalAlignment" Value="Right" />
-    </Style>
+  <Style Selector=":is(Layoutable).align-left-top">
+    <Setter Property="HorizontalAlignment" Value="Left" />
+    <Setter Property="VerticalAlignment" Value="Top" />
+  </Style>
 
-    <Style Selector=":is(Layoutable).m-0">
-        <Setter Property="Margin" Value="0" />
-    </Style>
+  <Style Selector=":is(Layoutable).align-right">
+    <Setter Property="HorizontalAlignment" Value="Right" />
+  </Style>
 
-    <Style Selector=":is(Layoutable).m-2">
-        <Setter Property="Margin" Value="2" />
-    </Style>
+  <Style Selector=":is(Layoutable).m-0">
+    <Setter Property="Margin" Value="0" />
+  </Style>
 
-    <Style Selector=":is(Layoutable).m-3">
-        <Setter Property="Margin" Value="3" />
-    </Style>
+  <Style Selector=":is(Layoutable).m-2">
+    <Setter Property="Margin" Value="2" />
+  </Style>
 
-    <Style Selector=":is(Layoutable).m-5">
-        <Setter Property="Margin" Value="5" />
-    </Style>
+  <Style Selector=":is(Layoutable).m-3">
+    <Setter Property="Margin" Value="3" />
+  </Style>
 
-    <Style Selector=":is(Layoutable).m-l-5">
-        <Setter Property="Margin" Value="5,0,0,0" />
-    </Style>
+  <Style Selector=":is(Layoutable).m-5">
+    <Setter Property="Margin" Value="5" />
+  </Style>
 
-    <Style Selector=":is(Layoutable).m-h-3">
-        <Setter Property="Margin" Value="3,0" />
-    </Style>
+  <Style Selector=":is(Layoutable).m-l-5">
+    <Setter Property="Margin" Value="5,0,0,0" />
+  </Style>
 
-    <Style Selector=":is(Layoutable).m-10">
-        <Setter Property="Margin" Value="10" />
-    </Style>
+  <Style Selector=":is(Layoutable).m-h-3">
+    <Setter Property="Margin" Value="3,0" />
+  </Style>
 
-    <Style Selector=":is(Layoutable).w-5">
-        <Setter Property="Width" Value="5" />
-    </Style>
-    
-    <Style Selector=":is(Layoutable).w-100">
-        <Setter Property="Width" Value="100" />
-    </Style>
+  <Style Selector=":is(Layoutable).m-10">
+    <Setter Property="Margin" Value="10" />
+  </Style>
 
-    <Style Selector=":is(Layoutable).w-300">
-        <Setter Property="Width" Value="300" />
-    </Style>
-    
-    <Style Selector=":is(Layoutable).w-250">
-        <Setter Property="Width" Value="250" />
-    </Style>
-    
-    <Style Selector=":is(Layoutable).w-500">
-        <Setter Property="Width" Value="500" />
-    </Style>
-    
-    <Style Selector=":is(Layoutable).minw-300">
-        <Setter Property="MinWidth" Value="300" />
-    </Style>
-    
-    <Style Selector=":is(Layoutable).minw-150">
-        <Setter Property="MinWidth" Value="150" />
-    </Style>
+  <Style Selector=":is(Layoutable).w-5">
+    <Setter Property="Width" Value="5" />
+  </Style>
 
-    <Style Selector=":is(Layoutable).h-100">
-        <Setter Property="Height" Value="100" />
-    </Style>
+  <Style Selector=":is(Layoutable).w-100">
+    <Setter Property="Width" Value="100" />
+  </Style>
 
-    <Style Selector=":is(Layoutable).h-800">
-        <Setter Property="Height" Value="800" />
-    </Style>
-    
-    <Style Selector=":is(Layoutable).mh-800">
-        <Setter Property="MaxHeight" Value="800" />
-    </Style>
+  <Style Selector=":is(Layoutable).w-300">
+    <Setter Property="Width" Value="300" />
+  </Style>
 
-    <Style Selector=":is(Layoutable).s-20">
-        <Setter Property="Width" Value="20" />
-        <Setter Property="Height" Value="20" />
-    </Style>
+  <Style Selector=":is(Layoutable).w-250">
+    <Setter Property="Width" Value="250" />
+  </Style>
 
-    <Style Selector=":is(Layoutable).s-40">
-        <Setter Property="Width" Value="40" />
-        <Setter Property="Height" Value="40" />
-    </Style>
+  <Style Selector=":is(Layoutable).w-500">
+    <Setter Property="Width" Value="500" />
+  </Style>
 
-    <Style Selector=":is(Layoutable).s-100">
-        <Setter Property="Width" Value="100" />
-        <Setter Property="Height" Value="100" />
-    </Style>
+  <Style Selector=":is(Layoutable).minw-300">
+    <Setter Property="MinWidth" Value="300" />
+  </Style>
 
-    <Style Selector=":is(Layoutable).s-nan">
-        <Setter Property="Width" Value="{x:Static s:Double.NaN}" />
-        <Setter Property="Height" Value="{x:Static s:Double.NaN}" />
-    </Style>
+  <Style Selector=":is(Layoutable).minw-150">
+    <Setter Property="MinWidth" Value="150" />
+  </Style>
+
+  <Style Selector=":is(Layoutable).h-100">
+    <Setter Property="Height" Value="100" />
+  </Style>
+
+  <Style Selector=":is(Layoutable).h-800">
+    <Setter Property="Height" Value="800" />
+  </Style>
+
+  <Style Selector=":is(Layoutable).mh-800">
+    <Setter Property="MaxHeight" Value="800" />
+  </Style>
+
+  <Style Selector=":is(Layoutable).s-20">
+    <Setter Property="Width" Value="20" />
+    <Setter Property="Height" Value="20" />
+  </Style>
+
+  <Style Selector=":is(Layoutable).s-40">
+    <Setter Property="Width" Value="40" />
+    <Setter Property="Height" Value="40" />
+  </Style>
+
+  <Style Selector=":is(Layoutable).s-100">
+    <Setter Property="Width" Value="100" />
+    <Setter Property="Height" Value="100" />
+  </Style>
+
+  <Style Selector=":is(Layoutable).s-nan">
+    <Setter Property="Width" Value="{x:Static s:Double.NaN}" />
+    <Setter Property="Height" Value="{x:Static s:Double.NaN}" />
+  </Style>
 </Styles>
