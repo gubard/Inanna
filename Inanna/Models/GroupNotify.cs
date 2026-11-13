@@ -8,5 +8,5 @@ public sealed partial class GroupNotify<T> : ObservableObject
     public AvaloniaList<T> Items { get; } = new();
 
     [ObservableProperty]
-    private string _name = string.Empty;
+    public partial string Name { get; set; } = string.Empty;
 }

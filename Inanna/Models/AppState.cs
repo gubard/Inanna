@@ -40,7 +40,7 @@ public sealed partial class AppState : ObservableObject
     }
 
     [ObservableProperty]
-    private UserState? _user;
+    public partial UserState? User { get; set; }
 
     private readonly Dictionary<string, IServiceState> _serviceStates = new();
 }

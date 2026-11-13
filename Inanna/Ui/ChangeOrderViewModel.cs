@@ -11,16 +11,16 @@ public sealed partial class ChangeOrderViewModel : ViewModelBase
     public ChangeOrderViewModel(IEnumerable<IOrderedItem> items, ViewModelServices services)
         : base(services)
     {
-        _isAfter = true;
-        _items = new(items);
-        _selectedItem = _items.First(x => !x.IsChangingOrder);
+        IsAfter = true;
+        _items = [.. items];
+        SelectedItem = _items.First(x => !x.IsChangingOrder);
     }
 
     [ObservableProperty]
-    private bool _isAfter;
+    public partial bool IsAfter { get; set; }
 
     [ObservableProperty]
-    private IOrderedItem _selectedItem;
+    public partial IOrderedItem SelectedItem { get; set; }
 
     private readonly AvaloniaList<IOrderedItem> _items;
 }

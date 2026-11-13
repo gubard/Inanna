@@ -113,7 +113,7 @@ public abstract partial class UiService<
     }
 
     [ObservableProperty]
-    private ServiceMode _mode;
+    public partial ServiceMode Mode { get; set; }
 
     private readonly ServiceOfflineStatusViewModel _viewModel;
     private readonly THttpService _httpService;

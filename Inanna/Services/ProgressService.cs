@@ -29,13 +29,13 @@ public sealed partial class ProgressService : ObservableObject, IProgressService
     }
 
     [ObservableProperty]
-    private uint _needValue;
+    public partial uint NeedValue { get; set; }
 
     [ObservableProperty]
-    private uint _currentValue;
+    public partial uint CurrentValue { get; set; }
 
     [ObservableProperty]
-    private string _status = string.Empty;
+    public partial string Status { get; set; } = string.Empty;
 
     private readonly List<ProgressItem> _items = new();
     private bool _isUpdating;

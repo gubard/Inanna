@@ -41,7 +41,7 @@ public sealed partial class StatusBarViewModel : ViewModelBase
     }
 
     [ObservableProperty]
-    private bool _isVisible;
+    public partial bool IsVisible { get; set; }
 
     private readonly AvaloniaList<object> _statuses = new();
 

@@ -15,12 +15,12 @@ public sealed partial class LinearBarcodeViewModel : ViewModelBase
         : base(services)
     {
         _barcode = new();
-        _backgroundColor = Colors.White;
-        _barColor = Colors.Black;
-        _barWidth = 3;
-        _barHeight = 80;
-        _bottomText = string.Empty;
-        _topText = string.Empty;
+        BackgroundColor = Colors.White;
+        BarColor = Colors.Black;
+        BarWidth = 3;
+        BarHeight = 80;
+        BottomText = string.Empty;
+        TopText = string.Empty;
     }
 
     public IEnumerable<bool> Barcode => _barcode;
@@ -48,20 +48,20 @@ public sealed partial class LinearBarcodeViewModel : ViewModelBase
     private Control? _control;
 
     [ObservableProperty]
-    private Color _backgroundColor;
+    public partial Color BackgroundColor { get; set; }
 
     [ObservableProperty]
-    private Color _barColor;
+    public partial Color BarColor { get; set; }
 
     [ObservableProperty]
-    private double _barWidth;
+    public partial double BarWidth { get; set; }
 
     [ObservableProperty]
-    private double _barHeight;
+    public partial double BarHeight { get; set; }
 
     [ObservableProperty]
-    private string _bottomText;
+    public partial string BottomText { get; set; }
 
     [ObservableProperty]
-    private string _topText;
+    public partial string TopText { get; set; }
 }

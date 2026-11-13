@@ -5,8 +5,8 @@ namespace Inanna.Models;
 public sealed partial class NamedNotify : ObservableObject
 {
     [ObservableProperty]
-    private string _name = string.Empty;
+    public partial string Name { get; set; } = string.Empty;
 
     [ObservableProperty]
-    private object? _value;
+    public partial object? Value { get; set; }
 }

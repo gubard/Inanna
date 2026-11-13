@@ -17,29 +17,29 @@ public sealed partial class LinearBarcodeGeneratorViewModel : ViewModelBase
     )
         : base(services)
     {
-        _text = string.Empty;
+        Text = string.Empty;
         _factory = factory;
         _barcodes = new(factory.SupportedBarcodes.ToArray());
-        _selectedBarcode = _barcodes[0];
+        SelectedBarcode = _barcodes[0];
         Barcode = viewModelFactory.CreateLinearBarcode();
-        _isShowBottomText = true;
-        _isShowTopText = true;
+        IsShowBottomText = true;
+        IsShowTopText = true;
     }
 
     public IEnumerable<string> Barcodes => _barcodes;
     public LinearBarcodeViewModel Barcode { get; }
 
     [ObservableProperty]
-    private string _text;
+    public partial string Text { get; set; }
 
     [ObservableProperty]
-    private string _selectedBarcode;
+    public partial string SelectedBarcode { get; set; }
 
     [ObservableProperty]
-    private bool _isShowBottomText;
+    public partial bool IsShowBottomText { get; set; }
 
     [ObservableProperty]
-    private bool _isShowTopText;
+    public partial bool IsShowTopText { get; set; }
 
     private readonly AvaloniaList<string> _barcodes;
     private readonly ILinearBarcodeSerializerFactory _factory;

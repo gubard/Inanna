@@ -6,7 +6,7 @@ namespace Inanna.Models;
 public sealed partial class InannaCommand : ObservableObject
 {
     [ObservableProperty]
-    private bool _isEnable;
+    public partial bool IsEnable { get; set; }
 
     public InannaCommand(
         ICommand command,
@@ -21,7 +21,7 @@ public sealed partial class InannaCommand : ObservableObject
         Parameter = parameter;
         Content = content;
         Icon = icon;
-        _isEnable = isEnable;
+        IsEnable = isEnable;
         Type = type;
     }
 

@@ -51,7 +51,7 @@ public sealed partial class StackViewModel : ViewModelBase
     }
 
     [ObservableProperty]
-    private object? _currentView;
+    public partial object? CurrentView { get; set; }
 
     private readonly Stack<object> _views = new();
 }

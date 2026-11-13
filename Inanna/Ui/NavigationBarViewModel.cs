@@ -41,7 +41,7 @@ public sealed partial class NavigationBarViewModel : ViewModelBase
     private readonly INavigator _navigator;
 
     [ObservableProperty]
-    private bool _showPane;
+    public partial bool ShowPane { get; set; }
 
     [RelayCommand]
     private async Task BackAsync(CancellationToken ct)
