@@ -122,6 +122,14 @@
   <Style Selector=":is(Layoutable).w-250">
     <Setter Property="Width" Value="250" />
   </Style>
+  
+  <Style Selector=":is(Layoutable).w-350">
+    <Setter Property="Width" Value="350" />
+  </Style>
+  
+  <Style Selector=":is(Layoutable).w-400">
+    <Setter Property="Width" Value="400" />
+  </Style>
 
   <Style Selector=":is(Layoutable).w-500">
     <Setter Property="Width" Value="500" />

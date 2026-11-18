@@ -22,7 +22,7 @@
   <Style Selector=":is(TopLevel):small c|DialogControl.adaptive-dialog-control">
     <Setter
       Property="WidthDialog"
-      Value="{Binding $parent[TopLevel].Width, Converter={x:Static converters:DoubleToPercentsConverter.Instance}, ConverterParameter=0.85}"
+      Value="{Binding $parent[TopLevel].Width, Converter={x:Static converters:DoubleToPercentsConverter.Instance}, ConverterParameter=0.90}"
     />
     <Setter
       Property="MaxHeightDialog"
@@ -33,7 +33,7 @@
   <Style Selector=":is(TopLevel):medium c|DialogControl.adaptive-dialog-control">
     <Setter
       Property="WidthDialog"
-      Value="{Binding $parent[TopLevel].Width, Converter={x:Static converters:DoubleToPercentsConverter.Instance}, ConverterParameter=0.70}"
+      Value="{Binding $parent[TopLevel].Width, Converter={x:Static converters:DoubleToPercentsConverter.Instance}, ConverterParameter=0.85}"
     />
     <Setter
       Property="MaxHeightDialog"
@@ -44,7 +44,7 @@
   <Style Selector=":is(TopLevel):large c|DialogControl.adaptive-dialog-control">
     <Setter
       Property="WidthDialog"
-      Value="{Binding $parent[TopLevel].Width, Converter={x:Static converters:DoubleToPercentsConverter.Instance}, ConverterParameter=0.5}"
+      Value="{Binding $parent[TopLevel].Width, Converter={x:Static converters:DoubleToPercentsConverter.Instance}, ConverterParameter=0.80}"
     />
     <Setter
       Property="MaxHeightDialog"
@@ -55,7 +55,7 @@
   <Style Selector=":is(TopLevel):extra-large c|DialogControl.adaptive-dialog-control">
     <Setter
       Property="WidthDialog"
-      Value="{Binding $parent[TopLevel].Width, Converter={x:Static converters:DoubleToPercentsConverter.Instance}, ConverterParameter=0.5}"
+      Value="{Binding $parent[TopLevel].Width, Converter={x:Static converters:DoubleToPercentsConverter.Instance}, ConverterParameter=0.75}"
     />
     <Setter
       Property="MaxHeightDialog"
