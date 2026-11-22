@@ -2,6 +2,7 @@
 using System.Windows.Input;
 using Avalonia.Threading;
 using Gaia.Helpers;
+using Gaia.Models;
 using Gaia.Services;
 using Inanna.Models;
 using IServiceProvider = Gaia.Services.IServiceProvider;
@@ -69,12 +70,11 @@ public abstract class Commands
         );
     }
 
-    protected Lazy<ICommand> CreateLazyCommand<TValidationErrors>(
-        Func<CancellationToken, ConfiguredValueTaskAwaitable<TValidationErrors>> func,
+    protected Lazy<ICommand> CreateLazyCommand(
+        Func<CancellationToken, ConfiguredValueTaskAwaitable<Result>> func,
         bool isBackground = false,
         bool canCancel = true
     )
-        where TValidationErrors : IValidationErrors
     {
         return new(() =>
             ServiceProvider
@@ -83,12 +83,11 @@ public abstract class Commands
         );
     }
 
-    protected Lazy<ICommand> CreateLazyCommand<TValidationErrors>(
-        Func<CancellationToken, ValueTask<TValidationErrors>> func,
+    protected Lazy<ICommand> CreateLazyCommand(
+        Func<CancellationToken, ValueTask<Result>> func,
         bool isBackground = false,
         bool canCancel = true
     )
-        where TValidationErrors : IValidationErrors
     {
         return new(() =>
             ServiceProvider
@@ -97,12 +96,11 @@ public abstract class Commands
         );
     }
 
-    protected Lazy<ICommand> CreateLazyCommand<T, TValidationErrors>(
-        Func<T, CancellationToken, ConfiguredValueTaskAwaitable<TValidationErrors>> func,
+    protected Lazy<ICommand> CreateLazyCommand<T>(
+        Func<T, CancellationToken, ConfiguredValueTaskAwaitable<Result<T>>> func,
         bool isBackground = false,
         bool canCancel = true
     )
-        where TValidationErrors : IValidationErrors
     {
         return new(() =>
             ServiceProvider
@@ -111,12 +109,11 @@ public abstract class Commands
         );
     }
 
-    protected Lazy<ICommand> CreateLazyCommand<T, TValidationErrors>(
-        Func<T, CancellationToken, ValueTask<TValidationErrors>> func,
+    protected Lazy<ICommand> CreateLazyCommand<T>(
+        Func<T, CancellationToken, ValueTask<Result<T>>> func,
         bool isBackground = false,
         bool canCancel = true
     )
-        where TValidationErrors : IValidationErrors
     {
         return new(() =>
             ServiceProvider
@@ -156,26 +153,26 @@ public sealed class InannaCommands : Commands
                     .NavigateToAsync(DiHelper.ServiceProvider.GetService(type), ct)
         );
 
-        _switchServiceModeCommand = CreateLazyCommand<IServiceState, IValidationErrors>(
+        _switchServiceModeCommand = CreateLazyCommand<IServiceState>(
             async (state, ct) =>
             {
                 if (state.Mode == ServiceMode.Online)
                 {
                     Dispatcher.UIThread.Post(() => state.Mode = ServiceMode.Offline);
 
-                    return new DefaultValidationErrors();
+                    return state;
                 }
 
-                var errors = await state.HealthCheckAsync(ct);
+                var result = await state.HealthCheckAsync(ct);
 
-                if (errors.ValidationErrors.Count != 0)
+                if (result is ValidationError error)
                 {
-                    return errors;
+                    return error;
                 }
 
                 await ServiceProvider.GetService<INavigator>().RefreshCurrentViewAsync(ct);
 
-                return errors;
+                return state;
             }
         );
     }

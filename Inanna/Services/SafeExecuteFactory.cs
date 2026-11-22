@@ -1,6 +1,7 @@
 using System.Runtime.CompilerServices;
 using Avalonia.Threading;
 using Gaia.Helpers;
+using Gaia.Models;
 using Gaia.Services;
 using Inanna.Helpers;
 using Inanna.Models;
@@ -13,19 +14,22 @@ public interface ISafeExecuteWrapper
 {
     void Execute(Action action);
 
-    void Execute<TValidationErrors>(Func<TValidationErrors> func)
-        where TValidationErrors : IValidationErrors;
+    void Execute(Func<Result> func);
 
     public ConfiguredValueTaskAwaitable ExecuteAsync(
         Func<ConfiguredValueTaskAwaitable> func,
         CancellationToken ct
     );
 
-    ConfiguredValueTaskAwaitable ExecuteAsync<TValidationErrors>(
-        Func<ConfiguredValueTaskAwaitable<TValidationErrors>> func,
+    ConfiguredValueTaskAwaitable ExecuteAsync(
+        Func<ConfiguredValueTaskAwaitable<Result>> func,
         CancellationToken ct
-    )
-        where TValidationErrors : IValidationErrors;
+    );
+
+    ConfiguredValueTaskAwaitable ExecuteAsync<T>(
+        Func<ConfiguredValueTaskAwaitable<Result<T>>> func,
+        CancellationToken ct
+    );
 }
 
 public sealed class SafeExecuteWrapper : ISafeExecuteWrapper
@@ -43,17 +47,23 @@ public sealed class SafeExecuteWrapper : ISafeExecuteWrapper
         return ExecuteCore(func, ct).ConfigureAwait(false);
     }
 
-    public ConfiguredValueTaskAwaitable ExecuteAsync<TValidationErrors>(
-        Func<ConfiguredValueTaskAwaitable<TValidationErrors>> func,
+    public ConfiguredValueTaskAwaitable ExecuteAsync(
+        Func<ConfiguredValueTaskAwaitable<Result>> func,
         CancellationToken ct
     )
-        where TValidationErrors : IValidationErrors
     {
         return ExecuteCore(func, ct).ConfigureAwait(false);
     }
 
-    public void Execute<TValidationErrors>(Func<TValidationErrors> func)
-        where TValidationErrors : IValidationErrors
+    public ConfiguredValueTaskAwaitable ExecuteAsync<T>(
+        Func<ConfiguredValueTaskAwaitable<Result<T>>> func,
+        CancellationToken ct
+    )
+    {
+        return ExecuteCore(func, ct).ConfigureAwait(false);
+    }
+
+    public void Execute(Func<Result> func)
     {
         var progress = new ProgressItem(1);
 
@@ -62,9 +72,9 @@ public sealed class SafeExecuteWrapper : ISafeExecuteWrapper
             _serviceProvider.GetService<IProgressService>().AddProgress(progress);
             var result = func.Invoke();
 
-            if (result.ValidationErrors is not { Count: 0 })
+            if (result is ValidationError error)
             {
-                _serviceProvider.GetService<ILogger>().CommandErrors(result.ValidationErrors);
+                _serviceProvider.GetService<ILogger>().CommandErrors(error);
 
                 _serviceProvider
                     .GetService<IDialogService>()
@@ -73,9 +83,7 @@ public sealed class SafeExecuteWrapper : ISafeExecuteWrapper
                             .GetService<IAppResourceService>()
                             .GetResource<string>("Lang.Error")
                             .DispatchToDialogHeader(),
-                        _serviceProvider
-                            .GetService<IErrorDialogFactory>()
-                            .Create(result.ValidationErrors.ToArray()),
+                        _serviceProvider.GetService<IErrorDialogFactory>().Create(error),
                         CancellationToken.None,
                         _serviceProvider.GetService<IDialogService>().OkButton
                     );
@@ -182,11 +190,10 @@ public sealed class SafeExecuteWrapper : ISafeExecuteWrapper
         }
     }
 
-    private async ValueTask ExecuteCore<TValidationErrors>(
-        Func<ConfiguredValueTaskAwaitable<TValidationErrors>> func,
+    private async ValueTask ExecuteCore(
+        Func<ConfiguredValueTaskAwaitable<Result>> func,
         CancellationToken ct
     )
-        where TValidationErrors : IValidationErrors
     {
         var progress = new ProgressItem(1);
 
@@ -195,9 +202,9 @@ public sealed class SafeExecuteWrapper : ISafeExecuteWrapper
             _serviceProvider.GetService<IProgressService>().AddProgress(progress);
             var result = await func.Invoke();
 
-            if (result.ValidationErrors is not { Count: 0 })
+            if (result is ValidationError error)
             {
-                _serviceProvider.GetService<ILogger>().CommandErrors(result.ValidationErrors);
+                _serviceProvider.GetService<ILogger>().CommandErrors(error);
 
                 await _serviceProvider
                     .GetService<IDialogService>()
@@ -206,9 +213,61 @@ public sealed class SafeExecuteWrapper : ISafeExecuteWrapper
                             .GetService<IAppResourceService>()
                             .GetResource<string>("Lang.Error")
                             .DispatchToDialogHeader(),
+                        _serviceProvider.GetService<IErrorDialogFactory>().Create(error),
+                        CancellationToken.None,
+                        _serviceProvider.GetService<IDialogService>().OkButton
+                    );
+            }
+        }
+        catch (OperationCanceledException e)
+        {
+            _serviceProvider.GetService<ILogger>().OperationCanceled(e);
+        }
+        catch (Exception e)
+        {
+            _serviceProvider.GetService<ILogger>().CommandException(e);
+            await _serviceProvider
+                .GetService<IDialogService>()
+                .ShowMessageBoxAsync(
+                    _serviceProvider
+                        .GetService<IAppResourceService>()
+                        .GetResource<string>("Lang.Error")
+                        .DispatchToDialogHeader(),
+                    _serviceProvider.GetService<IErrorDialogFactory>().Create([e]),
+                    CancellationToken.None,
+                    _serviceProvider.GetService<IDialogService>().OkButton
+                );
+        }
+        finally
+        {
+            Dispatcher.UIThread.Post(() => progress.CurrentValue++);
+        }
+    }
+
+    private async ValueTask ExecuteCore<T>(
+        Func<ConfiguredValueTaskAwaitable<Result<T>>> func,
+        CancellationToken ct
+    )
+    {
+        var progress = new ProgressItem(1);
+
+        try
+        {
+            _serviceProvider.GetService<IProgressService>().AddProgress(progress);
+            var result = await func.Invoke();
+
+            if (result is ValidationError error)
+            {
+                _serviceProvider.GetService<ILogger>().CommandErrors(error);
+
+                await _serviceProvider
+                    .GetService<IDialogService>()
+                    .ShowMessageBoxAsync(
                         _serviceProvider
-                            .GetService<IErrorDialogFactory>()
-                            .Create(result.ValidationErrors.ToArray()),
+                            .GetService<IAppResourceService>()
+                            .GetResource<string>("Lang.Error")
+                            .DispatchToDialogHeader(),
+                        _serviceProvider.GetService<IErrorDialogFactory>().Create(error),
                         CancellationToken.None,
                         _serviceProvider.GetService<IDialogService>().OkButton
                     );

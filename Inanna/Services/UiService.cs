@@ -12,7 +12,7 @@ namespace Inanna.Services;
 
 public interface IUiService
 {
-    ConfiguredValueTaskAwaitable<IValidationErrors> RefreshServiceAsync(CancellationToken ct);
+    ConfiguredValueTaskAwaitable<Result> RefreshServiceAsync(CancellationToken ct);
 }
 
 public interface IUiService<in TGetRequest, in TPostRequest, TGetResponse, TPostResponse>
@@ -41,7 +41,7 @@ public abstract partial class UiService<
 {
     public string ServiceName { get; }
 
-    public virtual ConfiguredValueTaskAwaitable<TGetResponse> GetAsync(
+    public virtual ConfiguredValueTaskAwaitable<Result<TGetResponse>> GetAsync(
         TGetRequest request,
         CancellationToken ct
     )
@@ -49,7 +49,7 @@ public abstract partial class UiService<
         return GetCore(request, ct).ConfigureAwait(false);
     }
 
-    public virtual ConfiguredValueTaskAwaitable<TPostResponse> PostAsync(
+    public virtual ConfiguredValueTaskAwaitable<Result<TPostResponse>> PostAsync(
         Guid idempotentId,
         TPostRequest request,
         CancellationToken ct
@@ -58,12 +58,12 @@ public abstract partial class UiService<
         return PostCore(idempotentId, request, ct).ConfigureAwait(false);
     }
 
-    public ConfiguredValueTaskAwaitable<IValidationErrors> HealthCheckAsync(CancellationToken ct)
+    public ConfiguredValueTaskAwaitable<Result> HealthCheckAsync(CancellationToken ct)
     {
         return HealthCheckCore(ct).ConfigureAwait(false);
     }
 
-    public ConfiguredValueTaskAwaitable<IValidationErrors> RefreshServiceAsync(CancellationToken ct)
+    public ConfiguredValueTaskAwaitable<Result> RefreshServiceAsync(CancellationToken ct)
     {
         return RefreshServiceCore(ct).ConfigureAwait(false);
     }
@@ -90,7 +90,7 @@ public abstract partial class UiService<
         _viewModel = factory.CreateServiceOfflineStatus(this);
     }
 
-    protected abstract ValueTask<IValidationErrors> RefreshServiceCore(CancellationToken ct);
+    protected abstract ValueTask<Result> RefreshServiceCore(CancellationToken ct);
 
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
@@ -122,23 +122,21 @@ public abstract partial class UiService<
 
     private CancellationTokenSource? _cts;
 
-    private async ValueTask<IValidationErrors> HealthCheckCore(CancellationToken ct)
+    private async ValueTask<Result> HealthCheckCore(CancellationToken ct)
     {
-        var errors = await _httpService.HealthCheckAsync(ct);
+        var result = await _httpService.HealthCheckAsync(ct);
 
-        if (errors.ValidationErrors.Count == 0)
+        Mode = result switch
         {
-            Mode = ServiceMode.Online;
+            Success => ServiceMode.Online,
+            ValidationError => ServiceMode.Offline,
+            _ => throw new ArgumentOutOfRangeException(nameof(result)),
+        };
 
-            return errors;
-        }
-
-        Mode = ServiceMode.Offline;
-
-        return errors;
+        return result;
     }
 
-    private async ValueTask<TPostResponse> PostCore(
+    private async ValueTask<Result<TPostResponse>> PostCore(
         Guid idempotentId,
         TPostRequest request,
         CancellationToken ct
@@ -169,15 +167,19 @@ public abstract partial class UiService<
                 request.Events = events;
                 var response = await _httpService.PostAsync(idempotentId, request, ct);
 
-                if (response.IsEventSaved)
+                if (response is TPostResponse { IsEventSaved: true })
                 {
                     await DbService.ClearEventsAsync(ct);
                 }
 
-                if (response.ValidationErrors.OfType<ExceptionsValidationError>().Any())
+                if (response is ValidationError error)
                 {
-                    var r = await DbService.PostAsync(idempotentId, request, ct);
-                    response.ValidationErrors.AddRange(r.ValidationErrors);
+                    var dbResult = await DbService.PostAsync(idempotentId, request, ct);
+
+                    if (dbResult is ValidationError dbError)
+                    {
+                        return new ValidationErrors([error, dbError]);
+                    }
                 }
 
                 return response;
@@ -194,21 +196,29 @@ public abstract partial class UiService<
         }
     }
 
-    private async ValueTask<TGetResponse> GetCore(TGetRequest request, CancellationToken ct)
+    private async ValueTask<Result<TGetResponse>> GetCore(TGetRequest request, CancellationToken ct)
     {
         switch (Mode)
         {
             case ServiceMode.Online:
             {
                 var response = await _httpService.GetAsync(request, ct);
-                await UiCache.UpdateAsync(response, ct);
+
+                if (response is TGetResponse get)
+                {
+                    await UiCache.UpdateAsync(get, ct);
+                }
 
                 return response;
             }
             case ServiceMode.Offline:
             {
                 var response = await DbService.GetAsync(request, ct);
-                await UiCache.MemoryCache.UpdateAsync(response, ct);
+
+                if (response is TGetResponse get)
+                {
+                    await UiCache.MemoryCache.UpdateAsync(get, ct);
+                }
 
                 return response;
             }

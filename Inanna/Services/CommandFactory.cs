@@ -2,6 +2,7 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using Gaia.Helpers;
+using Gaia.Models;
 using Gaia.Services;
 using IServiceProvider = Gaia.Services.IServiceProvider;
 
@@ -33,33 +34,29 @@ public interface ICommandFactory
         bool canCancel = true
     );
 
-    ICommand CreateCommand<TValidationErrors>(
-        Func<CancellationToken, ConfiguredValueTaskAwaitable<TValidationErrors>> func,
+    ICommand CreateCommand(
+        Func<CancellationToken, ConfiguredValueTaskAwaitable<Result>> func,
         bool isBackground = false,
         bool canCancel = true
-    )
-        where TValidationErrors : IValidationErrors;
+    );
 
-    ICommand CreateCommand<TValidationErrors>(
-        Func<CancellationToken, ValueTask<TValidationErrors>> func,
+    ICommand CreateCommand(
+        Func<CancellationToken, ValueTask<Result>> func,
         bool isBackground = false,
         bool canCancel = true
-    )
-        where TValidationErrors : IValidationErrors;
+    );
 
-    ICommand CreateCommand<T, TValidationErrors>(
-        Func<T, CancellationToken, ConfiguredValueTaskAwaitable<TValidationErrors>> func,
+    ICommand CreateCommand<T>(
+        Func<T, CancellationToken, ConfiguredValueTaskAwaitable<Result<T>>> func,
         bool isBackground = false,
         bool canCancel = true
-    )
-        where TValidationErrors : IValidationErrors;
+    );
 
-    ICommand CreateCommand<T, TValidationErrors>(
-        Func<T, CancellationToken, ValueTask<TValidationErrors>> func,
+    ICommand CreateCommand<T>(
+        Func<T, CancellationToken, ValueTask<Result<T>>> func,
         bool isBackground = false,
         bool canCancel = true
-    )
-        where TValidationErrors : IValidationErrors;
+    );
 }
 
 public sealed class CommandFactory : ICommandFactory
@@ -164,12 +161,11 @@ public sealed class CommandFactory : ICommandFactory
         });
     }
 
-    public ICommand CreateCommand<TValidationErrors>(
-        Func<CancellationToken, ConfiguredValueTaskAwaitable<TValidationErrors>> func,
+    public ICommand CreateCommand(
+        Func<CancellationToken, ConfiguredValueTaskAwaitable<Result>> func,
         bool isBackground = false,
         bool canCancel = true
     )
-        where TValidationErrors : IValidationErrors
     {
         return new AsyncRelayCommand(async ct =>
         {
@@ -187,12 +183,11 @@ public sealed class CommandFactory : ICommandFactory
         });
     }
 
-    public ICommand CreateCommand<TValidationErrors>(
-        Func<CancellationToken, ValueTask<TValidationErrors>> func,
+    public ICommand CreateCommand(
+        Func<CancellationToken, ValueTask<Result>> func,
         bool isBackground = false,
         bool canCancel = true
     )
-        where TValidationErrors : IValidationErrors
     {
         return new AsyncRelayCommand(async ct =>
         {
@@ -210,12 +205,11 @@ public sealed class CommandFactory : ICommandFactory
         });
     }
 
-    public ICommand CreateCommand<T, TValidationErrors>(
-        Func<T, CancellationToken, ConfiguredValueTaskAwaitable<TValidationErrors>> func,
+    public ICommand CreateCommand<T>(
+        Func<T, CancellationToken, ConfiguredValueTaskAwaitable<Result<T>>> func,
         bool isBackground = false,
         bool canCancel = true
     )
-        where TValidationErrors : IValidationErrors
     {
         return new AsyncRelayCommand<T>(
             async (parameter, ct) =>
@@ -236,12 +230,11 @@ public sealed class CommandFactory : ICommandFactory
         );
     }
 
-    public ICommand CreateCommand<T, TValidationErrors>(
-        Func<T, CancellationToken, ValueTask<TValidationErrors>> func,
+    public ICommand CreateCommand<T>(
+        Func<T, CancellationToken, ValueTask<Result<T>>> func,
         bool isBackground = false,
         bool canCancel = true
     )
-        where TValidationErrors : IValidationErrors
     {
         return new AsyncRelayCommand<T>(
             async (parameter, ct) =>

@@ -112,21 +112,19 @@ public abstract class ViewModelBase : PropertyValidator
         return Services.SafeExecuteWrapper.ExecuteAsync(func, ct);
     }
 
-    protected ConfiguredValueTaskAwaitable WrapCommandAsync<TValidationErrors>(
-        Func<ConfiguredValueTaskAwaitable<TValidationErrors>> func,
+    protected ConfiguredValueTaskAwaitable WrapCommandAsync(
+        Func<ConfiguredValueTaskAwaitable<Result>> func,
         CancellationToken ct,
         bool isBackground = false
     )
-        where TValidationErrors : IValidationErrors
     {
         return WrapCommandCore(func, ct, isBackground).ConfigureAwait(false);
     }
 
-    protected ConfiguredValueTaskAwaitable WrapCommandAsync<TValidationErrors>(
-        Func<ValueTask<TValidationErrors>> func,
+    protected ConfiguredValueTaskAwaitable WrapCommandAsync(
+        Func<ValueTask<Result>> func,
         CancellationToken ct
     )
-        where TValidationErrors : IValidationErrors
     {
         StartExecute();
 
@@ -146,8 +144,7 @@ public abstract class ViewModelBase : PropertyValidator
         );
     }
 
-    protected void WrapCommand<TValidationErrors>(Func<TValidationErrors> func)
-        where TValidationErrors : IValidationErrors
+    protected void WrapCommand(Func<Result> func)
     {
         StartExecute();
 
@@ -195,11 +192,11 @@ public abstract class ViewModelBase : PropertyValidator
     }
 
     protected ConfiguredValueTaskAwaitable ShowErrorAsync(
-        ValidationError[] errors,
+        ValidationError error,
         CancellationToken ct
     )
     {
-        return ShowErrorCore(errors, ct).ConfigureAwait(false);
+        return ShowErrorCore(error, ct).ConfigureAwait(false);
     }
 
     protected ConfiguredValueTaskAwaitable ShowErrorAsync(
@@ -405,11 +402,11 @@ public abstract class ViewModelBase : PropertyValidator
         );
     }
 
-    private async ValueTask ShowErrorCore(ValidationError[] errors, CancellationToken ct)
+    private async ValueTask ShowErrorCore(ValidationError error, CancellationToken ct)
     {
         await Services.DialogService.ShowMessageBoxAsync(
             GetLang("Lang.Error").DispatchToDialogHeader(),
-            Services.ErrorDialogFactory.Create(errors),
+            Services.ErrorDialogFactory.Create(error),
             ct,
             Services.DialogService.OkButton
         );
@@ -480,12 +477,11 @@ public abstract class ViewModelBase : PropertyValidator
         );
     }
 
-    private async ValueTask WrapCommandCore<TValidationErrors>(
-        Func<ConfiguredValueTaskAwaitable<TValidationErrors>> func,
+    private async ValueTask WrapCommandCore(
+        Func<ConfiguredValueTaskAwaitable<Result>> func,
         CancellationToken ct,
         bool isBackground = false
     )
-        where TValidationErrors : IValidationErrors
     {
         StartExecute();
 
