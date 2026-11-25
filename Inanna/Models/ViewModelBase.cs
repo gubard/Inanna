@@ -4,7 +4,6 @@ using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using Gaia.Helpers;
 using Gaia.Models;
-using Gaia.Services;
 using Inanna.Helpers;
 
 namespace Inanna.Models;

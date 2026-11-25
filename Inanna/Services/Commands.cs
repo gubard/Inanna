@@ -101,6 +101,7 @@ public abstract class Commands
         bool isBackground = false,
         bool canCancel = true
     )
+        where T : notnull
     {
         return new(() =>
             ServiceProvider
@@ -114,6 +115,7 @@ public abstract class Commands
         bool isBackground = false,
         bool canCancel = true
     )
+        where T : notnull
     {
         return new(() =>
             ServiceProvider

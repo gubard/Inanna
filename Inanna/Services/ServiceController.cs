@@ -1,7 +1,6 @@
 using System.Runtime.CompilerServices;
 using Gaia.Helpers;
 using Gaia.Models;
-using Gaia.Services;
 
 namespace Inanna.Services;
 

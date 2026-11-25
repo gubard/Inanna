@@ -3,7 +3,6 @@ using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using Gaia.Helpers;
 using Gaia.Models;
-using Gaia.Services;
 using IServiceProvider = Gaia.Services.IServiceProvider;
 
 namespace Inanna.Services;
@@ -50,13 +49,15 @@ public interface ICommandFactory
         Func<T, CancellationToken, ConfiguredValueTaskAwaitable<Result<T>>> func,
         bool isBackground = false,
         bool canCancel = true
-    );
+    )
+        where T : notnull;
 
     ICommand CreateCommand<T>(
         Func<T, CancellationToken, ValueTask<Result<T>>> func,
         bool isBackground = false,
         bool canCancel = true
-    );
+    )
+        where T : notnull;
 }
 
 public sealed class CommandFactory : ICommandFactory
@@ -210,6 +211,7 @@ public sealed class CommandFactory : ICommandFactory
         bool isBackground = false,
         bool canCancel = true
     )
+        where T : notnull
     {
         return new AsyncRelayCommand<T>(
             async (parameter, ct) =>
@@ -235,6 +237,7 @@ public sealed class CommandFactory : ICommandFactory
         bool isBackground = false,
         bool canCancel = true
     )
+        where T : notnull
     {
         return new AsyncRelayCommand<T>(
             async (parameter, ct) =>

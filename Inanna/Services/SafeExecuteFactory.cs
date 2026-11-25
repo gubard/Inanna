@@ -2,7 +2,6 @@ using System.Runtime.CompilerServices;
 using Avalonia.Threading;
 using Gaia.Helpers;
 using Gaia.Models;
-using Gaia.Services;
 using Inanna.Helpers;
 using Inanna.Models;
 using Microsoft.Extensions.Logging;
@@ -29,7 +28,8 @@ public interface ISafeExecuteWrapper
     ConfiguredValueTaskAwaitable ExecuteAsync<T>(
         Func<ConfiguredValueTaskAwaitable<Result<T>>> func,
         CancellationToken ct
-    );
+    )
+        where T : notnull;
 }
 
 public sealed class SafeExecuteWrapper : ISafeExecuteWrapper
@@ -59,6 +59,7 @@ public sealed class SafeExecuteWrapper : ISafeExecuteWrapper
         Func<ConfiguredValueTaskAwaitable<Result<T>>> func,
         CancellationToken ct
     )
+        where T : notnull
     {
         return ExecuteCore(func, ct).ConfigureAwait(false);
     }
@@ -180,7 +181,7 @@ public sealed class SafeExecuteWrapper : ISafeExecuteWrapper
                         .GetResource<string>("Lang.Error")
                         .DispatchToDialogHeader(),
                     _serviceProvider.GetService<IErrorDialogFactory>().Create([e]),
-                    CancellationToken.None,
+                    ct,
                     _serviceProvider.GetService<IDialogService>().OkButton
                 );
         }
@@ -214,7 +215,7 @@ public sealed class SafeExecuteWrapper : ISafeExecuteWrapper
                             .GetResource<string>("Lang.Error")
                             .DispatchToDialogHeader(),
                         _serviceProvider.GetService<IErrorDialogFactory>().Create(error),
-                        CancellationToken.None,
+                        ct,
                         _serviceProvider.GetService<IDialogService>().OkButton
                     );
             }
@@ -248,6 +249,7 @@ public sealed class SafeExecuteWrapper : ISafeExecuteWrapper
         Func<ConfiguredValueTaskAwaitable<Result<T>>> func,
         CancellationToken ct
     )
+        where T : notnull
     {
         var progress = new ProgressItem(1);
 
@@ -268,7 +270,7 @@ public sealed class SafeExecuteWrapper : ISafeExecuteWrapper
                             .GetResource<string>("Lang.Error")
                             .DispatchToDialogHeader(),
                         _serviceProvider.GetService<IErrorDialogFactory>().Create(error),
-                        CancellationToken.None,
+                        ct,
                         _serviceProvider.GetService<IDialogService>().OkButton
                     );
             }
