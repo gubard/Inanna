@@ -97,87 +97,82 @@ public static class BitmapExtension
             var angleStep = (float)(2.0 * Math.PI / Math.Max(1, samples));
             var contrastFactor = (1.0f + contrast) * (1.0f + contrast);
 
-            Parallel.For(
-                0,
-                height,
-                y =>
+            Parallel.For(0, height, y =>
+            {
+                var rowOffset = y * stride;
+
+                for (var x = 0; x < width; x++)
                 {
-                    var rowOffset = y * stride;
+                    var offset = rowOffset + x * 4;
 
-                    for (var x = 0; x < width; x++)
+                    var b = srcData[offset];
+                    var g = srcData[offset + 1];
+                    var r = srcData[offset + 2];
+                    var a = srcData[offset + 3];
+                    var srcLuma = GetGrayscale(r, g, b, mode);
+                    var totalSampleLuma = 0f;
+                    var validSamples = 0;
+
+                    for (var s = 0; s < samples; s++)
                     {
-                        var offset = rowOffset + x * 4;
+                        var angle = s * angleStep;
 
-                        var b = srcData[offset];
-                        var g = srcData[offset + 1];
-                        var r = srcData[offset + 2];
-                        var a = srcData[offset + 3];
-                        var srcLuma = GetGrayscale(r, g, b, mode);
-                        var totalSampleLuma = 0f;
-                        var validSamples = 0;
-
-                        for (var s = 0; s < samples; s++)
+                        for (var it = 1; it <= iterations; it++)
                         {
-                            var angle = s * angleStep;
+                            var currentRadius = radius / (float)iterations * it;
 
-                            for (var it = 1; it <= iterations; it++)
-                            {
-                                var currentRadius = radius / (float)iterations * it;
+                            var sampleX = Math.Clamp(
+                                (int)(x + Math.Cos(angle) * currentRadius),
+                                0,
+                                width - 1
+                            );
+                            var sampleY = Math.Clamp(
+                                (int)(y + Math.Sin(angle) * currentRadius),
+                                0,
+                                height - 1
+                            );
 
-                                var sampleX = Math.Clamp(
-                                    (int)(x + Math.Cos(angle) * currentRadius),
-                                    0,
-                                    width - 1
-                                );
-                                var sampleY = Math.Clamp(
-                                    (int)(y + Math.Sin(angle) * currentRadius),
-                                    0,
-                                    height - 1
-                                );
-
-                                var sampleOffset = sampleY * stride + sampleX * 4;
-                                var sb = srcData[sampleOffset];
-                                var sg = srcData[sampleOffset + 1];
-                                var sr = srcData[sampleOffset + 2];
-                                totalSampleLuma += GetGrayscale(sr, sg, sb, mode);
-                                validSamples++;
-                            }
+                            var sampleOffset = sampleY * stride + sampleX * 4;
+                            var sb = srcData[sampleOffset];
+                            var sg = srcData[sampleOffset + 1];
+                            var sr = srcData[sampleOffset + 2];
+                            totalSampleLuma += GetGrayscale(sr, sg, sb, mode);
+                            validSamples++;
                         }
-
-                        var localBgLuma =
-                            validSamples > 0 ? totalSampleLuma / validSamples : srcLuma;
-
-                        // 2. Локальна дельта контрасту
-                        var delta = srcLuma - localBgLuma;
-                        var baseGray = 128.0f + delta * 2.0f; // Підсилений коефіцієнт дельти (2.0 замість 1.8)
-
-                        // 3. Контрастність
-                        var gray = (baseGray - 128.0f) * contrastFactor + 128.0f;
-
-                        // 4. Очищення паперу (Levels / Thresholding для документів)
-                        if (gray >= whitePoint)
-                        {
-                            gray = 255.0f; // Папір робимо повністю білим
-                        }
-                        else if (gray <= blackPoint)
-                        {
-                            gray = 0.0f; // Текст/лінії робимо глибоко чорними
-                        }
-                        else
-                        {
-                            // Лінійна нормалізація діапазону [blackPoint .. whitePoint] у [0 .. 255]
-                            gray = (gray - blackPoint) / (whitePoint - blackPoint) * 255.0f;
-                        }
-
-                        var grayByte = (byte)Math.Clamp(gray, 0.0f, 255.0f);
-
-                        resultData[offset] = grayByte; // B
-                        resultData[offset + 1] = grayByte; // G
-                        resultData[offset + 2] = grayByte; // R
-                        resultData[offset + 3] = a; // A
                     }
+
+                    var localBgLuma = validSamples > 0 ? totalSampleLuma / validSamples : srcLuma;
+
+                    // 2. Локальна дельта контрасту
+                    var delta = srcLuma - localBgLuma;
+                    var baseGray = 128.0f + delta * 2.0f; // Підсилений коефіцієнт дельти (2.0 замість 1.8)
+
+                    // 3. Контрастність
+                    var gray = (baseGray - 128.0f) * contrastFactor + 128.0f;
+
+                    // 4. Очищення паперу (Levels / Thresholding для документів)
+                    if (gray >= whitePoint)
+                    {
+                        gray = 255.0f; // Папір робимо повністю білим
+                    }
+                    else if (gray <= blackPoint)
+                    {
+                        gray = 0.0f; // Текст/лінії робимо глибоко чорними
+                    }
+                    else
+                    {
+                        // Лінійна нормалізація діапазону [blackPoint .. whitePoint] у [0 .. 255]
+                        gray = (gray - blackPoint) / (whitePoint - blackPoint) * 255.0f;
+                    }
+
+                    var grayByte = (byte)Math.Clamp(gray, 0.0f, 255.0f);
+
+                    resultData[offset] = grayByte; // B
+                    resultData[offset + 1] = grayByte; // G
+                    resultData[offset + 2] = grayByte; // R
+                    resultData[offset + 3] = a; // A
                 }
-            );
+            });
 
             var resultBitmap = new WriteableBitmap(
                 pixelSize,

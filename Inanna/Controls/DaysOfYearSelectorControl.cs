@@ -18,9 +18,8 @@ public sealed class DaysOfYearSelectorControl : TemplatedControl
         );
 
     public static readonly DirectProperty<DaysOfYearSelectorControl, IEnumerable> ItemsProperty =
-        AvaloniaProperty.RegisterDirect<DaysOfYearSelectorControl, IEnumerable>(
-            nameof(Items),
-            x => x._items
+        AvaloniaProperty.RegisterDirect<DaysOfYearSelectorControl, IEnumerable>(nameof(Items), x =>
+            x._items
         );
 
     private readonly FrozenDictionary<Month, IntegersSelectorControl> _items;

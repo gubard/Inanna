@@ -28,9 +28,8 @@ public sealed class PathControl : TemplatedControl
         ItemsControl.ItemsSourceProperty.AddOwner<PathControl>();
 
     public static readonly DirectProperty<PathControl, IList?> ItemsProperty =
-        AvaloniaProperty.RegisterDirect<PathControl, IList?>(
-            nameof(Items),
-            control => control._items
+        AvaloniaProperty.RegisterDirect<PathControl, IList?>(nameof(Items), control =>
+            control._items
         );
 
     private INotifyCollectionChanged? _notifyCollectionChanged;
