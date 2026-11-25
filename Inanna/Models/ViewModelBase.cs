@@ -207,13 +207,17 @@ public abstract class ViewModelBase : PropertyValidator
         return ShowErrorCore(exceptions, ct).ConfigureAwait(false);
     }
 
-    protected ConfiguredValueTaskAwaitable<IStorageFile?> OpenFilePickerAsync(CancellationToken ct)
+    protected ConfiguredValueTaskAwaitable<IStorageFile?> OpenFilePickerAsync(
+        string defaultFileName,
+        CancellationToken ct
+    )
     {
         return OpenFilePickerCore(
                 new()
                 {
                     AllowMultiple = false,
                     Title = Services.AppResourceService.GetResource<string>("Lang.SelectFile"),
+                    SuggestedFileName = defaultFileName,
                 },
                 ct
             )
