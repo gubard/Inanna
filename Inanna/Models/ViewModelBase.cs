@@ -239,20 +239,13 @@ public abstract class ViewModelBase : PropertyValidator
     }
 
     protected ConfiguredValueTaskAwaitable<IStorageFile?> SaveFilePickerAsync(
-        string defaultExtension,
-        CancellationToken ct
+        CancellationToken ct,
+        string? suggestedFileName = null,
+        string? defaultExtension = null,
+        Uri? suggestedStartLocation = null
     )
     {
-        return SaveFilePickerCore(null, defaultExtension, ct).ConfigureAwait(false);
-    }
-
-    protected ConfiguredValueTaskAwaitable<IStorageFile?> SaveFilePickerAsync(
-        Uri suggestedStartLocation,
-        string defaultExtension,
-        CancellationToken ct
-    )
-    {
-        return SaveFilePickerCore(suggestedStartLocation, defaultExtension, ct)
+        return SaveFilePickerCore(suggestedFileName, defaultExtension, suggestedStartLocation, ct)
             .ConfigureAwait(false);
     }
 
@@ -289,8 +282,9 @@ public abstract class ViewModelBase : PropertyValidator
     }
 
     private async ValueTask<IStorageFile?> SaveFilePickerCore(
+        string? suggestedFileName,
+        string? defaultExtension,
         Uri? suggestedStartLocation,
-        string defaultExtension,
         CancellationToken ct
     )
     {
@@ -314,6 +308,7 @@ public abstract class ViewModelBase : PropertyValidator
                 Title = Services.AppResourceService.GetResource<string>("Lang.SaveFile"),
                 DefaultExtension = defaultExtension,
                 SuggestedStartLocation = ssl,
+                SuggestedFileName = suggestedFileName,
             }
         );
     }
@@ -330,6 +325,7 @@ public abstract class ViewModelBase : PropertyValidator
             return null;
         }
 
+        ct.ThrowIfCancellationRequested();
         var folders = await topLevel.StorageProvider.OpenFolderPickerAsync(options);
 
         if (folders.Count == 0)
@@ -352,6 +348,7 @@ public abstract class ViewModelBase : PropertyValidator
             return null;
         }
 
+        ct.ThrowIfCancellationRequested();
         var files = await topLevel.StorageProvider.OpenFilePickerAsync(options);
 
         if (files.Count == 0)
